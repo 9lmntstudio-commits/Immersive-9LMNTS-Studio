@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Uncle Jay’s Catering | LIVE Event OS - The Pit Experience</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black-deep: #000000;
+            --black-richer: #050505;
+            --black-card: #0A0A0A;
+            --red-vibrant: #E34D2E;
+            --red-glow: rgba(227, 77, 46, 0.35);
+            --white: #FFFFFF;
+            --white-muted: #DDDDDD;
+            --border-subtle: rgba(227, 77, 46, 0.4);
+            --font-body: 'Inter', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--black-deep); color: var(--white); font-family: var(--font-body); margin: 0; padding-bottom: 85px; overflow-x: hidden; }
+        .app-container { max-width: 500px; margin: 0 auto; min-height: 100vh; background: var(--black-deep); position: relative; }
+
+        /* Header */
+        .live-event-header { background: var(--black-richer); padding: 16px 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--red-vibrant); }
+        .logo-placeholder { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .logo-icon { width: 40px; height: 40px; background: var(--red-vibrant); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; color: white; }
+        .logo-text { font-size: 1.3rem; font-weight: 800; color: var(--white); letter-spacing: -0.5px; }
+        .logo-text span { color: var(--red-vibrant); }
+        .logo-text small { font-size: 0.55rem; color: var(--white-muted); display: block; font-weight: 400; }
+        .user-profile { display: flex; align-items: center; gap: 8px; background: rgba(227,77,46,0.15); padding: 5px 12px; border-radius: 30px; cursor: pointer; transition: 0.2s; }
+        .user-profile:active { background: rgba(227,77,46,0.3); }
+        .user-avatar { width: 28px; height: 28px; background: var(--red-vibrant); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+        .user-name { font-size: 0.7rem; font-weight: 600; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .live-status { display: flex; gap: 8px; align-items: center; }
+        .live-badge { background: var(--red-vibrant); color: var(--white); font-size: 0.65rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; animation: pulse 1.8s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.8} }
+        .live-timer { font-size: 0.7rem; background: rgba(255,255,255,0.08); padding: 5px 12px; border-radius: 20px; }
+
+        /* Rest of styles (same as before) */
+        .announcement-ticker { background: var(--black-richer); border-bottom: 1px solid var(--border-subtle); padding: 10px 0; overflow: hidden; white-space: nowrap; }
+        .ticker-content { display: inline-block; animation: ticker 45s linear infinite; color: var(--red-vibrant); font-size: 0.75rem; padding-left: 100%; }
+        .ticker-content i { margin: 0 12px; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        .hero-dashboard-live { position: relative; padding: 40px 20px; text-align: center; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800'); background-size: cover; border-bottom: 1px solid var(--border-subtle); }
+        .hero-title { font-size: 2.5rem; font-weight: 800; }
+        .hero-title i { color: var(--red-vibrant); }
+        .hero-sub { color: var(--red-vibrant); font-size: 0.7rem; margin: 10px 0 20px; text-transform: uppercase; letter-spacing: 1.5px; }
+        .live-stats { display: flex; justify-content: space-around; margin: 20px 0; background: rgba(0,0,0,0.85); padding: 15px; border-radius: 16px; border: 1px solid var(--border-subtle); }
+        .stat-item { text-align: center; flex: 1; }
+        .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--red-vibrant); }
+        .stat-label { font-size: 0.6rem; color: var(--white-muted); }
+        .main-cta-btn { width: 100%; padding: 14px; background: var(--red-vibrant); color: white; border: none; border-radius: 40px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .main-cta-btn:active { transform: scale(0.98); opacity: 0.9; }
+        .contribution-section { padding: 20px 0 25px 20px; margin: 20px; background: var(--black-card); border-radius: 20px; border: 1px solid var(--border-subtle); }
+        .section-header { display: flex; gap: 10px; margin-bottom: 20px; color: var(--red-vibrant); font-weight: 700; }
+        .menu-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
+        .menu-card { min-width: 140px; padding: 16px; border-radius: 16px; border: 1px solid var(--border-subtle); background: var(--black-deep); cursor: pointer; text-align: center; transition: 0.2s; }
+        .menu-card:active { transform: scale(0.97); background: rgba(227,77,46,0.1); }
+        .menu-card.vip { border: 2px solid var(--red-vibrant); }
+        .vip-badge { display: inline-block; background: var(--red-vibrant); color: white; font-size: 0.55rem; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
+        .m-price { font-size: 1.5rem; font-weight: 800; color: var(--red-vibrant); }
+        .m-label { font-size: 0.7rem; color: var(--white-muted); margin: 8px 0; }
+        .m-btn { font-size: 0.7rem; padding: 8px; border-radius: 30px; border: 1px solid var(--red-vibrant); background: transparent; color: var(--red-vibrant); width: 100%; cursor: pointer; transition: 0.2s; }
+        .m-btn:active { background: var(--red-vibrant); color: white; }
+        .nav-tabs { display: flex; background: var(--black-richer); overflow-x: auto; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 73px; z-index: 90; }
+        .tab { padding: 12px 8px; color: var(--white-muted); font-size: 0.65rem; cursor: pointer; text-align: center; flex: 1; text-transform: uppercase; transition: 0.2s; white-space: nowrap; }
+        .tab.active { color: var(--red-vibrant); border-bottom: 2px solid var(--red-vibrant); }
+        .view-section { display: none; padding: 20px; animation: fadeIn 0.3s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .course-card { background: var(--black-card); border-radius: 20px; padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--red-vibrant); position: relative; }
+        .course-header { display: flex; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; }
+        .course-name { font-weight: 800; font-size: 1.2rem; color: var(--red-vibrant); }
+        .course-timer { background: rgba(227,77,46,0.15); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; color: var(--red-vibrant); }
+        .dish-options { display: flex; gap: 15px; flex-wrap: wrap; }
+        .dish-card { flex: 1; min-width: 140px; background: var(--black-deep); border-radius: 16px; padding: 15px; text-align: center; cursor: pointer; border: 1px solid var(--border-subtle); transition: 0.2s; }
+        .dish-card:active { transform: scale(0.98); border-color: var(--red-vibrant); }
+        .dish-img { width: 100%; aspect-ratio: 1; border-radius: 12px; margin-bottom: 12px; background-size: cover; background-position: center; opacity: 0.4; transition: 0.3s; }
+        .dish-card:hover .dish-img { opacity: 1; transform: scale(1.02); }
+        .dish-name { font-weight: 800; font-size: 0.95rem; }
+        .dish-desc { font-size: 0.65rem; color: var(--white-muted); margin: 5px 0; }
+        .vote-count { color: var(--red-vibrant); font-weight: 700; font-size: 0.8rem; margin: 8px 0; }
+        .power-boost-btn { background: transparent; border: 1px solid var(--red-vibrant); padding: 5px 10px; border-radius: 20px; color: var(--red-vibrant); font-size: 0.6rem; cursor: pointer; margin-top: 5px; transition: 0.2s; }
+        .power-boost-btn:active { background: var(--red-vibrant); color: white; }
+        .share-btn { background: transparent; border: 1px solid var(--white-muted); padding: 5px 8px; border-radius: 20px; color: var(--white-muted); font-size: 0.55rem; cursor: pointer; margin-top: 5px; display: inline-flex; align-items: center; gap: 4px; }
+        .crew-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .crew-card { background: var(--black-card); border-radius: 18px; padding: 18px; text-align: center; border: 1px solid var(--border-subtle); }
+        .crew-avatar { width: 70px; height: 70px; background: var(--red-vibrant); border-radius: 50%; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; }
+        .crew-name { font-weight: 800; font-size: 1rem; }
+        .crew-role { font-size: 0.65rem; color: var(--white-muted); margin-bottom: 12px; }
+        .tip-progress { background: rgba(255,255,255,0.1); border-radius: 10px; height: 6px; margin: 12px 0; overflow: hidden; }
+        .tip-fill { background: var(--red-vibrant); height: 100%; transition: width 0.5s; }
+        .tip-btn { background: transparent; border: 1px solid var(--red-vibrant); color: var(--red-vibrant); padding: 8px; border-radius: 25px; width: 100%; cursor: pointer; transition: 0.2s; }
+        .tip-btn:active { background: var(--red-vibrant); color: white; }
+        .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+        .shop-item { background: var(--black-card); border-radius: 16px; padding: 16px; text-align: center; border: 1px solid var(--border-subtle); cursor: pointer; transition: 0.2s; }
+        .shop-item:active { transform: scale(0.97); background: rgba(227,77,46,0.05); }
+        .shop-price { font-size: 1.3rem; font-weight: 800; color: var(--red-vibrant); }
+        .lead-form { background: var(--black-card); border-radius: 20px; padding: 25px; margin: 20px 0; border: 1px solid var(--border-subtle); }
+        .form-group { margin-bottom: 15px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; background: var(--black-deep); border: 1px solid var(--border-subtle); border-radius: 12px; color: white; }
+        .submit-lead { background: var(--red-vibrant); color: white; padding: 14px; border: none; border-radius: 40px; font-weight: 700; width: 100%; cursor: pointer; transition: 0.2s; }
+        .submit-lead:active { opacity: 0.8; }
+        .auction-item, .qa-item { background: var(--black-card); border-radius: 16px; padding: 18px; margin-bottom: 12px; border-left: 3px solid var(--red-vibrant); }
+        .bid-btn { background: var(--red-vibrant); border: none; padding: 8px 20px; border-radius: 30px; color: white; cursor: pointer; margin-top: 12px; transition: 0.2s; }
+        .ask-input { width: 100%; padding: 14px; background: var(--black-card); border: 1px solid var(--border-subtle); border-radius: 16px; color: white; margin-bottom: 15px; font-family: var(--font-body); }
+        .video-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .video-card { background: var(--black-deep); border-radius: 12px; padding: 12px; text-align: center; border: 1px solid var(--border-subtle); cursor: pointer; transition: 0.2s; }
+        .video-card:active { transform: scale(0.97); }
+        .video-thumb { width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--red-vibrant), var(--black-deep)); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+        .sponsor-tier { background: var(--black-card); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border-subtle); cursor: pointer; transition: 0.2s; }
+        .sponsor-tier:active { transform: scale(0.98); background: rgba(227,77,46,0.05); }
+        .sponsor-price { font-size: 1.2rem; font-weight: 800; color: var(--red-vibrant); }
+        .waitlist-banner { background: var(--red-vibrant); padding: 12px; text-align: center; border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .waitlist-banner:active { opacity: 0.8; }
+        .waitlist-banner-outline { background: transparent; border: 1px solid var(--red-vibrant); color: var(--red-vibrant); }
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; background: var(--black-richer); border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-around; padding: 12px 0; z-index: 100; }
+        .nav-item { text-align: center; color: var(--white-muted); font-size: 0.55rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
+        .nav-item:active { transform: scale(0.95); }
+        .nav-item.active { color: var(--red-vibrant); }
+        .nav-item i { font-size: 1.1rem; display: block; margin-bottom: 3px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 200; justify-content: center; align-items: center; }
+        .modal-box { width: 90%; max-width: 420px; background: var(--black-card); border-radius: 24px; border-top: 3px solid var(--red-vibrant); overflow: hidden; position: relative; }
+        .m-header { padding: 20px; text-align: center; border-bottom: 1px solid var(--border-subtle); }
+        .m-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--white-muted); z-index: 10; }
+        .m-body { padding: 20px; }
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; background: transparent; border: none; color: var(--red-vibrant); font-size: 0.8rem; cursor: pointer; margin-bottom: 15px; padding: 5px 0; }
+        .social-buttons { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .social-btn { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; border: 1px solid var(--border-subtle); background: var(--black-deep); color: var(--white); }
+        .social-btn:active { transform: scale(0.98); background: rgba(227,77,46,0.1); }
+        .social-btn i { font-size: 1.2rem; }
+        .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: var(--white-muted); font-size: 0.7rem; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-subtle); }
+        .divider::before { margin-right: 10px; }
+        .divider::after { margin-left: 10px; }
+        .welcome-message { text-align: center; margin-bottom: 20px; }
+        .welcome-message h3 { color: var(--red-vibrant); margin-bottom: 8px; }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: var(--red-vibrant); color: white; padding: 12px 24px; border-radius: 40px; font-weight: 700; z-index: 300; animation: fadeUp 0.3s ease; text-align: center; max-width: 90%; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+        .qr-container { text-align: center; padding: 20px; background: var(--black-card); margin: 20px; border-radius: 20px; border: 1px solid var(--border-subtle); }
+        .qr-placeholder { background: white; padding: 15px; border-radius: 16px; display: inline-block; cursor: pointer; transition: 0.2s; }
+        .qr-placeholder:active { transform: scale(0.98); }
+        .qr-placeholder i { font-size: 4rem; color: var(--black-deep); }
+        .qr-note { font-size: 0.65rem; color: var(--white-muted); margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- HEADER WITH USER PROFILE -->
+    <div class="live-event-header">
+        <div class="logo-placeholder" onclick="alert('Replace with Uncle Jay\'s official logo')">
+            <div class="logo-icon">UJ</div>
+            <div class="logo-text">UNCLE <span>JAY'S</span><small>CATERING • OTTAWA & GATINEAU</small></div>
+        </div>
+        <div class="live-status">
+            <div class="live-timer" id="liveTimer">NEXT: 7:30 PM</div>
+            <div class="live-badge"><i class="fas fa-fire"></i> LIVE</div>
+            <div class="user-profile" onclick="openUserMenu()" id="userProfile">
+                <div class="user-avatar"><i class="fas fa-user"></i></div>
+                <span class="user-name" id="userNameDisplay">Join</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TICKER -->
+    <div class="announcement-ticker">
+        <div class="ticker-content" id="announcementTicker"></div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero-dashboard-live">
+        <div class="hero-sub">BOLD FLAVORS • PROFESSIONAL SERVICE • OTTAWA & GATINEAU</div>
+        <h1 class="hero-title"><i class="fas fa-utensils"></i> THE PIT<br>EXPERIENCE</h1>
+        <div class="live-stats">
+            <div class="stat-item"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-value" id="liveAudience">187</div><div class="stat-label">GUESTS</div></div>
+            <div class="stat-item"><div class="stat-icon"><i class="fas fa-utensils"></i></div><div class="stat-value" id="totalVotes">1,247</div><div class="stat-label">VOTES</div></div>
+            <div class="stat-item"><div class="stat-icon"><i class="fas fa-chart-line"></i></div><div class="stat-value" id="totalRevenue">$9,944</div><div class="stat-label">RAISED</div></div>
+        </div>
+        <button class="main-cta-btn" onclick="showUpgradeOptions()"><i class="fas fa-ticket-alt"></i> UPGRADE EXPERIENCE</button>
+    </div>
+
+    <!-- EARLY BIRD + REFERRAL + WAITLIST -->
+    <div style="margin: 0 20px 10px;">
+        <div class="waitlist-banner" onclick="buyEarlyBird()"><i class="fas fa-ticket"></i> 🎟️ EARLY BIRD: $45 (Save $15) – Click to Reserve</div>
+        <div style="display: flex; gap: 10px;">
+            <div class="waitlist-banner waitlist-banner-outline" onclick="showReferralCode()"><i class="fas fa-gift"></i> BRING A FRIEND • Get $10 Off</div>
+            <div class="waitlist-banner waitlist-banner-outline" onclick="joinWaitlistPrompt()"><i class="fas fa-clock"></i> SOLD OUT? Join Waitlist</div>
+        </div>
+    </div>
+
+    <!-- UPGRADE SECTION -->
+    <div class="contribution-section">
+        <div class="section-header"><i class="fas fa-crown"></i> ELEVATE YOUR EXPERIENCE</div>
+        <div class="menu-row">
+            <div class="menu-card" onclick="processUpgrade(15, 'Power Voter Pack')"><div class="m-price">$15</div><div class="m-label">5x Power Votes</div><button class="m-btn">BOOST</button></div>
+            <div class="menu-card" onclick="processUpgrade(35, 'Chef\'s Plate')"><div class="m-price">$35</div><div class="m-label">Premium Dish Upgrade</div><button class="m-btn">GET PLATE</button></div>
+            <div class="menu-card vip" onclick="processUpgrade(125, 'VIP Chef\'s Table')"><div class="vip-badge">VIP</div><div class="m-price">$125</div><div class="m-label">Chef's Table + Meet Jay</div><button class="m-btn">RESERVE</button></div>
+        </div>
+    </div>
+
+    <!-- TABS (Same as before) -->
+    <div class="nav-tabs">
+        <div class="tab active" onclick="switchTab('feast', this)">FEAST</div>
+        <div class="tab" onclick="switchTab('kitchen', this)">KITCHEN</div>
+        <div class="tab" onclick="switchTab('stage', this)">STAGE</div>
+        <div class="tab" onclick="switchTab('artists', this)">🎬 ARTISTS</div>
+        <div class="tab" onclick="switchTab('sponsors', this)">🤝 SPONSORS</div>
+        <div class="tab" onclick="switchTab('analytics', this)">📊 STATS</div>
+        <div class="tab" onclick="switchTab('ask', this)">ASK</div>
+        <div class="tab" onclick="switchTab('book', this)">BOOK</div>
+    </div>
+
+    <!-- FEAST TAB -->
+    <div id="feast" class="view-section active">
+        <div class="course-card">
+            <div class="course-header"><span class="course-name">🔥 STARTER</span><span class="course-timer">VOTING OPEN</span></div>
+            <div class="dish-options">
+                <div class="dish-card" onclick="voteDish('Jerk Chicken Spring Rolls')">
+                    <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1541014741259-de529411b96a?w=300');"></div>
+                    <div class="dish-name">🌶️ Jerk Chicken Spring Rolls</div>
+                    <div class="dish-desc">Spicy, crispy, mango dip</div>
+                    <div class="vote-count" id="appVote1">142 votes</div>
+                    <button class="power-boost-btn" onclick="event.stopPropagation(); powerBoostPrompt('Jerk Chicken Spring Rolls')">⚡ POWER BOOST</button>
+                </div>
+                <div class="dish-card" onclick="voteDish('Poutine Croquettes')">
+                    <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1585109649139-366815a0d713?w=300');"></div>
+                    <div class="dish-name">🧀 Poutine Croquettes</div>
+                    <div class="dish-desc">Gravy aioli, cheese curds</div>
+                    <div class="vote-count" id="appVote2">108 votes</div>
+                    <button class="power-boost-btn" onclick="event.stopPropagation(); powerBoostPrompt('Poutine Croquettes')">⚡ POWER BOOST</button>
+                </div>
+            </div>
+        </div>
+        <div class="course-card">
+            <div class="course-header"><span class="course-name">🍖 MAIN COURSE</span><span class="course-timer">NEXT</span></div>
+            <div class="dish-options">
+                <div class="dish-card" onclick="voteDish('Oxtail & Rice')">
+                    <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?w=300');"></div>
+                    <div class="dish-name">🍛 Oxtail & Rice</div>
+                    <div class="dish-desc">Jamaican oxtail, butter beans</div>
+                    <div class="vote-count" id="mainVote1">97 votes</div>
+                    <button class="power-boost-btn" onclick="event.stopPropagation(); powerBoostPrompt('Oxtail & Rice')">⚡ POWER BOOST</button>
+                </div>
+                <div class="dish-card" onclick="voteDish('Smoked Brisket Tacos')">
+                    <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=300');"></div>
+                    <div class="dish-name">🌮 Smoked Brisket Tacos</div>
+                    <div class="dish-desc">12-hour brisket, salsa verde</div>
+                    <div class="vote-count" id="mainVote2">118 votes</div>
+                    <button class="power-boost-btn" onclick="event.stopPropagation(); powerBoostPrompt('Smoked Brisket Tacos')">⚡ POWER BOOST</button>
+                </div>
+            </div>
+        </div>
+        <div class="course-card">
+            <div class="course-header"><span class="course-name">🍰 DESSERT</span><span class="course-timer">NEXT</span></div>
+            <div class="dish-options">
+                <div class="dish-card" onclick="voteDish('Rum Cake')">
+                    <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=300');"></div>
+                    <div class="dish-name">🥃 Rum Cake</div>
+                    <div class="dish-desc">Caribbean rum glaze</div>
+                    <div class="vote-count" id="dessertVote1">86 votes</div>
+                    <button class="power-boost-btn" onclick="event.stopPropagation(); powerBoostPrompt('Rum Cake')">⚡ POWER BOOST</button>
+                </div>
+                <div class="dish-card" onclick="voteDish('Maple Crème Brûlée')">
+                    <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=300');"></div>
+                    <div class="dish-name">🍁 Maple Crème Brûlée</div>
+                    <div class="dish-desc">Canadian maple, vanilla</div>
+                    <div class="vote-count" id="dessertVote2">91 votes</div>
+                    <button class="power-boost-btn" onclick="event.stopPropagation(); powerBoostPrompt('Maple Crème Brûlée')">⚡ POWER BOOST</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KITCHEN TAB -->
+    <div id="kitchen" class="view-section">
+        <div class="crew-grid" id="crewGrid"></div>
+        <div class="shop-grid">
+            <div class="shop-item" onclick="buyMerch('Jerk Sauce', 12)"><div class="shop-price">$12</div><div>🌶️ Signature Jerk Sauce</div><button class="m-btn">ADD</button></div>
+            <div class="shop-item" onclick="buyMerch('BBQ Rub Trio', 25)"><div class="shop-price">$25</div><div>🔥 BBQ Rub Trio</div><button class="m-btn">ADD</button></div>
+            <div class="shop-item" onclick="buyMerch('Uncle Jay T-Shirt', 30)"><div class="shop-price">$30</div><div>👕 "Pit Master" Tee</div><button class="m-btn">ADD</button></div>
+            <div class="shop-item" onclick="buyMerch('Cooking Class', 100)"><div class="shop-price">$100</div><div>👨‍🍳 Private BBQ Class</div><button class="m-btn">RESERVE</button></div>
+        </div>
+    </div>
+
+    <!-- STAGE TAB -->
+    <div id="stage" class="view-section">
+        <div class="course-card"><div class="course-header"><span class="course-name">🎸 LIVE MUSIC</span><span class="course-timer">8:30 PM</span></div><p>Ottawa's <strong>Soul Food Collective</strong> – Blues & BBQ vibes<br><span style="color:var(--red-vibrant);">🎥 Live Recording + AI Music Video</span></p></div>
+        <div class="course-card"><div class="course-header"><span class="course-name">💰 LIVE AUCTION</span></div>
+            <div class="auction-item"><strong>🍽️ Private Dinner for 8</strong> – Catered by Uncle Jay<br><button class="bid-btn" onclick="placeBid('Private Dinner', 400)">BID $400</button></div>
+            <div class="auction-item"><strong>👨‍🍳 Pit Master Class</strong> – 2hrs with Chef Jay<br><button class="bid-btn" onclick="placeBid('Cooking Class', 150)">BID $150</button></div>
+            <div class="auction-item"><strong>🎉 Full BBQ Catering (50 guests)</strong><br><button class="bid-btn" onclick="placeBid('Catering Package', 1500)">BID $1,500</button></div>
+        </div>
+    </div>
+
+    <!-- ARTISTS TAB -->
+    <div id="artists" class="view-section">
+        <div class="course-card"><div class="course-header"><span class="course-name">🎬 AI MUSIC VIDEO LIBRARY</span></div>
+            <div class="video-gallery">
+                <div class="video-card" onclick="playVideo('Soul Food Collective - Blues Night')"><div class="video-thumb"><i class="fas fa-play-circle"></i></div><div>Soul Food Collective</div><div style="font-size:0.6rem;">2.3K views</div></div>
+                <div class="video-card" onclick="playVideo('Jazz & Jerk - Live Session')"><div class="video-thumb"><i class="fas fa-play-circle"></i></div><div>Jazz & Jerk Session</div><div style="font-size:0.6rem;">1.8K views</div></div>
+                <div class="video-card" onclick="playVideo('Uncle Jay’s Pit Session')"><div class="video-thumb"><i class="fas fa-play-circle"></i></div><div>Pit Session</div><div style="font-size:0.6rem;">3.1K views</div></div>
+                <div class="video-card" onclick="openArtistBooking()"><div class="video-thumb"><i class="fas fa-plus-circle"></i></div><div>BOOK YOUR SESSION</div><div style="font-size:0.6rem;">Apply to perform</div></div>
+            </div>
+            <p style="font-size:0.7rem; text-align:center; margin-top:10px;">🎥 Every artist gets a professional AI music video</p>
+        </div>
+    </div>
+
+    <!-- SPONSORS TAB -->
+    <div id="sponsors" class="view-section">
+        <div class="course-card"><div class="course-header"><span class="course-name">🤝 BECOME A SPONSOR</span></div>
+            <div class="sponsor-tier" onclick="selectSponsor(500, 'Course Sponsor')"><div class="sponsor-price">$500</div><div>🔥 COURSE SPONSOR</div><div style="font-size:0.7rem;">Logo on course voting screen + shoutout</div><button class="m-btn" style="margin-top:8px;">SELECT</button></div>
+            <div class="sponsor-tier" onclick="selectSponsor(1000, 'Stage Sponsor')"><div class="sponsor-price">$1,000</div><div>🎸 STAGE SPONSOR</div><div style="font-size:0.7rem;">Logo on stage backdrop + social feature</div><button class="m-btn" style="margin-top:8px;">SELECT</button></div>
+            <div class="sponsor-tier" onclick="selectSponsor(2500, 'Presenting Sponsor')"><div class="sponsor-price">$2,500</div><div>👑 PRESENTING SPONSOR</div><div style="font-size:0.7rem;">Naming rights + VIP tickets + video feature</div><button class="m-btn" style="margin-top:8px;">SELECT</button></div>
+        </div>
+    </div>
+
+    <!-- ANALYTICS TAB -->
+    <div id="analytics" class="view-section">
+        <div class="course-card"><div class="course-header"><span class="course-name">📊 EVENT ANALYTICS</span></div>
+            <div style="margin: 10px 0;"><strong>🍽️ Dish Popularity</strong>
+                <div>Jerk Spring Rolls: <span id="statDish1">142</span> votes ████████░░ 42%</div>
+                <div>Poutine Croquettes: <span id="statDish2">108</span> votes ██████░░░░ 32%</div>
+                <div>Brisket Tacos: <span id="statDish3">118</span> votes ███████░░░ 35%</div>
+                <div>Oxtail: <span id="statDish4">97</span> votes ██████░░░░ 29%</div>
+            </div>
+            <div style="margin: 10px 0;"><strong>💰 Revenue Breakdown</strong>
+                <div>Tickets: $6,800</div>
+                <div>Upgrades: $1,060</div>
+                <div>Power Votes: $419</div>
+                <div>Merch: $790</div>
+                <div>Tips: $375</div>
+                <div>Auction: $500</div>
+                <div><strong>Total: $9,944</strong></div>
+            </div>
+            <div style="margin: 10px 0;"><strong>👥 Engagement</strong>
+                <div>Active Voters: 87%</div>
+                <div>Power Users: 32%</div>
+                <div>Social Shares: 45</div>
+                <div>Waitlist: <span id="waitlistCount">23</span> people</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ASK JAY TAB -->
+    <div id="ask" class="view-section">
+        <div class="course-card"><div class="course-header"><span class="course-name">💬 ASK CHEF JAY</span></div>
+            <textarea id="questionInput" class="ask-input" rows="3" placeholder="Ask Chef Jay about BBQ techniques, recipes, or the inspiration behind his award-winning dishes..."></textarea>
+            <button class="main-cta-btn" onclick="submitQuestion()"><i class="fas fa-paper-plane"></i> ASK CHEF JAY</button>
+            <div id="qaContainer" style="margin-top:20px;"></div>
+        </div>
+    </div>
+
+    <!-- BOOK JAY TAB -->
+    <div id="book" class="view-section">
+        <div class="lead-form">
+            <h3 style="color:var(--red-vibrant);">🔥 Book Uncle Jay's Catering</h3>
+            <p>Bring the bold flavors to your next event. Serving Ottawa & Gatineau.</p>
+            <div class="form-group"><input type="text" id="leadName" placeholder="Your Name"></div>
+            <div class="form-group"><input type="email" id="leadEmail" placeholder="Email Address"></div>
+            <div class="form-group"><input type="tel" id="leadPhone" placeholder="Phone Number"></div>
+            <div class="form-group"><select id="leadEventType"><option>Wedding</option><option>Corporate Event</option><option>Birthday Party</option><option>Backyard BBQ</option></select></div>
+            <button class="submit-lead" onclick="submitLead()"><i class="fas fa-calendar-alt"></i> REQUEST CONSULTATION</button>
+            <div style="margin-top:15px; text-align:center;"><p style="font-size:0.7rem;"><i class="fas fa-phone"></i> (613) 293-2415 | <i class="fas fa-envelope"></i> info@unclejays.ca</p></div>
+        </div>
+        <div class="lead-form" style="margin-top:0;">
+            <h3 style="color:var(--red-vibrant);">📧 Never Miss an Event</h3>
+            <p>Get early access + exclusive recipes</p>
+            <div class="form-group"><input type="email" id="newsletterEmail" placeholder="Your Email"></div>
+            <button class="submit-lead" onclick="subscribeNewsletter()">SUBSCRIBE</button>
+        </div>
+    </div>
+
+    <!-- QR CODE SECTION -->
+    <div class="qr-container">
+        <h4 style="color:var(--red-vibrant);"><i class="fas fa-qrcode"></i> SCAN TO JOIN THE EVENT</h4>
+        <div class="qr-placeholder" onclick="alert('Replace with your actual QR code image')">
+            <i class="fas fa-qrcode"></i>
+        </div>
+        <div class="qr-note">Scan with your phone to access the live event experience</div>
+        <div class="qr-note" style="color:var(--red-vibrant);"><i class="fas fa-edit"></i> Replace this QR code with your actual event link QR code</div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTabMobile('feast', this)"><i class="fas fa-utensils"></i>FEAST</div>
+        <div class="nav-item" onclick="switchTabMobile('kitchen', this)"><i class="fas fa-user-chef"></i>KITCHEN</div>
+        <div class="nav-item" onclick="switchTabMobile('stage', this)"><i class="fas fa-music"></i>STAGE</div>
+        <div class="nav-item" onclick="switchTabMobile('artists', this)"><i class="fas fa-video"></i>ARTISTS</div>
+        <div class="nav-item" onclick="switchTabMobile('book', this)"><i class="fas fa-calendar"></i>BOOK</div>
+    </div>
+</div>
+
+<!-- ONBOARDING/WELCOME MODAL -->
+<div id="onboardingModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <span class="m-close" onclick="closeOnboarding()">&times;</span>
+            <h3><i class="fas fa-utensils" style="color:var(--red-vibrant);"></i> WELCOME TO THE PIT</h3>
+        </div>
+        <div class="m-body">
+            <div class="welcome-message">
+                <h3>Join the Feast!</h3>
+                <p style="font-size:0.85rem; color:var(--white-muted); margin-top:8px;">Sign in to vote, tip the kitchen, and get exclusive event updates.</p>
+            </div>
+            
+            <!-- Social Login Options -->
+            <div class="social-buttons">
+                <div class="social-btn" onclick="socialLogin('google')">
+                    <i class="fab fa-google"></i> Continue with Google
+                </div>
+                <div class="social-btn" onclick="socialLogin('facebook')">
+                    <i class="fab fa-facebook-f"></i> Continue with Facebook
+                </div>
+                <div class="social-btn" onclick="socialLogin('apple')">
+                    <i class="fab fa-apple"></i> Continue with Apple
+                </div>
+            </div>
+            
+            <div class="divider">OR</div>
+            
+            <!-- Email Signup Form -->
+            <div class="form-group">
+                <input type="email" id="onboardingEmail" placeholder="Email address" style="width:100%; padding:14px; background:var(--black-deep); border:1px solid var(--border-subtle); border-radius:40px; color:white; text-align:center;">
+            </div>
+            <div class="form-group">
+                <input type="text" id="onboardingName" placeholder="Your name (optional)" style="width:100%; padding:14px; background:var(--black-deep); border:1px solid var(--border-subtle); border-radius:40px; color:white; text-align:center;">
+            </div>
+            <button class="submit-lead" onclick="emailSignup()">Continue with Email</button>
+            
+            <p style="font-size:0.7rem; color:var(--white-muted); text-align:center; margin-top:15px;">
+                By continuing, you agree to receive event updates and our privacy policy.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- USER MENU MODAL -->
+<div id="userMenuModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <span class="m-close" onclick="closeModal('userMenuModal')">&times;</span>
+            <h3><i class="fas fa-user-circle"></i> My Account</h3>
+        </div>
+        <div class="m-body">
+            <div style="text-align:center; margin-bottom:20px;">
+                <div class="user-avatar" style="width:60px; height:60px; margin:0 auto 12px; font-size:1.8rem;"><i class="fas fa-user"></i></div>
+                <h3 id="menuUserName">Guest User</h3>
+                <p id="menuUserEmail" style="color:var(--white-muted); font-size:0.8rem;">Not signed in</p>
+            </div>
+            <div style="border-top:1px solid var(--border-subtle); padding-top:15px;">
+                <div class="social-btn" onclick="showOnboarding()" style="margin-bottom:10px;"><i class="fas fa-sign-in-alt"></i> Sign In / Create Account</div>
+                <div class="social-btn" onclick="viewMyVotes()"><i class="fas fa-chart-simple"></i> My Votes & Activity</div>
+                <div class="social-btn" onclick="viewMyOrders()"><i class="fas fa-shopping-bag"></i> My Orders</div>
+                <div class="social-btn" onclick="viewMyTips()"><i class="fas fa-heart"></i> My Tips</div>
+            </div>
+            <button class="main-cta-btn" onclick="closeModal('userMenuModal')" style="margin-top:15px;">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div id="upgradeModal" class="modal"><div class="modal-box"><div class="m-header"><span class="m-close" onclick="closeModal('upgradeModal')">&times;</span><h3>UPGRADE EXPERIENCE</h3></div><div class="m-body" id="upgradeBody"></div></div></div>
+<div id="tipModal" class="modal"><div class="modal-box"><div class="m-header"><span class="m-close" onclick="closeModal('tipModal')">&times;</span><h3>TIP THE KITCHEN</h3></div><div class="m-body"><div style="display:flex; gap:10px; flex-wrap:wrap;"><button onclick="sendTip(5)" class="main-cta-btn" style="flex:1;">$5</button><button onclick="sendTip(15)" class="main-cta-btn" style="flex:1;">$15</button><button onclick="sendTip(25)" class="main-cta-btn" style="flex:1;">$25</button><button onclick="sendTip(50)" class="main-cta-btn" style="flex:1;">$50</button></div><input type="number" id="customTipAmount" placeholder="Custom amount" style="width:100%; padding:12px; margin:15px 0; background:var(--black-deep); border:1px solid var(--border-subtle); border-radius:12px; color:white;"><button onclick="sendCustomTip()" class="submit-lead">SEND TIP</button></div></div></div>
+<div id="waitlistModal" class="modal"><div class="modal-box"><div class="m-header"><span class="m-close" onclick="closeModal('waitlistModal')">&times;</span><h3>JOIN WAITLIST</h3></div><div class="m-body"><input type="email" id="waitlistEmail" placeholder="Your Email" style="width:100%; padding:12px; background:var(--black-deep); border:1px solid var(--border-subtle); border-radius:12px; color:white;"><button class="submit-lead" onclick="joinWaitlist()" style="margin-top:15px;">JOIN WAITLIST</button></div></div></div>
+
+<script>
+    // ============ USER DATA ============
+    let currentUser = {
+        isLoggedIn: false,
+        name: null,
+        email: null,
+        joinDate: null
+    };
+    
+    // Load saved user data from localStorage
+    function loadUserData() {
+        const savedUser = localStorage.getItem('unclejays_user');
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+            updateUserUI();
+        }
+    }
+    
+    // Save user data to localStorage
+    function saveUserData() {
+        localStorage.setItem('unclejays_user', JSON.stringify(currentUser));
+    }
+    
+    // Update UI with user info
+    function updateUserUI() {
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        const menuUserName = document.getElementById('menuUserName');
+        const menuUserEmail = document.getElementById('menuUserEmail');
+        
+        if (currentUser.isLoggedIn && currentUser.name) {
+            userNameDisplay.innerText = currentUser.name.split(' ')[0];
+            if (menuUserName) menuUserName.innerText = currentUser.name;
+            if (menuUserEmail) menuUserEmail.innerText = currentUser.email || 'Member';
+        } else if (currentUser.isLoggedIn && currentUser.email) {
+            userNameDisplay.innerText = currentUser.email.split('@')[0];
+            if (menuUserName) menuUserName.innerText = currentUser.email.split('@')[0];
+            if (menuUserEmail) menuUserEmail.innerText = currentUser.email;
+        } else {
+            userNameDisplay.innerText = 'Join';
+            if (menuUserName) menuUserName.innerText = 'Guest User';
+            if (menuUserEmail) menuUserEmail.innerText = 'Not signed in';
+        }
+    }
+    
+    // Onboarding functions
+    function showOnboarding() {
+        closeModal('userMenuModal');
+        openModal('onboardingModal');
+    }
+    
+    function closeOnboarding() {
+        closeModal('onboardingModal');
+        // If user didn't sign up, keep guest mode
+        if (!currentUser.isLoggedIn) {
+            showToast('Continue as guest - create an account to save your votes!');
+        }
+    }
+    
+    function emailSignup() {
+        const email = document.getElementById('onboardingEmail').value.trim();
+        const name = document.getElementById('onboardingName').value.trim();
+        
+        if (!email) {
+            showToast('Please enter your email address');
+            return;
+        }
+        
+        // Simple email validation
+        if (!email.includes('@') || !email.includes('.')) {
+            showToast('Please enter a valid email address');
+            return;
+        }
+        
+        currentUser = {
+            isLoggedIn: true,
+            name: name || email.split('@')[0],
+            email: email,
+            joinDate: new Date().toISOString()
+        };
+        
+        saveUserData();
+        updateUserUI();
+        closeModal('onboardingModal');
+        
+        // Record lead for Uncle Jay
+        let leads = JSON.parse(localStorage.getItem('unclejays_leads') || '[]');
+        leads.push({ email: email, name: name, date: new Date().toISOString(), source: 'onboarding' });
+        localStorage.setItem('unclejays_leads', JSON.stringify(leads));
+        
+        showToast(`🎉 Welcome ${currentUser.name}! Your votes are now saved.`);
+        
+        // Update audience count
+        let audience = parseInt(document.getElementById('liveAudience').innerText);
+        document.getElementById('liveAudience').innerText = audience + 1;
+    }
+    
+    function socialLogin(provider) {
+        // Mock social login - in production, this would redirect to OAuth
+        const mockNames = {
+            google: 'Alex Johnson',
+            facebook: 'Sarah Chen',
+            apple: 'Michael Lee'
+        };
+        
+        currentUser = {
+            isLoggedIn: true,
+            name: mockNames[provider],
+            email: `${provider}_user@example.com`,
+            joinDate: new Date().toISOString(),
+            provider: provider
+        };
+        
+        saveUserData();
+        updateUserUI();
+        closeModal('onboardingModal');
+        
+        // Record lead
+        let leads = JSON.parse(localStorage.getItem('unclejays_leads') || '[]');
+        leads.push({ email: currentUser.email, name: currentUser.name, date: new Date().toISOString(), source: provider });
+        localStorage.setItem('unclejays_leads', JSON.stringify(leads));
+        
+        showToast(`🎉 Welcome ${currentUser.name}! Connected with ${provider}.`);
+        
+        let audience = parseInt(document.getElementById('liveAudience').innerText);
+        document.getElementById('liveAudience').innerText = audience + 1;
+    }
+    
+    function openUserMenu() {
+        updateUserUI();
+        openModal('userMenuModal');
+    }
+    
+    function viewMyVotes() {
+        closeModal('userMenuModal');
+        showToast('📊 Your votes: ' + (localStorage.getItem('user_votes') || '0') + ' total votes cast');
+        // Switch to analytics tab to show stats
+        switchTab('analytics', document.querySelector('.tab[onclick*="analytics"]'));
+    }
+    
+    function viewMyOrders() {
+        closeModal('userMenuModal');
+        const orders = JSON.parse(localStorage.getItem('user_orders') || '[]');
+        if (orders.length === 0) {
+            showToast('🛍️ No orders yet. Check out the Kitchen tab to shop!');
+        } else {
+            showToast(`🛍️ You have ${orders.length} order(s). Check your email for details.`);
+        }
+    }
+    
+    function viewMyTips() {
+        closeModal('userMenuModal');
+        const tips = JSON.parse(localStorage.getItem('user_tips') || '[]');
+        const totalTips = tips.reduce((sum, t) => sum + t.amount, 0);
+        if (totalTips === 0) {
+            showToast('💛 You haven\'t tipped yet. Support the kitchen crew!');
+        } else {
+            showToast(`💛 You've tipped $${totalTips} to the kitchen crew. Thank you!`);
+        }
+    }
+    
+    // ============ EXISTING GLOBAL STATE ============
+    let votes = {
+        'Jerk Chicken Spring Rolls': 142, 'Poutine Croquettes': 108, 'Oxtail & Rice': 97,
+        'Smoked Brisket Tacos': 118, 'Rum Cake': 86, 'Maple Crème Brûlée': 91
+    };
+    let totalVotes = 1247, audience = 187, revenue = 9944, tipTotal = 0, waitlistCount = 23;
+    let questions = [{ id: 1, text: "What's the secret to your award-winning jerk sauce?", author: "BBQ_Lover", time: "8m ago", votes: 24, answered: true, answer: "Family recipe from Kingston! Allspice, scotch bonnet, and 24-hour marinade." }];
+
+    document.addEventListener('DOMContentLoaded', () => { 
+        loadUserData();
+        renderCrew(); 
+        renderQA(); 
+        updateTicker(); 
+        updateVotesUI(); 
+        setInterval(updateLiveStats, 4000); 
+        setInterval(updateTimer, 1000);
+        
+        // Show onboarding for new users
+        if (!currentUser.isLoggedIn && !localStorage.getItem('onboarding_shown')) {
+            setTimeout(() => {
+                openModal('onboardingModal');
+                localStorage.setItem('onboarding_shown', 'true');
+            }, 1000);
+        }
+    });
+
+    function voteDish(dish) { 
+        if (!currentUser.isLoggedIn) {
+            showToast('💡 Sign in to save your votes and earn rewards!');
+            openModal('onboardingModal');
+            return;
+        }
+        votes[dish]++; 
+        totalVotes++; 
+        updateVotesUI(); 
+        document.getElementById('totalVotes').innerText = totalVotes; 
+        showToast(`🔥 Voted for ${dish}!`);
+        
+        // Save vote
+        let userVotes = parseInt(localStorage.getItem('user_votes') || '0');
+        localStorage.setItem('user_votes', userVotes + 1);
+    }
+    
+    function powerBoostPrompt(dish) { 
+        if (!currentUser.isLoggedIn) {
+            showToast('💡 Sign in to use power votes!');
+            openModal('onboardingModal');
+            return;
+        }
+        showUpgradeOptions(); 
+        showToast(`⚡ Boost ${dish} with Power Votes - $5 for 5 votes!`); 
+    }
+    
+    function doPowerBoost(dish) { 
+        votes[dish] += 5; 
+        totalVotes += 5; 
+        updateVotesUI(); 
+        document.getElementById('totalVotes').innerText = totalVotes; 
+        revenue += 5; 
+        document.getElementById('totalRevenue').innerText = `$${revenue}`; 
+        showToast(`⚡ +5 Power Votes for ${dish}!`); 
+        closeModal('upgradeModal'); 
+    }
+    
+    function updateVotesUI() {
+        document.getElementById('appVote1').innerText = votes['Jerk Chicken Spring Rolls'] + ' votes';
+        document.getElementById('appVote2').innerText = votes['Poutine Croquettes'] + ' votes';
+        document.getElementById('mainVote1').innerText = votes['Oxtail & Rice'] + ' votes';
+        document.getElementById('mainVote2').innerText = votes['Smoked Brisket Tacos'] + ' votes';
+        document.getElementById('dessertVote1').innerText = votes['Rum Cake'] + ' votes';
+        document.getElementById('dessertVote2').innerText = votes['Maple Crème Brûlée'] + ' votes';
+        if(document.getElementById('statDish1')) { 
+            document.getElementById('statDish1').innerText = votes['Jerk Chicken Spring Rolls']; 
+            document.getElementById('statDish2').innerText = votes['Poutine Croquettes']; 
+            document.getElementById('statDish3').innerText = votes['Smoked Brisket Tacos']; 
+            document.getElementById('statDish4').innerText = votes['Oxtail & Rice']; 
+        }
+    }
+    
+    function showUpgradeOptions() { 
+        openModal('upgradeModal'); 
+        document.getElementById('upgradeBody').innerHTML = `<div style="display:flex; flex-direction:column; gap:15px;"><div class="menu-card" onclick="doPowerBoost('Jerk Chicken Spring Rolls')" style="width:100%;"><div class="m-price">$5</div><div class="m-label">5x Power Votes</div><button class="m-btn">BOOST</button></div><div class="menu-card" onclick="processUpgrade(35, 'Premium Dish Upgrade')" style="width:100%;"><div class="m-price">$35</div><div class="m-label">Premium Dish Upgrade</div><button class="m-btn">GET PLATE</button></div><div class="menu-card vip" onclick="processUpgrade(125, 'VIP Chef\'s Table')" style="width:100%;"><div class="vip-badge">VIP</div><div class="m-price">$125</div><div class="m-label">Chef's Table + Meet Jay</div><button class="m-btn">RESERVE</button></div></div>`; 
+    }
+    
+    function processUpgrade(amount, name) { 
+        revenue += amount; 
+        document.getElementById('totalRevenue').innerText = `$${revenue}`; 
+        showToast(`✨ ${name} added! $${amount}`); 
+        closeModal('upgradeModal');
+        
+        // Save order
+        let orders = JSON.parse(localStorage.getItem('user_orders') || '[]');
+        orders.push({ item: name, amount: amount, date: new Date().toISOString() });
+        localStorage.setItem('user_orders', JSON.stringify(orders));
+    }
+    
+    function buyEarlyBird() { 
+        revenue += 45; 
+        document.getElementById('totalRevenue').innerText = `$${revenue}`; 
+        showToast(`🎟️ Early Bird ticket purchased! $45 - Check your email for confirmation.`); 
+    }
+    
+    function showReferralCode() { 
+        navigator.clipboard.writeText('UNCLEJAY10'); 
+        showToast('📋 Code copied: UNCLEJAY10 - Share with friends! They get $10 off, you get $10 credit.'); 
+    }
+    
+    function joinWaitlistPrompt() { 
+        openModal('waitlistModal'); 
+    }
+    
+    function joinWaitlist() { 
+        let email = document.getElementById('waitlistEmail').value; 
+        if(email) { 
+            waitlistCount++; 
+            document.getElementById('waitlistCount').innerText = waitlistCount; 
+            showToast(`📧 Added to waitlist! We'll notify you when spots open.`); 
+            closeModal('waitlistModal'); 
+            document.getElementById('waitlistEmail').value = ''; 
+            
+            // Save waitlist lead
+            let waitlist = JSON.parse(localStorage.getItem('unclejays_waitlist') || '[]');
+            waitlist.push({ email: email, date: new Date().toISOString() });
+            localStorage.setItem('unclejays_waitlist', JSON.stringify(waitlist));
+        } else { 
+            showToast("Please enter your email"); 
+        } 
+    }
+    
+    function buyMerch(item, price) { 
+        revenue += price; 
+        document.getElementById('totalRevenue').innerText = `$${revenue}`; 
+        showToast(`🛍️ ${item} added to order! $${price} - Pick up at event.`);
+        
+        let orders = JSON.parse(localStorage.getItem('user_orders') || '[]');
+        orders.push({ item: item, amount: price, date: new Date().toISOString() });
+        localStorage.setItem('user_orders', JSON.stringify(orders));
+    }
+    
+    function placeBid(item, price) { 
+        revenue += price; 
+        document.getElementById('totalRevenue').innerText = `$${revenue}`; 
+        showToast(`💰 Bid placed for ${item} at $${price}! You are the current highest bidder.`); 
+    }
+    
+    function selectSponsor(amount, tier) { 
+        revenue += amount; 
+        document.getElementById('totalRevenue').innerText = `$${revenue}`; 
+        showToast(`🎉 Thank you for becoming a ${tier}! Our team will contact you shortly.`); 
+    }
+    
+    function sendTip(amount) { 
+        tipTotal += amount; 
+        revenue += amount; 
+        document.getElementById('totalRevenue').innerText = `$${revenue}`; 
+        showToast(`💛 Thank you! $${amount} tip sent to the kitchen crew! Total tips: $${tipTotal}`); 
+        closeModal('tipModal'); 
+        renderCrew();
+        
+        // Save tip
+        let tips = JSON.parse(localStorage.getItem('user_tips') || '[]');
+        tips.push({ amount: amount, date: new Date().toISOString() });
+        localStorage.setItem('user_tips', JSON.stringify(tips));
+    }
+    
+    function sendCustomTip() { 
+        let amount = parseInt(document.getElementById('customTipAmount').value); 
+        if(amount > 0 && amount <= 500) { 
+            sendTip(amount); 
+        } else { 
+            showToast("Please enter a valid amount between $1 and $500"); 
+        } 
+    }
+    
+    function submitLead() { 
+        let name = document.getElementById('leadName').value; 
+        let email = document.getElementById('leadEmail').value; 
+        if(name && email) { 
+            showToast(`✅ Thanks ${name}! Chef Jay will contact you within 24hrs.`); 
+            document.getElementById('leadName').value = ''; 
+            document.getElementById('leadEmail').value = ''; 
+            document.getElementById('leadPhone').value = '';
+            
+            let leads = JSON.parse(localStorage.getItem('unclejays_leads') || '[]');
+            leads.push({ name: name, email: email, type: document.getElementById('leadEventType').value, date: new Date().toISOString() });
+            localStorage.setItem('unclejays_leads', JSON.stringify(leads));
+        } else { 
+            showToast("Please fill in your name and email"); 
+        } 
+    }
+    
+    function subscribeNewsletter() { 
+        let email = document.getElementById('newsletterEmail').value; 
+        if(email) { 
+            showToast(`📧 Subscribed! Check your inbox for updates and exclusive recipes.`); 
+            document.getElementById('newsletterEmail').value = '';
+            
+            let subscribers = JSON.parse(localStorage.getItem('unclejays_subscribers') || '[]');
+            subscribers.push({ email: email, date: new Date().toISOString() });
+            localStorage.setItem('unclejays_subscribers', JSON.stringify(subscribers));
+        } else { 
+            showToast("Please enter your email"); 
+        } 
+    }
+    
+    function submitQuestion() { 
+        let question = document.getElementById('questionInput').value.trim(); 
+        if(question) { 
+            questions.unshift({ id: Date.now(), text: question, author: currentUser.name || "Guest", time: "Just now", votes: 0, answered: false }); 
+            renderQA(); 
+            document.getElementById('questionInput').value = ''; 
+            showToast("📝 Question sent to Chef Jay! He'll answer live during the event."); 
+        } else { 
+            showToast("Please enter your question"); 
+        } 
+    }
+    
+    function openArtistBooking() { 
+        showToast("📧 Apply to perform at future events: artists@unclejays.ca"); 
+    }
+    
+    function playVideo(title) { 
+        showToast(`🎬 Playing: ${title} (AI Music Video) - Full video available on our YouTube channel.`); 
+    }
+    
+    function renderCrew() { 
+        const crew = [{ name: "Chef Jay", role: "Executive Chef & Owner", tipGoal: 1000, raised: 520 },{ name: "Maria", role: "Sous Chef", tipGoal: 500, raised: 245 },{ name: "Luca", role: "Sauce Master", tipGoal: 400, raised: 180 },{ name: "Ana", role: "Beverage Director", tipGoal: 350, raised: 112 }]; 
+        document.getElementById('crewGrid').innerHTML = crew.map(c => `<div class="crew-card"><div class="crew-avatar"><i class="fas fa-user-chef"></i></div><div class="crew-name">${c.name}</div><div class="crew-role">${c.role}</div><div class="tip-progress"><div class="tip-fill" style="width:${(c.raised/c.tipGoal)*100}%"></div></div><div>$${c.raised} / $${c.tipGoal}</div><button class="tip-btn" onclick="openTipModal()">💰 TIP ${c.name.split(' ')[0]}</button></div>`).join(''); 
+    }
+    
+    function renderQA() { 
+        document.getElementById('qaContainer').innerHTML = questions.map(q => `<div class="qa-item"><strong>${q.author}</strong> • ${q.time}<br>${q.text}${q.answered ? `<div style="margin-top:12px; background:rgba(227,77,46,0.1); padding:12px; border-radius:12px;"><i class="fas fa-reply"></i> <strong>Chef Jay:</strong> "${q.answer}"</div>` : ''}</div>`).join(''); 
+    }
+    
+    function updateLiveStats() { 
+        audience += Math.floor(Math.random() * 3) - 1; 
+        audience = Math.max(120, audience); 
+        document.getElementById('liveAudience').innerText = audience; 
+    }
+    
+    let timerSeconds = 0; 
+    function updateTimer() { 
+        timerSeconds++; 
+        let mins = Math.floor(timerSeconds / 60); 
+        let secs = timerSeconds % 60; 
+        document.getElementById('eventTimer').innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`; 
+        let nextTimer = document.getElementById('liveTimer'); 
+        if(nextTimer) { 
+            let nextMins = 45 - mins; 
+            nextTimer.innerText = `NEXT: ${nextMins > 0 ? nextMins + 'm' : 'SOON'}`; 
+        } 
+    }
+    
+    function updateTicker() { 
+        const messages = ["🔥 VOTE NOW: Jerk Spring Rolls vs Poutine Croquettes!", "🎸 Live Blues at 8:30PM with Soul Food Collective", "💰 Auction: Private Dinner with Chef Jay", "✨ Book Uncle Jay for your next event!", "🍺 Try our signature smoked old fashioned at the bar", "🎥 Every artist gets a professional AI music video"]; 
+        const shuffled = [...messages].sort(() => 0.5 - Math.random()); 
+        const selected = shuffled.slice(0, 4); 
+        document.getElementById('announcementTicker').innerHTML = selected.map(m => `<i class="fas fa-fire"></i> ${m} •`).join(''); 
+    }
+    
+    function switchTab(id, el) { 
+        document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active')); 
+        document.getElementById(id).classList.add('active'); 
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); 
+        if(el) el.classList.add('active'); 
+    }
+    
+    function switchTabMobile(id, el) { 
+        switchTab(id, null); 
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); 
+        if(el) el.classList.add('active'); 
+    }
+    
+    function openTipModal() { 
+        openModal('tipModal'); 
+    }
+    
+    function openModal(id) { 
+        document.getElementById(id).style.display = 'flex'; 
+    }
+    
+    function closeModal(id) { 
+        document.getElementById(id).style.display = 'none'; 
+    }
+    
+    function showToast(message) { 
+        let existing = document.querySelector('.toast'); 
+        if(existing) existing.remove(); 
+        let toast = document.createElement('div'); 
+        toast.className = 'toast'; 
+        toast.innerText = message; 
+        document.body.appendChild(toast); 
+        setTimeout(() => toast.remove(), 3000); 
+    }
+</script>
+</body>
+</html>

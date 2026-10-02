@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🔥 LIVE: Culture Clash 2025 - 9LMNTS Street Tournament</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Teko:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CULTURE CLASH THEME --- */
+        :root {
+            --bg-color: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --modal-bg: #1a1a1a;
+            --orange: #FF5E00;
+            --red: #FF2E2E;
+            --accent: #FF5E00;
+            --secondary: #ff2e2e;
+            --gold: #fbbf24;
+            --neon-green: #00FF9D;
+            --text-main: #ffffff;
+            --text-sub: #a0aec0;
+            --border: #333333;
+            --input-bg: #0f0f0f;
+            --success: #10b981;
+            --live-pulse: #ff2e2e;
+            
+            --font-head: 'Teko', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body { 
+            background-color: var(--bg-color);
+            color: var(--text-main); 
+            font-family: var(--font-body); 
+            margin: 0; padding-bottom: 90px;
+            overflow-x: hidden;
+        }
+        
+        .app-container { 
+            max-width: 480px; margin: 0 auto; min-height: 100vh; 
+            background: var(--bg-color); 
+            position: relative;
+            box-shadow: 0 0 60px rgba(255, 94, 0, 0.1);
+        }
+        
+        /* LIVE EVENT HEADER */
+        .live-event-header { 
+            background: linear-gradient(90deg, #1a0a0a 0%, #0a0a0a 100%);
+            padding: 12px 20px; 
+            position: sticky; top: 0; z-index: 100; 
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--orange);
+            box-shadow: 0 5px 20px rgba(255, 94, 0, 0.2);
+        }
+        .logo { 
+            font-family: var(--font-head); 
+            font-size: 1.6rem; 
+            letter-spacing: 1.5px; 
+            text-transform: uppercase; 
+            color: white; 
+            text-shadow: 0 0 10px rgba(255, 94, 0, 0.5);
+        }
+        .logo span { color: var(--orange); }
+        .logo .ether { color: #666; font-size: 1.8rem; }
+        
+        .live-status {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .live-badge { 
+            background: linear-gradient(90deg, #ff2e2e, #ff5e5e);
+            color: white; 
+            font-size: 0.7rem; 
+            font-weight: 900; 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255, 46, 46, 0.5);
+            animation: pulse-glow 1.5s infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 46, 46, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(255, 46, 46, 0.8); }
+        }
+        
+        .live-timer {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--orange);
+            background: rgba(255, 94, 0, 0.1);
+            padding: 4px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--orange);
+        }
+
+        /* HERO DASHBOARD */
+        .hero-dashboard-live {
+            background: radial-gradient(ellipse at center, #1a0a0a 0%, #0a0a0a 70%);
+            padding: 25px 20px 20px; 
+            text-align: center; 
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+        .hero-dashboard-live::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--orange), var(--red));
+        }
+        
+        .event-date { 
+            color: var(--orange); 
+            font-weight: 900; 
+            letter-spacing: 3px; 
+            font-size: 0.75rem; 
+            margin-bottom: 15px; 
+            text-transform: uppercase;
+        }
+        
+        .hero-title { 
+            font-family: var(--font-head); 
+            margin: 0; 
+            font-size: 3.5rem; 
+            line-height: 0.85; 
+            color: white; 
+            text-transform: uppercase; 
+            text-shadow: 0 0 20px rgba(255, 94, 0, 0.3);
+            margin-bottom: 5px;
+        }
+        .hero-sub { 
+            color: var(--text-sub); 
+            font-weight: 900; 
+            letter-spacing: 2px; 
+            font-size: 0.75rem; 
+            margin: 10px 0 20px; 
+            text-transform: uppercase;
+        }
+        
+        .live-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0 20px;
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            display: block;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: var(--text-sub);
+            font-weight: 700;
+            margin-top: 5px;
+            display:block;
+        }
+        .stat-icon {
+            color: var(--orange);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .main-cta-btn { 
+            width: 100%; 
+            padding: 18px; 
+            background: linear-gradient(90deg, var(--orange), var(--red));
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: 900; 
+            font-size: 1rem; 
+            margin: 15px 0 10px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            text-transform: uppercase;
+            box-shadow: 0 5px 25px rgba(255, 94, 0, 0.4);
+            font-family: var(--font-body);
+        }
+        .main-cta-btn:active { transform: scale(0.98); }
+
+        /* TICKET SECTION */
+        .ticket-section {
+            padding: 20px 0 25px 20px; 
+            margin: 25px 20px; 
+            background: var(--card-bg); 
+            border-radius: 16px;
+            border: 2px solid var(--orange);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .section-header { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            color: white; 
+            font-weight: 800; 
+            font-size: 1rem; 
+        }
+        .section-header i { color: var(--orange); font-size: 1.1rem; }
+        
+        .ticket-row { 
+            display: flex; 
+            gap: 12px; 
+            overflow-x: auto; 
+            padding-bottom: 5px; 
+            padding-right: 20px; 
+            scrollbar-width: none; 
+        }
+        .ticket-card {
+            min-width: 140px; 
+            padding: 18px 12px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border);
+            background: var(--bg-color); 
+            cursor: pointer; 
+            text-align: center; 
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .ticket-card:active { transform: scale(0.97); }
+        .ticket-card.vip { 
+            border: 2px solid var(--gold); 
+            background: linear-gradient(145deg, rgba(251, 191, 36, 0.15), transparent); 
+            position: relative;
+        }
+        .vip-badge {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gold);
+            color: black;
+            font-size: 0.6rem;
+            font-weight: 900;
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+        
+        .t-price { font-size: 1.6rem; font-weight: 900; color: white; margin-bottom: 5px; }
+        .t-label { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 15px; }
+        .t-btn { 
+            font-size: 0.8rem; 
+            font-weight: 900; 
+            padding: 10px 0; 
+            border-radius: 25px; 
+            border: none; 
+            background: var(--orange); 
+            color: white; 
+            width: 100%; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .t-btn:hover { opacity: 0.9; }
+        .vip .t-btn { background: var(--gold); color: black; }
+
+        /* TABS */
+        .nav-tabs { 
+            display: flex; 
+            background: var(--card-bg); 
+            padding: 0 5px; 
+            border-bottom: 1px solid var(--border); 
+            overflow-x: auto;
+            position: sticky;
+            top: 73px;
+            z-index: 90;
+        }
+        .tab { 
+            padding: 18px 20px; 
+            color: var(--text-sub); 
+            font-weight: 800; 
+            font-size: 0.9rem; 
+            cursor: pointer; 
+            white-space: nowrap; 
+            border-bottom: 3px solid transparent; 
+            transition: 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+        .tab.active { 
+            color: white; 
+            border-bottom: 3px solid var(--orange);
+            background: rgba(255, 94, 0, 0.05);
+        }
+
+        /* SECTIONS */
+        .view-section { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* BATTLE GRID */
+        .battle-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-bottom: 25px; 
+        }
+        .battle-card { 
+            background: var(--card-bg); 
+            padding: 20px 15px; 
+            text-align: center; 
+            border-radius: 16px; 
+            border: 2px solid var(--border); 
+            position: relative;
+            transition: 0.3s;
+        }
+        .battle-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .bc-red { border-top: 5px solid var(--red); }
+        .bc-orange { border-top: 5px solid var(--orange); }
+        
+        .vote-percentage {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+        }
+        .bc-red .vote-percentage { color: var(--red); }
+        .bc-orange .vote-percentage { color: var(--orange); }
+        
+        .bc-avatar { 
+            width: 80px; 
+            height: 80px; 
+            background-size: cover; 
+            margin: 0 auto 15px; 
+            border-radius: 50%; 
+            border: 4px solid var(--bg-color); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            filter: grayscale(100%);
+            transition: filter 0.3s;
+        }
+        .battle-card:hover .bc-avatar { filter: grayscale(0%); }
+        .bc-name { 
+            font-family: var(--font-head); 
+            font-size: 1.6rem; 
+            line-height: 1; 
+            margin: 0; 
+            text-transform: uppercase; 
+            color: white;
+        }
+        .bc-role { 
+            font-size: 0.75rem; 
+            color: var(--text-sub); 
+            margin-bottom: 15px; 
+            font-weight: 600;
+        }
+        .vote-progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        .vote-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+        .bc-red .vote-fill { background: var(--red); }
+        .bc-orange .vote-fill { background: var(--orange); }
+        
+        .bc-btn { 
+            width: 100%; 
+            padding: 12px; 
+            font-weight: 900; 
+            border: none; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            border-radius: 10px; 
+            font-size: 0.85rem; 
+            color: white; 
+            transition: 0.2s;
+        }
+        .bc-btn:active { transform: scale(0.98); }
+        .btn-red { 
+            background: var(--red); 
+            box-shadow: 0 0 15px rgba(255, 46, 46, 0.3);
+        }
+        .btn-orange { 
+            background: var(--orange); 
+            box-shadow: 0 0 15px rgba(255, 94, 0, 0.3);
+        }
+
+        /* CONTESTANTS GRID */
+        .grid-header { 
+            font-size: 1rem; 
+            font-weight: 900; 
+            color: white; 
+            margin: 30px 0 20px; 
+            border-bottom: 1px solid var(--border); 
+            padding-bottom: 12px; 
+        }
+        .contestant-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+        }
+        
+        .c-card { 
+            background: var(--card-bg); 
+            padding: 15px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+        }
+        .c-card:active { transform: scale(0.98); }
+        .c-card.active { border-color: var(--orange); background: rgba(255, 94, 0, 0.05); }
+        .c-img { 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            background-size: cover; 
+            background-color: #333; 
+            border: 2px solid var(--border);
+            filter: grayscale(100%);
+        }
+        .c-card:hover .c-img { filter: grayscale(0%); }
+        .c-info { flex: 1; }
+        .c-title { font-weight: 900; font-size: 0.9rem; line-height: 1.1; color: white; }
+        .c-sub { font-size: 0.7rem; color: var(--text-sub); }
+        .c-vote-icon { 
+            color: var(--orange); 
+            font-size: 0.75rem; 
+            font-weight: 900;
+            border: 1px solid var(--orange); 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            transition: 0.2s;
+        }
+        .c-vote-icon:hover { background: var(--orange); color: white; }
+
+        /* BUILD A STAR SECTION */
+        .star-section {
+            padding: 30px 15px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            margin: 25px 20px;
+            border: 1px solid var(--border);
+        }
+        .section-label { 
+            text-align: center; 
+            color: var(--orange); 
+            font-size: 0.8rem; 
+            letter-spacing: 2px; 
+            margin-bottom: 20px; 
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        
+        .star-card {
+            padding: 25px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            background: var(--bg-color);
+            border-left: 4px solid var(--red);
+            border: 1px solid var(--border);
+            border-left-width: 4px;
+        }
+        .sc-orange { border-left-color: var(--orange); }
+        
+        .star-card h3 { 
+            margin: 0 0 10px 0; 
+            font-size: 1.2rem; 
+            text-transform: uppercase; 
+            color: white;
+        }
+        .sc-red h3 { color: var(--red); }
+        .sc-orange h3 { color: var(--orange); }
+        
+        .promo-tag { 
+            display: inline-block; 
+            background: var(--border); 
+            color: white; 
+            font-size: 0.6rem; 
+            font-weight: bold; 
+            padding: 4px 8px; 
+            margin-bottom: 15px; 
+            font-family: monospace; 
+            border-radius: 4px;
+        }
+        .star-btn { 
+            background: var(--orange); 
+            color: #000; 
+            border: none; 
+            padding: 12px 20px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+            font-size: 0.8rem; 
+            width: 100%; 
+            border-radius: 8px;
+        }
+        .sc-red .star-btn { background: var(--red); color: white; }
+
+        /* GAME FUNDING BANNER */
+        .game-banner {
+            margin: 30px 15px;
+            background: linear-gradient(45deg, #1a0505, #000);
+            border: 1px solid var(--orange);
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 16px;
+        }
+        .game-btn { 
+            background: var(--orange); 
+            color: white; 
+            border: none; 
+            padding: 15px 30px; 
+            font-weight: bold; 
+            margin-top: 15px; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            border-radius: 8px;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            max-width: 480px; 
+            background: rgba(26, 26, 26, 0.95); 
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border); 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 15px 0; 
+            z-index: 100; 
+        }
+        .nav-item { 
+            text-align: center; 
+            color: var(--text-sub); 
+            font-size: 0.7rem; 
+            cursor: pointer; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 6px; 
+            font-weight: 800; 
+            transition: 0.2s;
+        }
+        .nav-item:active { transform: scale(0.95); }
+        .nav-item.active { color: white; }
+        .nav-item i { font-size: 1.4rem; }
+
+        /* QUICK ACTION FAB */
+        .quick-action-fab {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--orange), var(--red));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 25px rgba(255, 94, 0, 0.5);
+            z-index: 99;
+            transition: 0.3s;
+        }
+        .quick-action-fab:active { 
+            transform: scale(0.9); 
+        }
+
+        /* --- MODALS --- */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.9); 
+            z-index: 200; 
+            justify-content: center; 
+            align-items: center; 
+            backdrop-filter: blur(10px); 
+        }
+        .modal-box { 
+            width: 90%; 
+            max-width: 400px; 
+            background: var(--modal-bg); 
+            padding: 0; 
+            border-radius: 20px; 
+            position: relative; 
+            border-top: 5px solid var(--orange); 
+            animation: slideUp 0.3s; 
+            overflow: hidden; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); 
+        }
+        
+        .m-header { 
+            padding: 25px 20px; 
+            border-bottom: 1px solid var(--border); 
+            position: relative; 
+            text-align: center; 
+            background: rgba(0,0,0,0.2);
+        }
+        .m-title { 
+            margin: 0; 
+            color: white; 
+            font-size: 1.4rem; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+        }
+        .m-close { 
+            position: absolute; 
+            top: 20px; 
+            right: 25px; 
+            font-size: 2rem; 
+            color: var(--text-sub); 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .m-close:active { transform: scale(1.2); }
+        .m-body { padding: 30px; }
+
+        /* VOTE MODAL */
+        .vote-tabs { 
+            display: flex; 
+            background: var(--bg-color); 
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .v-tab { 
+            flex: 1; 
+            padding: 18px; 
+            text-align: center; 
+            font-size: 0.85rem; 
+            font-weight: 900; 
+            color: var(--text-sub); 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .v-tab:active { transform: scale(0.98); }
+        .v-tab.active { 
+            color: white; 
+            background: rgba(255, 94, 0, 0.2);
+            border-bottom: 3px solid var(--orange); 
+        }
+        
+        .power-opt { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 20px; 
+            background: var(--bg-color); 
+            border: 2px solid var(--border); 
+            border-radius: 12px; 
+            margin-bottom: 15px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+        }
+        .power-opt:active { transform: scale(0.98); }
+        .power-opt:hover, .power-opt.selected { 
+            border-color: var(--orange); 
+            background: rgba(255, 94, 0, 0.1); 
+        }
+
+        .submit-action { 
+            background: linear-gradient(90deg, var(--orange), var(--red)); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            width: 100%; 
+            font-weight: 900; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            margin-top: 15px; 
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+        .submit-action:active { transform: scale(0.98); }
+
+        /* CONTRIBUTE MODAL */
+        .contribute-modal-content {
+            text-align: center;
+        }
+        .tier-option {
+            background: var(--bg-color);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .tier-option.selected {
+            border-color: var(--orange);
+            background: rgba(255, 94, 0, 0.1);
+        }
+        .tier-price {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--orange);
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes slideUp { 
+            from { transform: translateY(30px); opacity: 0; } 
+            to { transform: translateY(0); opacity: 1; } 
+        }
+        @keyframes pulse { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.6; } 
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <!-- LIVE EVENT HEADER -->
+    <div class="live-event-header">
+        <div class="logo">THE ETHER <span class="ether">×</span> <span>9LMNTS</span></div>
+        <div class="live-status">
+            <div class="live-timer" id="liveTimer">FEB 28 @ 70 BONGARD</div>
+            <div class="live-badge"><i class="fas fa-circle"></i> LIVE</div>
+        </div>
+    </div>
+
+    <!-- HERO DASHBOARD LIVE -->
+    <div class="hero-dashboard-live">
+        <div class="event-date">FEB 28 @ 70 BONGARD</div>
+        <h1 class="hero-title">CULTURE<br>CLASH</h1>
+        <p class="hero-sub">THE 9 ELEMENTS TOURNAMENT</p>
+        
+        <div class="live-stats">
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-value" id="liveAudience">1,247</div>
+                <div class="stat-label">Live Audience</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-vote-yea"></i></div>
+                <div class="stat-value" id="totalVotes">8,942</div>
+                <div class="stat-label">Votes Cast</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-value" id="matchTimer">12:45</div>
+                <div class="stat-label">Match Time</div>
+            </div>
+        </div>
+
+        <button class="main-cta-btn" onclick="openModal('gameModal')">
+            <i class="fas fa-ticket-alt"></i> GET TICKETS / PLEDGE
+        </button>
+    </div>
+
+    <!-- TICKET SECTION -->
+    <div class="ticket-section">
+        <div class="section-header">
+            <i class="fas fa-ticket-alt"></i> EVENT TICKETS & UPGRADES
+        </div>
+        <div class="ticket-row">
+            <div class="ticket-card" onclick="openTierSelection(25, 'Standard Ticket')">
+                <div class="t-price">$25</div>
+                <div class="t-label">Entry Pass</div>
+                <button class="t-btn">BUY NOW</button>
+            </div>
+            <div class="ticket-card" onclick="openTierSelection(50, 'Vote Pack')">
+                <div class="t-price">$50</div>
+                <div class="t-label">50 Power Votes</div>
+                <button class="t-btn">BOOST</button>
+            </div>
+            <div class="ticket-card vip" onclick="openTierSelection(150, 'VIP Access')">
+                <div class="vip-badge">VIP</div>
+                <div class="t-price">$150</div>
+                <div class="t-label">VIP Investor</div>
+                <button class="t-btn">UPGRADE</button>
+            </div>
+            <div class="ticket-card" onclick="openTierSelection(20, 'Raffle Bundle')">
+                <div class="t-price">$20</div>
+                <div class="t-label">5 Raffle Tickets</div>
+                <button class="t-btn">ENTER</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAV TABS -->
+    <div class="nav-tabs">
+        <div class="tab active" onclick="switchTab('battle', this)">
+            <i class="fas fa-fire"></i> BATTLE ARENA
+        </div>
+        <div class="tab" onclick="switchTab('star', this)">
+            <i class="fas fa-star"></i> BUILD A STAR
+        </div>
+        <div class="tab" onclick="switchTab('network', this)">
+            <i class="fas fa-users"></i> NETWORKING
+        </div>
+    </div>
+
+    <!-- TAB 1: BATTLE ARENA -->
+    <div id="battle" class="view-section active">
+        <!-- Battle Tabs Inside -->
+        <div class="nav-tabs" style="top: 148px; background: transparent; border: none; margin-bottom: 20px;">
+            <div class="tab active" onclick="switchCategory('lyrical', this)">🎤 LYRICAL</div>
+            <div class="tab" onclick="switchCategory('kinetic', this)">💃 KINETIC</div>
+            <div class="tab" onclick="switchCategory('fusion', this)">⚡ FUSION</div>
+        </div>
+
+        <!-- Lyrical Warfare -->
+        <div id="lyrical" class="category-section active">
+            <div class="battle-container">
+                <div class="battle-card bc-red">
+                    <div class="vote-percentage" id="voteRed1">48%</div>
+                    <div class="bc-avatar" style="background-image: url('https://images.unsplash.com/photo-1598520106830-8c45c2035460?w=300');"></div>
+                    <h3 class="bc-name">KINETIC</h3>
+                    <div class="bc-role">WEST END</div>
+                    <div class="vote-progress">
+                        <div class="vote-fill" id="progressRed1" style="width: 48%"></div>
+                    </div>
+                    <button class="bc-btn btn-red" onclick="openVote('KINETIC', 'var(--red)', 'KINETIC')">
+                        <i class="fas fa-fire"></i> VOTE RED
+                    </button>
+                </div>
+                <div class="battle-card bc-orange">
+                    <div class="vote-percentage" id="voteOrange1">52%</div>
+                    <div class="bc-avatar" style="background-image: url('https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=300'); border: 2px solid var(--orange);"></div>
+                    <h3 class="bc-name">DAS JONES</h3>
+                    <div class="bc-role">OTTAWA // MTL</div>
+                    <div class="vote-progress">
+                        <div class="vote-fill" id="progressOrange1" style="width: 52%"></div>
+                    </div>
+                    <button class="bc-btn btn-orange" onclick="openVote('DAS JONES', 'var(--orange)', 'DAS JONES')">
+                        <i class="fas fa-bolt"></i> VOTE ORANGE
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kinetic Energy -->
+        <div id="kinetic" class="category-section">
+            <div class="battle-container">
+                <div class="battle-card bc-red">
+                    <div class="vote-percentage" id="voteRed2">60%</div>
+                    <div class="bc-avatar" style="background-image: url('https://images.unsplash.com/photo-1535525266644-dc2878e7e653?w=300');"></div>
+                    <h3 class="bc-name">PHANTOM</h3>
+                    <div class="bc-role">BREAKING</div>
+                    <div class="vote-progress">
+                        <div class="vote-fill" id="progressRed2" style="width: 60%"></div>
+                    </div>
+                    <button class="bc-btn btn-red" onclick="openVote('PHANTOM', 'var(--red)', 'PHANTOM')">
+                        <i class="fas fa-fire"></i> VOTE RED
+                    </button>
+                </div>
+                <div class="battle-card bc-orange">
+                    <div class="vote-percentage" id="voteOrange2">40%</div>
+                    <div class="bc-avatar" style="background-image: url('https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?w=300');"></div>
+                    <h3 class="bc-name">B-BOY 613</h3>
+                    <div class="bc-role">POPPING</div>
+                    <div class="vote-progress">
+                        <div class="vote-fill" id="progressOrange2" style="width: 40%"></div>
+                    </div>
+                    <button class="bc-btn btn-orange" onclick="openVote('B-BOY 613', 'var(--orange)', 'B-BOY 613')">
+                        <i class="fas fa-bolt"></i> VOTE ORANGE
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fusion Teams -->
+        <div id="fusion" class="category-section">
+            <div class="battle-container">
+                <div class="battle-card bc-red">
+                    <div class="vote-percentage" id="voteRed3">30%</div>
+                    <div class="bc-avatar" style="background-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300');"></div>
+                    <h3 class="bc-name">TEAM ALPHA</h3>
+                    <div class="bc-role">DJ + RAP + DANCE</div>
+                    <div class="vote-progress">
+                        <div class="vote-fill" id="progressRed3" style="width: 30%"></div>
+                    </div>
+                    <button class="bc-btn btn-red" onclick="openVote('TEAM ALPHA', 'var(--red)', 'TEAM ALPHA')">
+                        <i class="fas fa-fire"></i> VOTE RED
+                    </button>
+                </div>
+                <div class="battle-card bc-orange">
+                    <div class="vote-percentage" id="voteOrange3">70%</div>
+                    <div class="bc-avatar" style="background-image: url('https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300');"></div>
+                    <h3 class="bc-name">TEAM OMEGA</h3>
+                    <div class="bc-role">DJ + RAP + DANCE</div>
+                    <div class="vote-progress">
+                        <div class="vote-fill" id="progressOrange3" style="width: 70%"></div>
+                    </div>
+                    <button class="bc-btn btn-orange" onclick="openVote('TEAM OMEGA', 'var(--orange)', 'TEAM OMEGA')">
+                        <i class="fas fa-bolt"></i> VOTE ORANGE
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ALL CONTESTANTS -->
+        <div class="grid-header">
+            ALL ARTISTS & CREWS
+        </div>
+        <div class="contestant-grid" id="contestantGrid">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- TAB 2: BUILD A STAR -->
+    <div id="star" class="view-section">
+        <div class="star-section">
+            <div class="section-label">—— BUILD A STAR ——</div>
+            
+            <div class="star-card sc-red">
+                <h3>THE SOUND</h3>
+                <p style="color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem;">Recorded at The Ether Studio.<br>Create now. Pay later.</p>
+                <div class="promo-tag">0% INTEREST FINANCING</div>
+                <button class="star-btn" onclick="openModal('studioModal')">BOOK STUDIO SESSION</button>
+            </div>
+
+            <div class="star-card sc-orange">
+                <h3>THE IMAGE</h3>
+                <p style="color: var(--text-sub); margin-bottom: 15px; font-size: 0.9rem;">Branding by 9LMNTS Studio.<br>Websites, Logos, & Identity.</p>
+                <div class="promo-tag">WINNER GETS FULL PACKAGE</div>
+                <button class="star-btn" onclick="openModal('agencyModal')">LAUNCH MY BRAND</button>
+            </div>
+        </div>
+
+        <!-- GAME FUNDING BANNER -->
+        <div class="game-banner">
+            <div style="font-size:0.7rem; color:var(--orange); font-weight:bold; letter-spacing:1px; margin-bottom:5px;">FUND THE REVOLUTION</div>
+            <h3 style="margin: 0 0 10px 0; color: white;">BECOME AN NPC IN "LOA"</h3>
+            <p style="font-size:0.8rem; color:#ccc; margin-bottom:15px;">Support the event & get your face scanned into Ottawa's first Open World RPG.</p>
+            <button class="game-btn" onclick="openModal('gameModal')">PLEDGE $250</button>
+        </div>
+    </div>
+
+    <!-- TAB 3: NETWORKING -->
+    <div id="network" class="view-section">
+        <div class="grid-header">
+            ARTIST NETWORKING
+            <span style="font-size:0.8rem; color:var(--text-sub);">8 ARTISTS • 4 CREWS</span>
+        </div>
+        <div class="contestant-grid">
+            <div class="c-card" onclick="openProfile('Kinetic', 'Rapper', 'https://images.unsplash.com/photo-1598520106830-8c45c2035460?w=300', 'WEST END')">
+                <div class="c-img" style="background-image: url('https://images.unsplash.com/photo-1598520106830-8c45c2035460?w=300');"></div>
+                <div class="c-info">
+                    <div class="c-title">KINETIC</div>
+                    <div class="c-sub">WEST END • LYRICAL</div>
+                </div>
+                <div class="c-vote-icon">VIEW</div>
+            </div>
+            <div class="c-card" onclick="openProfile('Das Jones', 'Rapper', 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=300', 'OTTAWA // MTL')">
+                <div class="c-img" style="background-image: url('https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=300');"></div>
+                <div class="c-info">
+                    <div class="c-title">DAS JONES</div>
+                    <div class="c-sub">OTTAWA // MTL • LYRICAL</div>
+                </div>
+                <div class="c-vote-icon">VIEW</div>
+            </div>
+            <div class="c-card" onclick="openProfile('Phantom', 'B-Boy', 'https://images.unsplash.com/photo-1535525266644-dc2878e7e653?w=300', 'BREAKING')">
+                <div class="c-img" style="background-image: url('https://images.unsplash.com/photo-1535525266644-dc2878e7e653?w=300');"></div>
+                <div class="c-info">
+                    <div class="c-title">PHANTOM</div>
+                    <div class="c-sub">BREAKING • KINETIC</div>
+                </div>
+                <div class="c-vote-icon">VIEW</div>
+            </div>
+            <div class="c-card" onclick="openProfile('B-Boy 613', 'Dancer', 'https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?w=300', 'POPPING')">
+                <div class="c-img" style="background-image: url('https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?w=300');"></div>
+                <div class="c-info">
+                    <div class="c-title">B-BOY 613</div>
+                    <div class="c-sub">POPPING • KINETIC</div>
+                </div>
+                <div class="c-vote-icon">VIEW</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK ACTION FAB -->
+    <div class="quick-action-fab" onclick="openQuickActions()">
+        <i class="fas fa-bolt"></i>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('battle', this)">
+            <i class="fas fa-fire"></i>
+            BATTLE
+        </div>
+        <div class="nav-item" onclick="openModal('agendaModal')">
+            <i class="far fa-calendar-alt"></i>
+            AGENDA
+        </div>
+        <div class="nav-item" onclick="switchTab('network', this)">
+            <i class="fas fa-users"></i>
+            NETWORK
+        </div>
+        <div class="nav-item" onclick="openModal('profileModal')">
+            <i class="fas fa-user-circle"></i>
+            PROFILE
+        </div>
+    </div>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- VOTE MODAL -->
+<div id="voteModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">CAST YOUR VOTE</div>
+            <div style="font-size:0.9rem; color:var(--text-sub); margin-top:8px;">
+                Voting for: <span id="voteTarget" style="color:white; font-weight:900; font-size:1.1rem;">TARGET</span>
+            </div>
+            <span class="m-close" onclick="closeModal('voteModal')">&times;</span>
+        </div>
+        <div class="vote-tabs">
+            <div class="v-tab active" onclick="switchVoteTab('free', this)">FREE VOTE</div>
+            <div class="v-tab" onclick="switchVoteTab('power', this)">POWER VOTE (+$)</div>
+        </div>
+        <div class="m-body">
+            <div id="freeVoteSection">
+                <p style="color:var(--text-sub); font-size:0.95rem; margin-bottom:25px; text-align:center;">
+                    Cast your single audience vote for this round. One vote per person.
+                </p>
+                <button class="submit-action" style="background:var(--border);" onclick="castFreeVote()">
+                    <i class="fas fa-check-circle"></i> SUBMIT FREE VOTE
+                </button>
+            </div>
+            <div id="powerVoteSection" style="display:none;">
+                <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">
+                    Boost your favorite artist with power votes! Each purchase supports the event.
+                </p>
+                <div class="power-opt" onclick="selectPowerOption(10, 2)">
+                    <span><strong>10 Power Votes</strong><br><small>Basic Boost</small></span>
+                    <span style="color:var(--orange); font-weight:900; font-size:1.1rem;">$2.00</span>
+                </div>
+                <div class="power-opt" onclick="selectPowerOption(50, 10)">
+                    <span><strong>50 Power Votes</strong><br><small>Popular Choice</small></span>
+                    <span style="color:var(--orange); font-weight:900; font-size:1.1rem;">$10.00</span>
+                </div>
+                <div class="power-opt" onclick="selectPowerOption(250, 45)">
+                    <span><strong>250 Power Votes</strong><br><small>Major Influence</small></span>
+                    <span style="color:var(--orange); font-weight:900; font-size:1.1rem;">$45.00</span>
+                </div>
+                <button class="submit-action" onclick="purchasePowerVotes()">
+                    <i class="fas fa-bolt"></i> PAY & BOOST
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- GAME/PLEDGE MODAL -->
+<div id="gameModal" class="modal">
+    <div class="modal-box" style="border-top-color: var(--orange);">
+        <div class="m-header">
+            <div class="m-title" style="color:var(--orange);">ENLIST IN THE REVOLUTION</div>
+            <span class="m-close" onclick="closeModal('gameModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <div class="contribute-modal-content">
+                <p style="color:var(--text-sub); margin-bottom:25px; font-size:0.9rem; text-align:center;">
+                    Support the Culture Clash event and fund Ottawa's first Open World RPG.
+                </p>
+                
+                <div class="tier-option" onclick="selectTier(25, 'Standard Ticket')">
+                    <div class="tier-price">$25</div>
+                    <div style="font-weight:bold; margin-bottom:5px;">THE RECRUIT</div>
+                    <div style="font-size:0.8rem; color:var(--text-sub);">Ticket Only</div>
+                </div>
+                
+                <div class="tier-option" onclick="selectTier(50, 'Vote Pack')">
+                    <div class="tier-price">$50</div>
+                    <div style="font-weight:bold; margin-bottom:5px;">THE BETA TESTER</div>
+                    <div style="font-size:0.8rem; color:var(--text-sub);">Ticket + Game Access</div>
+                </div>
+                
+                <div class="tier-option" onclick="selectTier(250, 'VIP Access')">
+                    <div class="tier-price">$250</div>
+                    <div style="font-weight:bold; margin-bottom:5px;">THE IMMORTAL</div>
+                    <div style="font-size:0.8rem; color:var(--text-sub);">VIP + NPC Face Scan</div>
+                </div>
+                
+                <button class="submit-action" style="margin-top:20px;" onclick="processContribution()" id="contributeBtn">
+                    SECURE SPOT
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- STUDIO MODAL -->
+<div id="studioModal" class="modal">
+    <div class="modal-box" style="border-top-color: var(--red);">
+        <div class="m-header">
+            <div class="m-title" style="color:var(--red);">BOOK STUDIO SESSION</div>
+            <span class="m-close" onclick="closeModal('studioModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <select style="width:100%; padding:15px; background:var(--input-bg); border:1px solid var(--border); color:white; margin-bottom:15px; border-radius:8px;">
+                <option>Recording Session ($65/hr)</option>
+                <option>Mixing & Mastering</option>
+                <option>Studio Takeover (10 Hrs)</option>
+            </select>
+            <div style="background:rgba(255, 46, 46, 0.1); padding:10px; border:1px solid var(--red); display:flex; align-items:center; gap:10px; margin-bottom:15px; border-radius:8px;">
+                <input type="checkbox" checked style="width:20px; margin:0;">
+                <span style="font-size:0.7rem; font-weight:bold; color:var(--red);">ACTIVATE 0% FINANCING</span>
+            </div>
+            <input type="email" placeholder="Your Email" style="width:100%; padding:15px; background:var(--input-bg); border:1px solid var(--border); color:white; margin-bottom:15px; border-radius:8px;">
+            <button class="submit-action" style="background:var(--red);" onclick="process('studioModal', 'BOOKING REQUEST SENT')">
+                CONFIRM BOOKING
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- AGENCY MODAL -->
+<div id="agencyModal" class="modal">
+    <div class="modal-box" style="border-top-color: var(--orange);">
+        <div class="m-header">
+            <div class="m-title" style="color:var(--orange);">LAUNCH YOUR BRAND</div>
+            <span class="m-close" onclick="closeModal('agencyModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <select style="width:100%; padding:15px; background:var(--input-bg); border:1px solid var(--border); color:white; margin-bottom:15px; border-radius:8px;">
+                <option>Logo & Identity Design</option>
+                <option>Artist Website</option>
+                <option>Social Media Kit</option>
+            </select>
+            <input type="email" placeholder="Your Email" style="width:100%; padding:15px; background:var(--input-bg); border:1px solid var(--border); color:white; margin-bottom:15px; border-radius:8px;">
+            <button class="submit-action" onclick="process('agencyModal', 'INQUIRY SENT')">
+                START PROJECT
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div id="profileModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">ARTIST PROFILE</div>
+            <span class="m-close" onclick="closeModal('profileModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <div style="text-align:center; margin-bottom:25px;">
+                <div id="pAvatar" style="width:110px; height:110px; background:var(--bg-color); border-radius:50%; margin:0 auto 20px; background-size:cover; border:4px solid var(--border);"></div>
+                <h2 id="pName" style="margin:0; font-size:1.5rem; color:white;">Name</h2>
+                <p id="pRole" style="color:var(--text-sub); margin:8px 0 0; font-size:0.9rem;">Role</p>
+            </div>
+            <button class="submit-action" style="margin-bottom:15px;">
+                <i class="fas fa-vote-yea"></i> VOTE FOR ARTIST
+            </button>
+            <div style="text-align:center; font-size:0.9rem; color:var(--orange); font-weight:900; cursor:pointer; padding:12px; border:2px solid var(--border); border-radius:12px;" 
+                 onclick="showToast('Follow request sent!')">
+                <i class="fas fa-user-plus"></i> FOLLOW ARTIST
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AGENDA MODAL -->
+<div id="agendaModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">EVENT SCHEDULE</div>
+            <span class="m-close" onclick="closeModal('agendaModal')">&times;</span>
+        </div>
+        <div class="m-body" style="padding:0 30px 30px;">
+            <ul style="list-style:none; padding:0; margin:0;">
+                <li style="padding:20px 0; border-bottom:1px solid var(--border); color:white; display:flex; gap:20px; align-items:flex-start;">
+                    <span style="font-weight:900; color:var(--orange); white-space:nowrap; font-size:1rem; min-width:80px;">7:00 PM</span>
+                    <span style="font-size:0.95rem; font-weight:600; flex:1;">Doors Open & Registration</span>
+                </li>
+                <li style="padding:20px 0; border-bottom:1px solid var(--border); color:white; display:flex; gap:20px; align-items:flex-start;">
+                    <span style="font-weight:900; color:var(--orange); white-space:nowrap; font-size:1rem; min-width:80px;">8:00 PM</span>
+                    <span style="font-size:0.95rem; font-weight:600; flex:1;">Opening Ceremony</span>
+                </li>
+                <li style="padding:20px 0; border-bottom:1px solid var(--border); color:white; display:flex; gap:20px; align-items:flex-start; background:rgba(255,94,0,0.05); border-left:5px solid var(--orange); margin-left:-30px; padding-left:25px;">
+                    <span style="font-weight:900; color:var(--orange); white-space:nowrap; font-size:1rem; min-width:80px;">8:30 PM</span>
+                    <span style="font-size:0.95rem; font-weight:600; flex:1;">Lyrical Warfare Battle</span>
+                </li>
+                <li style="padding:20px 0; border-bottom:1px solid var(--border); color:white; display:flex; gap:20px; align-items:flex-start;">
+                    <span style="font-weight:900; color:var(--orange); white-space:nowrap; font-size:1rem; min-width:80px;">9:30 PM</span>
+                    <span style="font-size:0.95rem; font-weight:600; flex:1;">Kinetic Energy Showcase</span>
+                </li>
+                <li style="padding:20px 0; border-bottom:1px solid var(--border); color:white; display:flex; gap:20px; align-items:flex-start;">
+                    <span style="font-weight:900; color:var(--orange); white-space:nowrap; font-size:1rem; min-width:80px;">10:30 PM</span>
+                    <span style="font-size:0.95rem; font-weight:600; flex:1;">Fusion Teams Finale</span>
+                </li>
+                <li style="padding:20px 0; color:white; display:flex; gap:20px; align-items:flex-start;">
+                    <span style="font-weight:900; color:var(--orange); white-space:nowrap; font-size:1rem; min-width:80px;">11:30 PM</span>
+                    <span style="font-size:0.95rem; font-weight:600; flex:1;">Awards & Afterparty</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============ STATE MANAGEMENT ============
+    const state = {
+        votes: {
+            'KINETIC': { count: 4890, percentage: 48 },
+            'DAS JONES': { count: 5052, percentage: 52 },
+            'PHANTOM': { count: 5340, percentage: 60 },
+            'B-BOY 613': { count: 3560, percentage: 40 },
+            'TEAM ALPHA': { count: 630, percentage: 30 },
+            'TEAM OMEGA': { count: 1470, percentage: 70 }
+        },
+        totalVotes: 8942,
+        liveAudience: 1247,
+        currentVoteTarget: '',
+        selectedPowerVotes: 0,
+        selectedPowerAmount: 0,
+        selectedTier: null,
+        selectedTierName: ''
+    };
+
+    // ============ INITIALIZATION ============
+    document.addEventListener('DOMContentLoaded', function() {
+        initializePage();
+        startLiveUpdates();
+    });
+
+    function initializePage() {
+        // Populate contestant grid
+        const contestants = [
+            { name: 'KINETIC', category: 'Lyrical', img: 'https://images.unsplash.com/photo-1598520106830-8c45c2035460?w=150' },
+            { name: 'DAS JONES', category: 'Lyrical', img: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150' },
+            { name: 'PHANTOM', category: 'Kinetic', img: 'https://images.unsplash.com/photo-1535525266644-dc2878e7e653?w=150' },
+            { name: 'B-BOY 613', category: 'Kinetic', img: 'https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?w=150' },
+            { name: 'TEAM ALPHA', category: 'Fusion', img: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=150' },
+            { name: 'TEAM OMEGA', category: 'Fusion', img: 'https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=150' }
+        ];
+
+        const grid = document.getElementById('contestantGrid');
+        contestants.forEach(contestant => {
+            const card = document.createElement('div');
+            card.className = 'c-card';
+            card.onclick = () => openVote(contestant.name, 'white', contestant.name);
+            
+            card.innerHTML = `
+                <div class="c-img" style="background-image: url('${contestant.img}');"></div>
+                <div class="c-info">
+                    <div class="c-title">${contestant.name}</div>
+                    <div class="c-sub">${contestant.category.toUpperCase()}</div>
+                </div>
+                <div class="c-vote-icon">VOTE</div>
+            `;
+            
+            grid.appendChild(card);
+        });
+
+        // Start match timer
+        updateMatchTimer();
+    }
+
+    // ============ NAVIGATION ============
+    function switchTab(id, el) {
+        document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(el) el.classList.add('active');
+    }
+
+    function switchCategory(id, el) {
+        document.querySelectorAll('.category-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-tabs .tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(el) el.classList.add('active');
+    }
+
+    // ============ MODAL SYSTEM ============
+    function openModal(id) {
+        document.getElementById(id).style.display = 'flex';
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+
+    // ============ VOTING SYSTEM ============
+    function openVote(name, color, target) {
+        state.currentVoteTarget = target;
+        document.getElementById('voteTarget').innerText = target;
+        switchVoteTab('free', document.querySelector('.v-tab'));
+        openModal('voteModal');
+    }
+
+    function switchVoteTab(type, el) {
+        document.querySelectorAll('.v-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('freeVoteSection').style.display = type === 'free' ? 'block' : 'none';
+        document.getElementById('powerVoteSection').style.display = type === 'power' ? 'block' : 'none';
+    }
+
+    function selectPowerOption(votes, amount) {
+        state.selectedPowerVotes = votes;
+        state.selectedPowerAmount = amount;
+        
+        document.querySelectorAll('.power-opt').forEach(o => o.classList.remove('selected'));
+        event.target.closest('.power-opt').classList.add('selected');
+    }
+
+    function castFreeVote() {
+        if(!state.currentVoteTarget) return;
+        
+        const target = state.currentVoteTarget;
+        if(state.votes[target]) {
+            state.votes[target].count += 1;
+            state.totalVotes += 1;
+            updateVotePercentages();
+            updateVoteUI();
+            showToast('Vote cast for ' + target + '!');
+            closeModal('voteModal');
+        }
+    }
+
+    function purchasePowerVotes() {
+        if(state.selectedPowerVotes === 0) {
+            showToast('Please select a power vote package first');
+            return;
+        }
+        
+        if(!state.currentVoteTarget) return;
+        
+        const target = state.currentVoteTarget;
+        if(state.votes[target]) {
+            state.votes[target].count += state.selectedPowerVotes;
+            state.totalVotes += state.selectedPowerVotes;
+            updateVotePercentages();
+            updateVoteUI();
+            showToast(`${state.selectedPowerVotes} power votes added to ${target}!`);
+            closeModal('voteModal');
+            state.selectedPowerVotes = 0;
+            state.selectedPowerAmount = 0;
+        }
+    }
+
+    function updateVotePercentages() {
+        // Update lyrical
+        const lyricalTotal = state.votes['KINETIC'].count + state.votes['DAS JONES'].count;
+        state.votes['KINETIC'].percentage = Math.round((state.votes['KINETIC'].count / lyricalTotal) * 100);
+        state.votes['DAS JONES'].percentage = Math.round((state.votes['DAS JONES'].count / lyricalTotal) * 100);
+        
+        // Update kinetic
+        const kineticTotal = state.votes['PHANTOM'].count + state.votes['B-BOY 613'].count;
+        state.votes['PHANTOM'].percentage = Math.round((state.votes['PHANTOM'].count / kineticTotal) * 100);
+        state.votes['B-BOY 613'].percentage = Math.round((state.votes['B-BOY 613'].count / kineticTotal) * 100);
+        
+        // Update fusion
+        const fusionTotal = state.votes['TEAM ALPHA'].count + state.votes['TEAM OMEGA'].count;
+        state.votes['TEAM ALPHA'].percentage = Math.round((state.votes['TEAM ALPHA'].count / fusionTotal) * 100);
+        state.votes['TEAM OMEGA'].percentage = Math.round((state.votes['TEAM OMEGA'].count / fusionTotal) * 100);
+        
+        // Update total votes
+        state.totalVotes = Object.values(state.votes).reduce((sum, vote) => sum + vote.count, 0);
+    }
+
+    function updateVoteUI() {
+        // Update percentages
+        document.getElementById('voteRed1').textContent = state.votes['KINETIC'].percentage + '%';
+        document.getElementById('progressRed1').style.width = state.votes['KINETIC'].percentage + '%';
+        document.getElementById('voteOrange1').textContent = state.votes['DAS JONES'].percentage + '%';
+        document.getElementById('progressOrange1').style.width = state.votes['DAS JONES'].percentage + '%';
+        
+        document.getElementById('voteRed2').textContent = state.votes['PHANTOM'].percentage + '%';
+        document.getElementById('progressRed2').style.width = state.votes['PHANTOM'].percentage + '%';
+        document.getElementById('voteOrange2').textContent = state.votes['B-BOY 613'].percentage + '%';
+        document.getElementById('progressOrange2').style.width = state.votes['B-BOY 613'].percentage + '%';
+        
+        document.getElementById('voteRed3').textContent = state.votes['TEAM ALPHA'].percentage + '%';
+        document.getElementById('progressRed3').style.width = state.votes['TEAM ALPHA'].percentage + '%';
+        document.getElementById('voteOrange3').textContent = state.votes['TEAM OMEGA'].percentage + '%';
+        document.getElementById('progressOrange3').style.width = state.votes['TEAM OMEGA'].percentage + '%';
+        
+        // Update total votes
+        document.getElementById('totalVotes').textContent = formatNumber(state.totalVotes);
+    }
+
+    // ============ TICKET & PLEDGE SYSTEM ============
+    function openTierSelection(amount, name) {
+        state.selectedTier = amount;
+        state.selectedTierName = name;
+        openModal('gameModal');
+    }
+
+    function selectTier(amount, name) {
+        state.selectedTier = amount;
+        state.selectedTierName = name;
+        
+        document.querySelectorAll('.tier-option').forEach(o => o.classList.remove('selected'));
+        event.target.closest('.tier-option').classList.add('selected');
+    }
+
+    function processContribution() {
+        if(!state.selectedTier) {
+            showToast('Please select a contribution tier first');
+            return;
+        }
+        
+        showToast(`Thank you for your ${state.selectedTierName} contribution of $${state.selectedTier}!`);
+        closeModal('gameModal');
+        state.selectedTier = null;
+        state.selectedTierName = '';
+    }
+
+    // ============ PROFILE SYSTEM ============
+    function openProfile(name, role, img, location) {
+        document.getElementById('pName').textContent = name;
+        document.getElementById('pRole').textContent = location;
+        document.getElementById('pAvatar').style.backgroundImage = `url('${img}')`;
+        openModal('profileModal');
+    }
+
+    // ============ UTILITIES ============
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function showToast(message) {
+        // Create toast
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--orange);
+            color: black;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+        `;
+        
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.animation = 'slideUp 0.3s ease';
+            setTimeout(() => {
+                if(toast.parentNode) toast.parentNode.removeChild(toast);
+            }, 300);
+        }, 3000);
+    }
+
+    // ============ LIVE UPDATES ============
+    function startLiveUpdates() {
+        setInterval(updateLiveStats, 3000);
+        setInterval(updateMatchTimer, 1000);
+        setInterval(simulateVoteFluctuations, 5000);
+    }
+
+    function updateLiveStats() {
+        // Update audience count
+        const audienceChange = getRandomInt(-5, 10);
+        state.liveAudience = Math.max(1200, state.liveAudience + audienceChange);
+        document.getElementById('liveAudience').textContent = formatNumber(state.liveAudience);
+        
+        // Update total votes
+        const newVotes = getRandomInt(10, 50);
+        state.totalVotes += newVotes;
+        document.getElementById('totalVotes').textContent = formatNumber(state.totalVotes);
+    }
+
+    function updateMatchTimer() {
+        const timer = document.getElementById('matchTimer');
+        if(!timer) return;
+        
+        const parts = timer.textContent.split(':');
+        let minutes = parseInt(parts[0]);
+        let seconds = parseInt(parts[1]);
+        
+        seconds++;
+        if(seconds >= 60) {
+            seconds = 0;
+            minutes++;
+        }
+        
+        timer.textContent = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+    }
+
+    function simulateVoteFluctuations() {
+        // Random small vote changes
+        Object.keys(state.votes).forEach(contestant => {
+            const change = getRandomInt(-3, 5);
+            state.votes[contestant].count = Math.max(0, state.votes[contestant].count + change);
+        });
+        
+        updateVotePercentages();
+        updateVoteUI();
+    }
+
+    // ============ QUICK ACTIONS ============
+    function openQuickActions() {
+        const actions = [
+            { text: 'Buy Power Votes', icon: 'bolt', action: () => openVote('Quick Vote', 'white', 'Quick Vote') },
+            { text: 'View Schedule', icon: 'calendar-alt', action: () => openModal('agendaModal') },
+            { text: 'Buy Ticket', icon: 'ticket-alt', action: () => openModal('gameModal') },
+            { text: 'Studio Booking', icon: 'music', action: () => openModal('studioModal') }
+        ];
+        
+        // Create quick action menu
+        const menu = document.createElement('div');
+        menu.style.cssText = `
+            position: fixed;
+            bottom: 150px;
+            right: 20px;
+            background: var(--modal-bg);
+            border-radius: 16px;
+            padding: 15px;
+            z-index: 199;
+            min-width: 200px;
+            border: 1px solid var(--border);
+        `;
+        
+        actions.forEach(action => {
+            const btn = document.createElement('div');
+            btn.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 15px;
+                cursor: pointer;
+                border-radius: 8px;
+                transition: background 0.2s;
+                color: white;
+            `;
+            btn.onmouseenter = () => btn.style.background = 'rgba(255,255,255,0.1)';
+            btn.onmouseleave = () => btn.style.background = 'transparent';
+            btn.onclick = () => {
+                action.action();
+                document.body.removeChild(menu);
+            };
+            
+            btn.innerHTML = `
+                <i class="fas fa-${action.icon}" style="color: var(--orange);"></i>
+                <span style="font-weight: 600;">${action.text}</span>
+            `;
+            
+            menu.appendChild(btn);
+        });
+        
+        // Close button
+        const closeBtn = document.createElement('div');
+        closeBtn.style.cssText = `
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            color: var(--text-sub);
+            font-size: 0.8rem;
+            cursor: pointer;
+            border-top: 1px solid var(--border);
+        `;
+        closeBtn.textContent = 'Close';
+        closeBtn.onclick = () => document.body.removeChild(menu);
+        menu.appendChild(closeBtn);
+        
+        document.body.appendChild(menu);
+        
+        // Close on outside click
+        setTimeout(() => {
+            const closeOnClick = (e) => {
+                if(!menu.contains(e.target) && !e.target.closest('.quick-action-fab')) {
+                    document.body.removeChild(menu);
+                    document.removeEventListener('click', closeOnClick);
+                }
+            };
+            document.addEventListener('click', closeOnClick);
+        }, 100);
+    }
+
+    // Legacy function for compatibility
+    function process(modalId, msg) {
+        showToast(msg);
+        closeModal(modalId);
+    }
+
+    // Add CSS for animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(0); opacity: 1; }
+            to { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+        }
+        .category-section { display: none; }
+        .category-section.active { display: block; }
+    `;
+    document.head.appendChild(style);
+</script>
+</body>
+</html>

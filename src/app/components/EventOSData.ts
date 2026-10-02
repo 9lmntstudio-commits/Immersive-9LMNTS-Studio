@@ -48,6 +48,143 @@ export interface EventOSData {
   requests: any[];
 }
 
+export const ARTIST_OS_DATA: EventOSData = {
+  id: "artist",
+  name: "Artist OS",
+  theme: {
+    primary: "#FF5500", // Flame Orange
+    secondary: "#00D4FF", // Cyber Cyan
+    accent: "#00FF9D", // Matrix Green
+    background: "bg-[#050505]",
+    cardBg: "bg-[#0B0F17]",
+  },
+  labels: {
+    appName: "ARTIST OS",
+    appSubtitle: "24/7 CREATOR HEADQUARTERS",
+    battleTitle: "STREAMING VAULT & CATALOG",
+    battleSubtitle: "Direct Fan Tipping • Uncompressed WAV Stems • VIP Vault",
+    contestantRole: "Featured Cut / Stem",
+    storeTitle: "Fan Store & Vault",
+    vipTitle: "Backstage Fan Club",
+    requestTitle: "Booking & Collab Drawer",
+    liveBadge: "ONLINE",
+    ticker: [
+      "🔥 NEW UNRELEASED STEM DROPPED TO VAULT",
+      "👑 MARCUS JOINED THE VIP BACKSTAGE CLUB",
+      "⚡ 5 DIRECT FAN TIP RECEIVED VIA APPLE PAY",
+      "🎵 TOUR DATE CONFIRMED: BRONSON CENTRE, OTTAWA",
+    ],
+  },
+  contestants: [
+    {
+      id: "track-1",
+      name: "CYBER BASS PROTOCOL (VIP EDIT)",
+      role: "BASS / TRAP • 140 BPM",
+      color: "#FF5500",
+      image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      initialVotes: 142,
+    },
+    {
+      id: "track-2",
+      name: "NEO-OTTAWA NIGHTS (ORIGINAL MIX)",
+      role: "AFRO HOUSE / MELODIC • 122 BPM",
+      color: "#00D4FF",
+      image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      initialVotes: 98,
+    },
+  ],
+  liveStats: [
+    {
+      label: "Catalog Streams",
+      value: "18,420",
+      icon: Music,
+      color: "#FF5500",
+    },
+    {
+      label: "Direct Fan Tips",
+      value: ",850",
+      icon: Zap,
+      color: "#00FF9D",
+    },
+    {
+      label: "Active Superfans",
+      value: "428",
+      icon: Users,
+      color: "#00D4FF",
+    },
+  ],
+  storeItems: [
+    {
+      id: "fan-tip-10",
+      name: "Direct Fan Tip Jar",
+      price: 10,
+      icon: Heart,
+      desc: "Send instant appreciation directly to the artist (100% to creator)",
+      color: "#00FF9D",
+      popular: false,
+    },
+    {
+      id: "fan-pass-25",
+      name: "Monthly Fan Pass (Rollover)",
+      price: 25,
+      icon: Star,
+      desc: "Access private streaming vault, unreleased tracks, and tour discounts",
+      color: "#FF5500",
+      popular: true,
+    },
+    {
+      id: "ar-garment-45",
+      name: "Phygital AR Cyber Hoodie",
+      price: 45,
+      icon: Crown,
+      desc: "Heavyweight streetwear featuring WebAR 3D glowing wings on camera scan",
+      color: "#00D4FF",
+      popular: false,
+    },
+    {
+      id: "stem-license-250",
+      name: "Stem Vault & Commercial Sync",
+      price: 250,
+      icon: Zap,
+      desc: "Complete multitrack WAV stems with commercial synchronization license",
+      color: "#FF5500",
+      popular: false,
+    },
+  ],
+  requests: [
+    {
+      id: 1,
+      song: "Exclusive DJ Set Booking (2-Hour Club Set)",
+      artist: "Promoter / Venue Inquiry",
+      votes: 12,
+      user: "Bronson Centre",
+    },
+    {
+      id: 2,
+      song: "Remix Stems Request (CYBER BASS PROTOCOL)",
+      artist: "Producer Collaboration",
+      votes: 8,
+      user: "DJ Specter",
+    },
+  ],
+  vipUsers: [
+    {
+      id: 1,
+      name: "Devon K.",
+      role: "Superfan #01",
+      status: "Listening",
+      img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    },
+    {
+      id: 2,
+      name: "Elena R.",
+      role: "Catalog Backer",
+      status: "VIP Vault",
+      img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    },
+  ],
+};
+
 export const SOUND_CLASH_DATA: EventOSData = {
   id: "nightlife",
   name: "Sound Clash",
@@ -61,8 +198,8 @@ export const SOUND_CLASH_DATA: EventOSData = {
   labels: {
     appName: "SOUND CLASH",
     appSubtitle: "OS",
-    battleTitle: "PITCH BATTLE",
-    battleSubtitle: "Grand Finals",
+    battleTitle: "SOUND CLASH ARENA",
+    battleSubtitle: "8 DJs • 3 Rounds • Live Mobile Crowd Voting",
     contestantRole: "Genre",
     storeTitle: "Club Store",
     vipTitle: "VIP Lounge",
@@ -956,7 +1093,7 @@ export const GAMING_OS_DATA: EventOSData = {
     appName: "GAME OS",
     appSubtitle: "PRO",
     battleTitle: "TOURNAMENT BATTLE",
-    battleSubtitle: "Grand Finals",
+    battleSubtitle: "8 DJs • 3 Rounds • Live Mobile Crowd Voting",
     contestantRole: "Player",
     storeTitle: "Gaming Gear",
     vipTitle: "Top Players",

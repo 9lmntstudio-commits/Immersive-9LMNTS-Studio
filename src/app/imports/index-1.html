@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>THE CLASH | SECURE TICKETS</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <script src="https://www.paypal.com/sdk/js?client-id=AWnXO57ecm7W13lHv-3dZL3Kti9iCsEo64dhri9DW0FRaHgFWOn3gWOozxyY8q4RorZz6CXr-R2TUGJW&currency=CAD"></script>
+    
+    <style>
+        :root { 
+            --bg-base: #000000; 
+            --panel-bg: #0f0f0f;
+            --accent-orange: #FF4500; 
+            --text-main: #ffffff; 
+            --font-cyber: 'Orbitron', sans-serif; 
+            --font-street: 'Inter', sans-serif; 
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700;900&display=swap');
+        
+        body { 
+            background-color: var(--bg-base); 
+            background-image: linear-gradient(rgba(255, 85, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 85, 0, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text-main); 
+            font-family: var(--font-street); 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh; 
+        }
+        .app-container { 
+            width: 100%; 
+            max-width: 480px; 
+            background-color: var(--panel-bg); 
+            border-left: 2px solid var(--accent-orange); 
+            border-right: 2px solid var(--accent-orange); 
+            box-shadow: 0 0 40px rgba(255, 85, 0, 0.15); 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        /* The Hero Image & Fallback */
+        .flyer-image { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            border-bottom: 3px solid var(--accent-orange); 
+            background: #000; 
+        }
+        .image-fallback {
+            display: none;
+            height: 200px;
+            background: #111;
+            border-bottom: 3px solid var(--accent-orange);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+        .image-fallback h1 {
+            font-family: var(--font-cyber);
+            color: var(--accent-orange);
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .action-area { 
+            padding: 30px 20px; 
+            text-align: center; 
+        }
+        
+        .checkout-title { 
+            font-family: var(--font-cyber); 
+            color: var(--accent-orange); 
+            margin-top: 0; 
+            margin-bottom: 20px; 
+            text-transform: uppercase; 
+            font-size: 1.5rem; 
+            text-shadow: 0 0 10px rgba(255,85,0,0.3); 
+        }
+        
+        select { 
+            width: 100%; 
+            padding: 16px; 
+            background: #1a1a1a; 
+            color: white; 
+            border: 1px solid #333; 
+            border-left: 4px solid var(--accent-orange);
+            border-radius: 4px; 
+            font-size: 1rem; 
+            margin-bottom: 25px; 
+            font-family: var(--font-street);
+            font-weight: 700;
+            outline: none;
+        }
+        
+        #paypal-button-container { width: 100%; min-height: 150px; }
+        
+        /* The Digital ID / Entry Pass */
+        #ticket-display { 
+            display: none; 
+            background: #111; 
+            color: white; 
+            padding: 25px; 
+            border-radius: 8px; 
+            border: 2px solid var(--accent-orange); 
+            margin-top: 10px; 
+            text-align: center; 
+        }
+        #ticket-display h3 { 
+            margin-top: 0; 
+            color: var(--accent-orange); 
+            font-family: var(--font-cyber); 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 15px;
+        }
+        .success-text { color: #00ff88; font-weight: 900; margin: 15px 0; font-size: 1.1rem; }
+        
+        #qr-code { 
+            display: flex; 
+            justify-content: center; 
+            margin: 20px 0; 
+            padding: 15px; 
+            background: white; 
+            border-radius: 8px; 
+            width: fit-content; 
+            margin-inline: auto; 
+        }
+
+        .tx-id { 
+            font-family: monospace; 
+            color: #aaa; 
+            font-size: 0.9rem; 
+            word-break: break-all; 
+            background: #000; 
+            padding: 10px; 
+            border-radius: 4px;
+        }
+        .ticket-footer { 
+            font-size: 0.85rem; 
+            color: #888; 
+            margin-top: 20px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+        }
+
+        /* Uncle Jay's Catering Module */
+        .catering-module {
+            margin-top: 30px;
+            padding: 15px;
+            border: 1px solid var(--accent-orange);
+            background: #000000;
+            text-align: center;
+        }
+        .catering-title {
+            color: var(--accent-orange);
+            font-family: var(--font-cyber);
+            font-size: 1.2rem;
+            margin: 10px 0;
+            text-transform: uppercase;
+        }
+
+        /* Flyer Overlay */
+        .flyer-container {
+            position: relative;
+            width: 100%;
+        }
+        .dj-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: var(--font-cyber);
+            color: #fff;
+            text-shadow: 0 0 10px #000, 0 0 20px var(--accent-orange);
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+        .dj-overlay span {
+            color: var(--accent-orange);
+            font-weight: 900;
+        }
+
+        /* FOMO Timer */
+        .fomo-timer {
+            background: #110500;
+            border: 1px solid var(--accent-orange);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255,69,0,0.2);
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 15px rgba(255,69,0,0.2); }
+            50% { box-shadow: 0 0 25px rgba(255,69,0,0.5); border-color: #ff6a00; }
+            100% { box-shadow: 0 0 15px rgba(255,69,0,0.2); }
+        }
+        .fomo-title {
+            color: #fff;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .fomo-countdown {
+            font-family: var(--font-cyber);
+            color: var(--accent-orange);
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+        .fomo-warning {
+            color: #ff4444;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        
+        <div class="flyer-container">
+            <img src="PRESENTING.jpg" alt="The Clash Live Event" class="flyer-image" onerror="this.parentElement.style.display='none'; document.getElementById('fallback-header').style.display='flex';">
+            <div class="dj-overlay">FEATURING <br><span>John DECK</span></div>
+        </div>
+        
+        <div id="fallback-header" class="image-fallback">
+            <h1>THE CLASH</h1>
+            <div style="color: #fff; font-weight: bold; letter-spacing: 1px;">UNDERGROUND MUSIC TOURNAMENT</div>
+            <div style="color: #aaa; font-size: 0.8rem; margin-top: 10px;">MAY 16, 2026 • BRONSON CENTRE</div>
+        </div>
+
+        <div class="action-area">
+            
+            <div class="fomo-timer" id="fomo-container">
+                <div class="fomo-title">Early Bird Ends In:</div>
+                <div class="fomo-countdown" id="countdown-display">--:--:--:--</div>
+                <div class="fomo-warning" id="fomo-warning-text">Price increases by $5 when timer hits zero!</div>
+            </div>
+
+            <h2 class="checkout-title">Secure Entry</h2>
+            
+            <select id="tier-select">
+                <!-- Dynamically populated by JS Engine -->
+            </select>
+
+            <div class="catering-module" id="catering-upsell">
+                <div class="catering-title">Uncle Jay's Catering Add-On</div>
+                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="add-catering" value="15.00" style="accent-color: var(--accent-orange); transform: scale(1.5);">
+                    <span style="font-weight: bold; font-size: 1.1rem;">Add Premium BBQ Plate (+$15)</span>
+                </label>
+            </div>
+
+            <div id="paypal-button-container" style="margin-top: 25px;"></div>
+
+            <div id="ticket-display">
+                <h3>ENTRY PASS SECURED</h3>
+                <div class="success-text">Payment Confirmed! ✅</div>
+                <p style="font-size: 0.9rem; color: #ccc;">Screenshot this Digital ID for door entry.</p>
+                
+                <div id="qr-code"></div>
+                
+                <p style="font-size:0.8rem; color:#666; margin-bottom: 5px; margin-top: 20px;">Transaction ID / Digital ID:</p>
+                <div class="tx-id" id="transaction-id-display"></div>
+                <div class="ticket-footer">MAY 16, 2026 • BRONSON CENTRE, OTTAWA<br><br>HOSTED ON UNCLEJAYS.CA</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tierSelect = document.getElementById('tier-select');
+            const paypalContainer = document.getElementById('paypal-button-container');
+
+            // --- FOMO DYNAMIC PRICING ENGINE ---
+            const priceTiers = [
+                { date: new Date('2026-05-05T00:00:00-04:00').getTime(), price: 30 },
+                { date: new Date('2026-05-08T00:00:00-04:00').getTime(), price: 35 },
+                { date: new Date('2026-05-11T00:00:00-04:00').getTime(), price: 40 },
+                { date: new Date('2026-05-14T00:00:00-04:00').getTime(), price: 45 },
+                { date: new Date('2026-05-17T00:00:00-04:00').getTime(), price: 50 } // Event Day
+            ];
+
+            function updatePricing() {
+                const now = new Date().getTime();
+                let currentTierIndex = 0;
+                
+                for (let i = 0; i < priceTiers.length; i++) {
+                    if (now < priceTiers[i].date) {
+                        currentTierIndex = i;
+                        break;
+                    }
+                }
+                
+                if (now >= priceTiers[priceTiers.length - 1].date) {
+                    currentTierIndex = priceTiers.length - 1;
+                }
+
+                const currentBasePrice = priceTiers[currentTierIndex].price;
+                const nextTierDate = priceTiers[currentTierIndex].date;
+
+                const distance = nextTierDate - now;
+                if (distance > 0) {
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                    document.getElementById('countdown-display').innerText = 
+                        `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+                } else {
+                    document.getElementById('countdown-display').innerText = "DOORS OPEN";
+                    document.getElementById('fomo-warning-text').innerText = "Tickets are at full price at the door.";
+                }
+
+                const optionsHTML = `
+                    <option value="${(currentBasePrice).toFixed(2)}|Entry Pass|0">Entry Pass Only ($${currentBasePrice})</option>
+                    <option value="${(currentBasePrice + 2).toFixed(2)}|Entry Pass + 10 Votes|10">Entry Pass + 10 Votes ($${currentBasePrice + 2})</option>
+                    <option value="${(currentBasePrice + 5).toFixed(2)}|Entry Pass + 20 Votes|20">Entry Pass + 20 Votes ($${currentBasePrice + 5})</option>
+                    <option value="${(currentBasePrice + 10).toFixed(2)}|Entry Pass + 50 Votes|50">Entry Pass + 50 Votes ($${currentBasePrice + 10})</option>
+                    <option value="2.00|10 Power Votes|10">10 Power Votes Only ($2)</option>
+                    <option value="5.00|20 Power Votes|20">20 Power Votes Only ($5)</option>
+                    <option value="10.00|50 Power Votes|50">50 Power Votes Only ($10)</option>
+                `;
+                
+                if (tierSelect.innerHTML.trim() === "" || tierSelect.getAttribute('data-price') !== currentBasePrice.toString()) {
+                    tierSelect.innerHTML = optionsHTML;
+                    tierSelect.setAttribute('data-price', currentBasePrice.toString());
+                }
+            }
+
+            updatePricing();
+            setInterval(updatePricing, 1000);
+            // --- END FOMO ENGINE ---
+
+            if (typeof paypal !== 'undefined') {
+                paypal.Buttons({
+                    style: {
+                        layout: 'vertical',
+                        color:  'gold',
+                        shape:  'rect',
+                        label:  'checkout'
+                    },
+                    createOrder: function(data, actions) {
+                        const selected = tierSelect.value.split('|');
+                        let basePrice = parseFloat(selected[0]);
+                        let desc = "THE CLASH - " + selected[1];
+                        
+                        const cateringBox = document.getElementById('add-catering');
+                        if (cateringBox.checked) {
+                            basePrice += 15.00;
+                            desc += " + Uncle Jay's BBQ Plate";
+                        }
+
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: { 
+                                    currency_code: 'CAD', 
+                                    value: basePrice.toFixed(2)
+                                }, 
+                                description: desc 
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            
+                            // 1. Hide Checkout Elements
+                            paypalContainer.style.display = 'none';
+                            tierSelect.style.display = 'none';
+                            document.querySelector('.checkout-title').style.display = 'none';
+
+                            // 2. Extract Transaction ID from PayPal
+                            const txId = details.purchase_units[0].payments.captures[0].id;
+                            
+                            // 3. Display Transaction ID 
+                            document.getElementById('transaction-id-display').innerText = txId;
+                            
+                            // 4. Generate the Digital ID QR Code (using the specific URL structure)
+                            const dynamicTicketUrl = "https://unclejays.ca/events-2/" + txId;
+                            
+                            new QRCode(document.getElementById('qr-code'), { 
+                                text: dynamicTicketUrl, 
+                                width: 180, 
+                                height: 180,
+                                colorDark: "#000000",
+                                colorLight: "#ffffff"
+                            });
+
+                            // 5. Show the Digital Ticket 
+                            document.getElementById('ticket-display').style.display = 'block';
+                            
+                            // Note: The n8n webhook/Supabase integration theoretically 
+                            // catches the PayPal transaction separately via PayPal webhooks, 
+                            // matching this txId at the door.
+                        });
+                    },
+                    onError: function (err) {
+                        console.error('PayPal Error:', err);
+                        paypalContainer.innerHTML = '<p style="color:var(--accent-orange);">Error loading payment portal. Please refresh.</p>';
+                    }
+                }).render('#paypal-button-container');
+            } else {
+                paypalContainer.innerHTML = '<p style="color:var(--accent-orange); padding:20px; border:1px dashed var(--accent-orange);">⚠️ Payment system failed to load. Please check connection.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

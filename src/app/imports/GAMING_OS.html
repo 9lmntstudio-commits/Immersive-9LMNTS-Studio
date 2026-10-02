@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎮 GAMING OS | Tournament Battle Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(10, 10, 20, 0.7);
+            --glass-border: rgba(0, 255, 255, 0.15);
+            --neon: #00ffff;
+            --magenta: #ff00ff;
+            --gold: #ffd700;
+            --xp: #32cd32;
+            --warn: #ff4444;
+            --text: #ffffff;
+            --sub: #aaaacc;
+            --font-head: 'Press Start 2P', cursive;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-body);
+            padding-bottom: 100px;
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+            min-height: 100vh;
+            background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&q=80') center/cover no-repeat fixed;
+            color: var(--text);
+        }
+        .app-container {
+            max-width: 500px; margin: 0 auto; min-height: 100vh; background: transparent; position: relative;
+            overflow-x: hidden; display: flex; flex-direction: column; z-index: 1; box-shadow: 0 0 80px rgba(0,255,255,0.1);
+        }
+        .live-header { background: var(--glass-bg); backdrop-filter: blur(16px); padding: 12px 16px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); }
+        .logo { font-family: var(--font-head); font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--neon); text-shadow: 0 0 10px rgba(0,255,255,0.5); }
+        .logo span { color: var(--magenta); text-shadow: 0 0 10px rgba(255,0,255,0.5); }
+        .live-status { display: flex; align-items: center; gap: 8px; }
+        .live-badge { background: var(--magenta); color: #fff; font-size: 0.55rem; font-weight: 900; padding: 5px 10px; border-radius: 4px; text-transform: uppercase; box-shadow: 0 0 20px rgba(255,0,255,0.5); animation: pulse-glow 1.5s infinite; letter-spacing: 1px; }
+        @keyframes pulse-glow { 0%,100%{box-shadow:0 0 20px rgba(255,0,255,0.5)} 50%{box-shadow:0 0 35px rgba(255,0,255,0.9)} }
+        .ticker-wrap { background: rgba(10,10,20,0.6); backdrop-filter: blur(8px); border-bottom: 1px solid var(--glass-border); padding: 8px 0; overflow: hidden; white-space: nowrap; }
+        .ticker-content { display: inline-block; animation: ticker 25s linear infinite; color: var(--neon); font-weight: 600; font-size: 0.7rem; padding-left: 100%; }
+        @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
+        .hero { background: rgba(10,10,20,0.5); backdrop-filter: blur(10px); padding: 24px 18px 20px; text-align: center; border-bottom: 1px solid var(--glass-border); position: relative; }
+        .hero::before { content:''; display:block; height:4px; background:linear-gradient(90deg,var(--neon),var(--magenta),var(--neon)); margin:-24px -18px 0; }
+        .hero-title { font-family: var(--font-head); font-size: 1.6rem; line-height: 1.1; color: #fff; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 20px rgba(0,255,255,0.4); }
+        .hero-sub { color: var(--neon); font-weight: 900; letter-spacing: 3px; font-size: 0.55rem; margin: 8px 0 18px; text-transform: uppercase; }
+        .live-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 18px 0 14px; }
+        .stat-card { background: rgba(0,0,0,0.4); padding: 12px 6px; border-radius: var(--radius-lg); border: 1px solid var(--glass-border); text-align: center; }
+        .stat-value { font-size: 1.3rem; font-weight: 900; color: var(--neon); font-family: var(--font-mono); text-shadow: 0 0 10px rgba(0,255,255,0.3); display: block; }
+        .stat-label { font-size: 0.5rem; text-transform: uppercase; color: var(--sub); font-weight: 700; margin-top: 3px; letter-spacing: 1px; }
+        .btn-primary { width:100%; padding:14px; background:linear-gradient(90deg,var(--neon),var(--magenta)); color:#000; border:none; border-radius:var(--radius); font-weight:900; font-size:0.8rem; margin:8px 0; cursor:pointer; text-transform:uppercase; letter-spacing:1px; box-shadow:0 4px 25px rgba(0,255,255,0.3); transition:0.2s; font-family:var(--font-body); }
+        .btn-secondary { background: transparent; border: 2px solid var(--neon); color: var(--neon); padding: 10px; border-radius: var(--radius); font-weight: 900; font-size: 0.7rem; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin: 4px 0; }
+        .revenue-rack { padding:16px 0 20px 14px; margin:16px 14px; background:var(--glass-bg); backdrop-filter:blur(12px); border-radius:var(--radius-xl); border:1px solid var(--glass-border); position:relative; }
+        .revenue-rack::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--neon); }
+        .section-label { display:flex; align-items:center; gap:10px; margin-bottom:14px; color:#fff; font-weight:800; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; }
+        .ticket-scroll { display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; padding-right:14px; scrollbar-width:none; }
+        .ticket { min-width:95px; padding:12px 7px; border-radius:var(--radius-lg); border:1px solid var(--glass-border); background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); cursor:pointer; text-align:center; flex-shrink:0; transition:0.2s; position:relative; }
+        .ticket.vip { border:2px solid var(--gold); background:rgba(255,215,0,0.1); }
+        .vip-tag { position:absolute; top:-8px; left:50%; transform:translateX(-50%); background:var(--gold); color:#000; font-size:0.45rem; font-weight:900; padding:2px 7px; border-radius:4px; letter-spacing:1px; white-space:nowrap; }
+        .t-price { font-size:1.1rem; font-weight:900; color:var(--neon); margin-bottom:2px; font-family:var(--font-mono); }
+        .t-label { font-size:0.55rem; color:var(--sub); margin-bottom:7px; text-transform:uppercase; letter-spacing:0.5px; line-height:1.2; }
+        .t-btn { font-size:0.6rem; font-weight:900; padding:6px 0; border-radius:20px; border:none; background:var(--magenta); color:#fff; width:100%; cursor:pointer; text-transform:uppercase; }
+        .nav-tabs { display:flex; background:rgba(10,10,20,0.6); backdrop-filter:blur(8px); border-bottom:1px solid var(--glass-border); overflow-x:auto; position:sticky; top:69px; z-index:90; }
+        .tab { padding:14px 10px; color:var(--sub); font-weight:800; font-size:0.65rem; cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent; flex:1; text-align:center; text-transform:uppercase; letter-spacing:0.5px; transition:0.2s; }
+        .tab.active { color:var(--neon); border-bottom-color:var(--neon); background:rgba(0,255,255,0.05); }
+        .view { display:none; padding:16px; animation:fadeIn 0.3s ease; }
+        .view.active { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .battle-header { text-align:center; margin-bottom:16px; color:var(--neon); font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; font-weight:900; }
+        .dot-live { background:var(--warn); color:#fff; font-size:0.5rem; padding:3px 7px; border-radius:3px; font-weight:900; animation:pulse 1.5s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .match-card { background:var(--glass-bg); backdrop-filter:blur(12px); border:1px solid var(--glass-border); border-radius:var(--radius-lg); padding:14px; margin-bottom:12px; }
+        .match-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--glass-border); }
+        .player-name { font-weight:900; color:#fff; font-size:0.8rem; }
+        .match-score { font-family:var(--font-mono); color:var(--neon); font-size:1.1rem; font-weight:900; min-width:40px; text-align:center; }
+        .match-vs { color:var(--magenta); font-weight:900; font-size:0.7rem; min-width:30px; text-align:center; }
+        .pool-group { background: rgba(0,0,0,0.3); border-radius: var(--radius); padding: 10px; margin-bottom: 8px; }
+        .pool-header { color: var(--neon); font-weight: 900; font-size: 0.7rem; margin-bottom: 6px; text-transform: uppercase; }
+        .prediction-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin: 6px 0; }
+        .prediction-fill { height: 100%; background: var(--neon); border-radius: 4px; transition: width 0.5s; }
+        .shop-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .shop-card { background:var(--glass-bg); backdrop-filter:blur(12px); padding:15px 10px; border-radius:var(--radius-xl); text-align:center; border:1px solid var(--glass-border); cursor:pointer; }
+        .shop-emoji { font-size:2rem; margin-bottom:5px; }
+        .shop-name { font-weight:900; font-size:0.8rem; color:#fff; } .shop-desc { font-size:0.6rem; color:var(--sub); margin-bottom:8px; }
+        .shop-price { font-weight:900; font-size:0.95rem; color:var(--neon); margin-bottom:6px; font-family:var(--font-mono); }
+        .shop-btn { background:transparent; border:1px solid var(--neon); color:var(--neon); padding:7px 12px; border-radius:20px; font-size:0.65rem; font-weight:900; text-transform:uppercase; cursor:pointer; }
+        .shop-btn.ordered { background:var(--xp); border-color:var(--xp); color:#000; }
+        .fantasy-card { background:var(--glass-bg); backdrop-filter:blur(12px); border:1px solid var(--glass-border); border-radius:var(--radius-lg); padding:12px; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+        .cosplay-card { background:var(--glass-bg); backdrop-filter:blur(12px); border:1px solid var(--glass-border); border-radius:var(--radius-lg); padding:14px; margin-bottom:10px; text-align:center; }
+        .workshop-card { background:var(--glass-bg); backdrop-filter:blur(12px); border:1px solid var(--glass-border); border-radius:var(--radius-lg); padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+        .bottom-nav { position:fixed; bottom:0; width:100%; max-width:500px; background:var(--glass-bg); backdrop-filter:blur(14px); border-top:1px solid var(--glass-border); display:flex; justify-content:space-around; padding:12px 0; z-index:100; }
+        .nav-item { text-align:center; color:var(--sub); font-size:0.55rem; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; font-weight:800; text-transform:uppercase; }
+        .nav-item.active { color:var(--neon); } .nav-item i { font-size:1.2rem; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:200; justify-content:center; align-items:center; }
+        .modal-box { width:92%; max-width:400px; max-height:85vh; overflow-y:auto; background:var(--glass-bg); backdrop-filter:blur(20px); border-radius:var(--radius-xl); border:1px solid var(--glass-border); animation:slideUp 0.3s; box-shadow:0 25px 55px rgba(0,0,0,0.7); }
+        .m-head { padding:18px 16px; border-bottom:1px solid var(--glass-border); text-align:center; position:sticky; top:0; background:rgba(10,10,20,0.9); backdrop-filter:blur(12px); z-index:5; }
+        .m-title { font-size:0.9rem; color:var(--neon); text-transform:uppercase; font-family:var(--font-head); letter-spacing:1px; }
+        .m-close { position:absolute; top:12px; right:16px; font-size:1.4rem; color:var(--sub); cursor:pointer; background:none; border:none; }
+        .m-body { padding:18px 14px; }
+        .pkg-opt { display:flex; justify-content:space-between; align-items:center; padding:12px; background:rgba(0,0,0,0.5); border:2px solid var(--glass-border); border-radius:var(--radius-lg); margin-bottom:8px; cursor:pointer; }
+        .pkg-opt.sel { border-color:var(--neon); background:rgba(0,255,255,0.08); }
+        .btn-submit { background:linear-gradient(90deg,var(--neon),var(--magenta)); color:#000; border:none; padding:13px; width:100%; font-weight:900; border-radius:var(--radius); cursor:pointer; text-transform:uppercase; margin-top:10px; font-size:0.8rem; letter-spacing:1px; }
+        .btn-submit.gray { background:var(--glass-border); color:#fff; }
+        .input-field { width:100%; padding:11px; background:rgba(0,0,0,0.5); border:2px solid var(--glass-border); border-radius:var(--radius); color:#fff; font-size:0.8rem; margin-bottom:8px; }
+        .toast { position:fixed; top:80px; left:50%; transform:translateX(-50%); background:var(--neon); color:#000; padding:10px 20px; border-radius:var(--radius); font-weight:900; z-index:1000; font-size:0.75rem; text-align:center; }
+        @keyframes slideUp { from{transform:translateY(28px);opacity:0} to{transform:translateY(0);opacity:1} }
+        .bracket-tree { text-align: center; }
+        .bracket-round { margin-bottom: 12px; }
+        .bracket-match { display: inline-block; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 8px 14px; margin: 4px; min-width: 120px; }
+        .bracket-player { font-weight: 900; color: #fff; font-size: 0.75rem; }
+        .bracket-score { color: var(--neon); font-family: var(--font-mono); font-size: 0.9rem; }
+        .countdown-timer { font-family: var(--font-mono); color: var(--gold); font-size: 1.2rem; text-align: center; margin: 8px 0; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="live-header">
+        <div class="logo">🎮 GAME<span>OS</span> PRO</div>
+        <div class="live-status"><div class="live-badge"><i class="fas fa-circle"></i> LIVE EVENT</div></div>
+    </div>
+    <div class="ticker-wrap"><div class="ticker-content" id="ticker"></div></div>
+    <div class="hero">
+        <div class="hero-sub" id="eventSub">ESPORTS TOURNAMENT • JULY 15‑17 2026 • ARENA X</div>
+        <h1 class="hero-title">TOURNAMENT<br>BATTLE</h1>
+        <div class="live-stats">
+            <div class="stat-card"><div class="stat-value" id="viewers">12,847</div><div class="stat-label">Live Viewers</div></div>
+            <div class="stat-card"><div class="stat-value" id="prizePool">$25,000</div><div class="stat-label">Prize Pool</div></div>
+            <div class="stat-card"><div class="stat-value" id="players">256</div><div class="stat-label">Competitors</div></div>
+            <div class="stat-card"><div class="stat-value" id="pools">8</div><div class="stat-label">Pools</div></div>
+            <div class="stat-card"><div class="stat-value" id="sideEvents">4</div><div class="stat-label">Side Events</div></div>
+            <div class="stat-card"><div class="stat-value" id="cosplayers">42</div><div class="stat-label">Cosplayers</div></div>
+        </div>
+        <button class="btn-primary" onclick="openModal('registrationModal')"><i class="fas fa-gamepad"></i> REGISTER & COMPETE</button>
+    </div>
+    <div class="revenue-rack">
+        <div class="section-label"><i class="fas fa-dragon"></i> POWER-UP STORE</div>
+        <div class="ticket-scroll" id="powerUpScroll"></div>
+    </div>
+    <div class="nav-tabs">
+        <div class="tab active" onclick="switchTab('bracket',this)">🏆 BRACKET</div>
+        <div class="tab" onclick="switchTab('pools',this)">📋 POOLS</div>
+        <div class="tab" onclick="switchTab('leaderboard',this)">📊 RANKINGS</div>
+        <div class="tab" onclick="switchTab('fantasy',this)">⚔️ FANTASY</div>
+        <div class="tab" onclick="switchTab('sideEvents',this)">🎯 SIDE</div>
+        <div class="tab" onclick="switchTab('cosplay',this)">🎭 COSPLAY</div>
+        <div class="tab" onclick="switchTab('workshops',this)">🎓 COACH</div>
+        <div class="tab" onclick="switchTab('shop',this)">🛒 GEAR</div>
+    </div>
+
+    <!-- BRACKET VIEW -->
+    <div id="bracket" class="view active">
+        <div class="battle-header"><div class="dot-live">GRAND FINALS</div> MAIN STAGE</div>
+        <div class="countdown-timer">⏱️ NEXT MATCH: 14:30</div>
+        <div class="bracket-tree" id="bracketTree"></div>
+        <div class="match-card">
+            <div style="font-weight:900; color:var(--gold); margin-bottom:8px;">🔥 FEATURED MATCH</div>
+            <div class="match-row"><span class="player-name">xXShadowXx</span><span class="match-score">2</span><span class="match-vs">VS</span><span class="match-score">1</span><span class="player-name">NoScopeKing</span></div>
+        </div>
+        <button class="btn-primary" onclick="openModal('cheerModal')"><i class="fas fa-star"></i> CHEER FOR PLAYER</button>
+        <button class="btn-secondary" onclick="openModal('predictionModal')">🔮 PREDICT WINNER</button>
+    </div>
+
+    <!-- POOLS VIEW -->
+    <div id="pools" class="view">
+        <div class="grid-header" style="color:var(--neon);">📋 POOL ASSIGNMENTS</div>
+        <div id="poolGroups"></div>
+        <button class="btn-secondary" onclick="toast('Wave schedule sent to your device')">📱 GET WAVE SCHEDULE</button>
+    </div>
+
+    <!-- LEADERBOARD VIEW -->
+    <div id="leaderboard" class="view">
+        <div class="grid-header" style="color:var(--neon);">🏅 GLOBAL RANKINGS</div>
+        <div id="leaderboardList"></div>
+    </div>
+
+    <!-- FANTASY VIEW -->
+    <div id="fantasy" class="view">
+        <div class="grid-header" style="color:var(--neon);">⚔️ FANTASY DRAFT</div>
+        <p style="font-size:0.7rem; color:var(--sub); margin-bottom:12px;">Draft 3 players. Earn points based on their performance!</p>
+        <div id="fantasyRoster"></div>
+        <button class="btn-primary" onclick="openModal('fantasyModal')">DRAFT YOUR TEAM ($10)</button>
+        <div style="margin-top:12px; font-size:0.7rem; color:var(--gold);">🏆 Top Fantasy Score: <strong>2,850 pts</strong></div>
+    </div>
+
+    <!-- SIDE EVENTS VIEW -->
+    <div id="sideEvents" class="view">
+        <div class="grid-header" style="color:var(--neon);">🎯 SIDE TOURNAMENTS</div>
+        <div id="sideEventsList"></div>
+    </div>
+
+    <!-- COSPLAY VIEW -->
+    <div id="cosplay" class="view">
+        <div class="grid-header" style="color:var(--neon);">🎭 COSPLAY CONTEST</div>
+        <div id="cosplayEntries"></div>
+    </div>
+
+    <!-- WORKSHOPS VIEW -->
+    <div id="workshops" class="view">
+        <div class="grid-header" style="color:var(--neon);">🎓 PRO COACHING</div>
+        <div id="workshopList"></div>
+    </div>
+
+    <!-- SHOP VIEW -->
+    <div id="shop" class="view">
+        <div class="grid-header" style="color:var(--neon);">🛒 GAMING GEAR</div>
+        <div class="shop-grid" id="shopGrid"></div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('bracket',this)"><i class="fas fa-sitemap"></i>BRACKET</div>
+        <div class="nav-item" onclick="switchTab('pools',this)"><i class="fas fa-th"></i>POOLS</div>
+        <div class="nav-item" onclick="switchTab('leaderboard',this)"><i class="fas fa-medal"></i>RANK</div>
+        <div class="nav-item" onclick="switchTab('fantasy',this)"><i class="fas fa-users"></i>FANTASY</div>
+        <div class="nav-item" onclick="switchTab('shop',this)"><i class="fas fa-shopping-bag"></i>GEAR</div>
+    </div>
+</div>
+
+<!-- CHEER MODAL -->
+<div id="cheerModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">🎯 CHEER POWER</div><button class="m-close" onclick="closeModal('cheerModal')">&times;</button></div><div class="m-body"><p style="color:var(--sub);font-size:0.75rem;text-align:center;margin-bottom:14px">Boost your favorite player!</p>
+<select class="input-field" id="cheerPlayer"><option>xXShadowXx</option><option>PixelQueen</option><option>NoScopeKing</option><option>LagMaster</option></select>
+<div class="pkg-opt" onclick="selectCheer(10,2,'10 Cheers')"><span><strong>10 Cheers</strong><br><small>Basic Boost</small></span><span style="color:var(--neon);font-weight:900">$2</span></div><div class="pkg-opt" onclick="selectCheer(50,5,'50 Cheers')"><span><strong>50 Cheers</strong><br><small>Power Boost</small></span><span style="color:var(--neon);font-weight:900">$5</span></div><div class="pkg-opt" onclick="selectCheer(200,15,'200 Cheers')"><span><strong>200 Cheers</strong><br><small>Mega Boost</small></span><span style="color:var(--neon);font-weight:900">$15</span></div><button class="btn-submit" onclick="purchaseCheer()">SEND CHEER POWER</button></div></div></div>
+
+<!-- PREDICTION MODAL -->
+<div id="predictionModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">🔮 MATCH PREDICTION</div><button class="m-close" onclick="closeModal('predictionModal')">&times;</button></div><div class="m-body"><p style="color:var(--sub);font-size:0.75rem;text-align:center;margin-bottom:14px">Predict the winner & win XP!</p>
+<div class="pkg-opt" onclick="selectPrediction('xXShadowXx')"><span><strong>xXShadowXx</strong><br><small>65% predicted</small></span><span style="color:var(--neon);font-weight:900">ODDS 1.5x</span></div>
+<div class="pkg-opt" onclick="selectPrediction('NoScopeKing')"><span><strong>NoScopeKing</strong><br><small>35% predicted</small></span><span style="color:var(--neon);font-weight:900">ODDS 2.8x</span></div>
+<button class="btn-submit" onclick="submitPrediction()">PLACE PREDICTION ($5)</button></div></div></div>
+
+<!-- REGISTRATION MODAL -->
+<div id="registrationModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">🎮 TOURNAMENT ENTRY</div><button class="m-close" onclick="closeModal('registrationModal')">&times;</button></div><div class="m-body">
+<div class="pkg-opt" onclick="selectReg('basic')"><span><strong>Basic Entry</strong><br><small>Bracket access</small></span><span style="color:var(--neon);font-weight:900">$25</span></div>
+<div class="pkg-opt" onclick="selectReg('pro')"><span><strong>Pro Entry</strong><br><small>+ Coaching session</small></span><span style="color:var(--neon);font-weight:900">$50</span></div>
+<div class="pkg-opt" onclick="selectReg('vip')"><span><strong>VIP Entry</strong><br><small>+ Backstage + Merch</small></span><span style="color:var(--neon);font-weight:900">$100</span></div>
+<div class="pkg-opt" onclick="selectReg('lan')"><span><strong>LAN Party Pass</strong><br><small>BYOC 3‑day access</small></span><span style="color:var(--neon);font-weight:900">$75</span></div>
+<input class="input-field" id="playerName" placeholder="Your gamer tag">
+<button class="btn-submit" onclick="registerPlayer()">REGISTER NOW</button></div></div></div>
+
+<!-- FANTASY MODAL -->
+<div id="fantasyModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">⚔️ DRAFT TEAM</div><button class="m-close" onclick="closeModal('fantasyModal')">&times;</button></div><div class="m-body"><p style="color:var(--sub);font-size:0.7rem;text-align:center;margin-bottom:12px">Select 3 players for your fantasy roster</p>
+<div class="pkg-opt" onclick="draftPlayer('xXShadowXx')"><span>🖱️ xXShadowXx</span><span style="color:var(--neon);">2,450 pts</span></div>
+<div class="pkg-opt" onclick="draftPlayer('PixelQueen')"><span>🎧 PixelQueen</span><span style="color:var(--neon);">2,320 pts</span></div>
+<div class="pkg-opt" onclick="draftPlayer('NoScopeKing')"><span>🎯 NoScopeKing</span><span style="color:var(--neon);">1,980 pts</span></div>
+<button class="btn-submit" onclick="submitFantasy()">LOCK IN ROSTER ($10)</button></div></div></div>
+
+<!-- PAYMENT MODAL -->
+<div id="payModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">SECURE CHECKOUT</div><button class="m-close" onclick="closeModal('payModal')">&times;</button></div><div class="m-body" style="text-align:center"><h3 id="paymentTitle">Payment</h3><div style="font-size:2rem;font-weight:900;color:var(--neon);font-family:var(--font-mono);margin:10px 0">$<span id="payAmount">0</span></div><div style="background:rgba(0,0,0,0.5);padding:10px;border:1px solid var(--glass-border);border-radius:var(--radius);margin-bottom:12px;font-size:0.75rem"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Item:</span><span id="paymentItem">-</span></div><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Amount:</span><span id="paymentAmount">-</span></div><hr style="border-color:var(--glass-border);margin:5px 0"><div style="display:flex;justify-content:space-between;font-weight:bold"><span>Total:</span><span id="paymentTotal" style="color:var(--neon)">-</span></div></div><button class="btn-submit" onclick="processPayment()">CONFIRM & PAY</button></div></div></div>
+
+<script>
+    const CONFIG = {
+        event: 'ESPORTS TOURNAMENT • JULY 15‑17 2026 • ARENA X',
+        prize: '$25,000',
+        entryPrices: { basic: 25, pro: 50, vip: 100, lan: 75 },
+        players: [
+            { name:'xXShadowXx', points:2450, wins:8, pool:'A', wave:1 },
+            { name:'PixelQueen', points:2320, wins:7, pool:'A', wave:1 },
+            { name:'NoScopeKing', points:1980, wins:6, pool:'B', wave:2 },
+            { name:'LagMaster', points:1650, wins:5, pool:'B', wave:2 },
+            { name:'ComboBreaker', points:1420, wins:4, pool:'C', wave:3 },
+            { name:'HeadshotHero', points:1280, wins:3, pool:'C', wave:3 }
+        ],
+        pools: ['A','B','C','D','E','F','G','H'],
+        sideEvents: [
+            { name:'2v2 Doubles', price:15, registered:24 },
+            { name:'Speedrun Challenge', price:10, registered:38 },
+            { name:'Retro Classic', price:10, registered:16 },
+            { name:'Random Character', price:5, registered:52 }
+        ],
+        cosplayContestants: [
+            { name:'CyberMage', character:'Cyber Sorceress', votes:128, img:'🧙‍♀️' },
+            { name:'PixelKnight', character:'8‑Bit Warrior', votes:95, img:'⚔️' },
+            { name:'NeonSamurai', character:'Future Ronin', votes:210, img:'🤖' }
+        ],
+        workshops: [
+            { name:'Pro Combo Lab', coach:'xXShadowXx', price:25, slots:8 },
+            { name:'Mindset Mastery', coach:'PixelQueen', price:20, slots:12 },
+            { name:'Tech Setup Guide', coach:'CoachGamer', price:15, slots:20 }
+        ]
+    };
+
+    const S = {
+        selectedCheer: null, selectedReg: null, regAmt: 0, selectedPred: null,
+        fantasyRoster: [], transactions: [],
+        gear: [
+            { id:1, name:'Pro Mouse', price:45, emoji:'🖱️', desc:'8K Sensor', ordered:false },
+            { id:2, name:'Headset', price:80, emoji:'🎧', desc:'Noise Cancel', ordered:false },
+            { id:3, name:'Team Jersey', price:35, emoji:'👕', desc:'Custom', ordered:false },
+            { id:4, name:'Energy Pack', price:5, emoji:'⚡', desc:'3 Drinks', ordered:false },
+            { id:5, name:'Mousepad', price:25, emoji:'🎯', desc:'XL RGB', ordered:false },
+            { id:6, name:'Snack Box', price:12, emoji:'🍕', desc:'Tournament fuel', ordered:false }
+        ]
+    };
+
+    function toast(m) {
+        const e = document.querySelector('.toast'); if(e) e.remove();
+        const t = document.createElement('div'); t.className='toast'; t.textContent=m;
+        document.body.appendChild(t);
+        setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity 0.3s'; setTimeout(()=>t.remove(),300); },2200);
+    }
+    function openModal(id) { document.getElementById(id).style.display='flex'; }
+    function closeModal(id) { document.getElementById(id).style.display='none'; }
+    function switchTab(id, el) {
+        document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(el) el.classList.add('active');
+        redirectRender(id);
+    }
+
+    function redirectRender(id) {
+        const renders = {
+            'bracket': renderBracket, 'pools': renderPools, 'leaderboard': renderLeaderboard,
+            'fantasy': renderFantasy, 'sideEvents': renderSideEvents, 'cosplay': renderCosplay,
+            'workshops': renderWorkshops, 'shop': renderShop
+        };
+        if(renders[id]) renders[id]();
+    }
+
+    function initUI() {
+        document.getElementById('eventSub').textContent = CONFIG.event;
+        document.getElementById('powerUpScroll').innerHTML = `
+            <div class="ticket" onclick="openModal('cheerModal')"><div class="t-price">$2</div><div class="t-label">10 Cheers</div><button class="t-btn">BOOST</button></div>
+            <div class="ticket" onclick="openModal('cheerModal')"><div class="t-price">$5</div><div class="t-label">50 Cheers</div><button class="t-btn">BOOST</button></div>
+            <div class="ticket" onclick="openModal('predictionModal')"><div class="t-price">$5</div><div class="t-label">Prediction</div><button class="t-btn">BET</button></div>
+            <div class="ticket vip" onclick="openModal('fantasyModal')"><div class="vip-tag">NEW</div><div class="t-price">$10</div><div class="t-label">Fantasy Draft</div><button class="t-btn">DRAFT</button></div>
+            <div class="ticket" onclick="switchTab('workshops')"><div class="t-price">$15+</div><div class="t-label">Coaching</div><button class="t-btn">LEARN</button></div>
+        `;
+        renderBracket();
+        renderPools();
+        renderLeaderboard();
+        renderFantasy();
+        renderSideEvents();
+        renderCosplay();
+        renderWorkshops();
+        renderShop();
+        updateTicker();
+    }
+
+    function renderBracket() {
+        document.getElementById('bracketTree').innerHTML = `
+            <div class="bracket-round"><strong style="color:var(--magenta);">SEMI‑FINALS</strong><br>
+                <div class="bracket-match"><span class="bracket-player">xXShadowXx</span> <span class="bracket-score">2‑0</span> <span class="bracket-player">LagMaster</span></div>
+                <div class="bracket-match"><span class="bracket-player">NoScopeKing</span> <span class="bracket-score">2‑1</span> <span class="bracket-player">PixelQueen</span></div>
+            </div>
+            <div class="bracket-round"><strong style="color:var(--gold);">🏆 FINALS</strong><br>
+                <div class="bracket-match"><span class="bracket-player">xXShadowXx</span> <span class="bracket-score">VS</span> <span class="bracket-player">NoScopeKing</span></div>
+            </div>`;
+    }
+
+    function renderPools() {
+        document.getElementById('poolGroups').innerHTML = CONFIG.pools.slice(0,4).map(p => {
+            const poolPlayers = CONFIG.players.filter(pl => pl.pool === p);
+            return `<div class="pool-group"><div class="pool-header">POOL ${p} — Wave ${poolPlayers[0]?.wave || 1}</div>${poolPlayers.map(pl => `<div class="match-row"><span class="player-name">${pl.name}</span><span style="color:var(--neon);">${pl.points} pts</span></div>`).join('')}</div>`;
+        }).join('');
+    }
+
+    function renderLeaderboard() {
+        document.getElementById('leaderboardList').innerHTML = CONFIG.players.sort((a,b)=>b.points-a.points).map((p,i) => `
+            <div class="match-row"><span class="player-name">#${i+1} ${p.name}</span><span class="match-score">${p.wins}W</span><span style="color:var(--neon);font-family:var(--font-mono);">${p.points} pts</span></div>
+        `).join('');
+    }
+
+    function renderFantasy() {
+        document.getElementById('fantasyRoster').innerHTML = S.fantasyRoster.length ? S.fantasyRoster.map(p => `<div class="fantasy-card"><span>🎮</span><span class="player-name">${p}</span></div>`).join('') : '<p style="color:var(--sub);font-size:0.7rem;">No players drafted yet. Draft your team!</p>';
+    }
+
+    function renderSideEvents() {
+        document.getElementById('sideEventsList').innerHTML = CONFIG.sideEvents.map(e => `
+            <div class="workshop-card"><div><strong>${e.name}</strong><br><small style="color:var(--sub);">${e.registered} registered</small></div><button class="shop-btn" onclick="openPay(${e.price},'${e.name} Entry')">ENTER $${e.price}</button></div>
+        `).join('');
+    }
+
+    function renderCosplay() {
+        document.getElementById('cosplayEntries').innerHTML = CONFIG.cosplayContestants.sort((a,b)=>b.votes-a.votes).map((c,i) => `
+            <div class="cosplay-card"><div style="font-size:3rem;">${c.img}</div><div style="font-weight:900;">${c.name}</div><div style="color:var(--sub);font-size:0.7rem;">${c.character}</div><div style="color:var(--gold);margin:8px 0;">⭐ ${c.votes} votes</div><button class="shop-btn" onclick="voteCosplay('${c.name}')">VOTE ($1)</button></div>
+        `).join('');
+    }
+
+    function renderWorkshops() {
+        document.getElementById('workshopList').innerHTML = CONFIG.workshops.map(w => `
+            <div class="workshop-card"><div><strong>${w.name}</strong><br><small style="color:var(--sub);">Coach: ${w.coach} • ${w.slots} slots</small></div><button class="shop-btn" onclick="openPay(${w.price},'${w.name} Workshop')">BOOK $${w.price}</button></div>
+        `).join('');
+    }
+
+    function renderShop() {
+        document.getElementById('shopGrid').innerHTML = S.gear.map(i => `
+            <div class="shop-card"><div class="shop-emoji">${i.emoji}</div><div class="shop-name">${i.name}</div><div class="shop-desc">${i.desc}</div><div class="shop-price">$${i.price}</div><button class="shop-btn ${i.ordered?'ordered':''}" onclick="orderGear(${i.id})">${i.ordered?'ORDERED ✓':'BUY'}</button></div>
+        `).join('');
+    }
+
+    function selectCheer(c,p,l) { S.selectedCheer = {cheers:c, price:p, label:l}; }
+    function purchaseCheer() { if(!S.selectedCheer) return toast('Select a pack'); const player = document.getElementById('cheerPlayer').value; openPay(S.selectedCheer.price, `${S.selectedCheer.label} for ${player}`); S.selectedCheer = null; }
+    function selectReg(t) { S.selectedReg = t; S.regAmt = CONFIG.entryPrices[t]; }
+    function registerPlayer() { const name = document.getElementById('playerName').value.trim(); if(!name) return toast('Enter your gamer tag'); if(!S.selectedReg) return toast('Select entry tier'); openPay(S.regAmt, `${S.selectedReg.toUpperCase()} Entry — ${name}`); S.selectedReg = null; }
+    function selectPrediction(p) { S.selectedPred = p; }
+    function submitPrediction() { if(!S.selectedPred) return toast('Select a player'); openPay(5, `Prediction: ${S.selectedPred} wins`); S.selectedPred = null; }
+    function draftPlayer(p) { if(S.fantasyRoster.includes(p)) return toast('Already drafted'); if(S.fantasyRoster.length >= 3) return toast('Max 3 players'); S.fantasyRoster.push(p); toast(`${p} drafted!`); renderFantasy(); }
+    function submitFantasy() { if(S.fantasyRoster.length < 3) return toast('Draft 3 players'); openPay(10, 'Fantasy Roster Entry'); }
+    function voteCosplay(name) { openPay(1, `Cosplay Vote — ${name}`); toast(`Vote cast for ${name}!`); }
+    function orderGear(id) { const i = S.gear.find(x=>x.id===id); if(!i||i.ordered) return; i.ordered=true; openPay(i.price, i.name); renderShop(); toast(i.name+' ordered!'); }
+
+    function openPay(amt, desc) {
+        document.getElementById('payAmount').textContent = amt;
+        document.getElementById('paymentTitle').textContent = 'Payment: '+desc;
+        document.getElementById('paymentItem').textContent = desc;
+        document.getElementById('paymentAmount').textContent = '$'+amt;
+        document.getElementById('paymentTotal').textContent = '$'+amt;
+        openModal('payModal');
+    }
+
+    function processPayment() {
+        const btn = document.querySelector('#payModal .btn-submit');
+        const orig = btn.innerHTML;
+        btn.innerHTML = 'PROCESSING...'; btn.disabled = true;
+        setTimeout(()=>{
+            const amt = parseFloat(document.getElementById('payAmount').textContent);
+            const desc = document.getElementById('paymentItem').textContent;
+            S.transactions.push({ amount: amt, desc, time: new Date().toLocaleTimeString() });
+            toast('Payment successful! 🎉'); closeModal('payModal'); btn.innerHTML = orig; btn.disabled = false;
+        }, 1000);
+    }
+
+    function updateTicker() {
+        document.getElementById('ticker').innerHTML = `🔥 Finals: xXShadowXx vs NoScopeKing • 🏆 Prize Pool: ${CONFIG.prize} • ⚡ Cheer packs live • 🎭 Cosplay voting open • 🎓 Workshop slots filling`;
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{ initUI(); setInterval(updateTicker, 10000); });
+    window.onclick = function(e){ if(e.target.classList.contains('modal')) closeModal(e.target.id); };
+</script>
+</body>
+</html>

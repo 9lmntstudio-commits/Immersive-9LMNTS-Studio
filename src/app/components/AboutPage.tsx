@@ -1,7 +1,7 @@
 import { Brain, Zap, Target, ArrowRight } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { SEO } from "./SEO";
-import founderImg from "../../imports/founder.png";
+import founderImg from "../imports/founder.png";
 const founderImage = founderImg;
 const cultureImage = "https://images.unsplash.com/photo-1602559399822-bd7d9f6da207?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjeWJlcnB1bmslMjB0ZWFtJTIwcGVvcGxlfGVufDF8fHx8MTc3Nzk2NjczOHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral";
 const aiImage      = "https://images.unsplash.com/photo-1764336312138-14a5368a6cd3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwbmVvbiUyMGJyYWlufGVufDF8fHx8MTc3Nzk2NjczOHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral";

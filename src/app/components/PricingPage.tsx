@@ -1,5 +1,6 @@
 import { Check, HelpCircle } from 'lucide-react';
 import { useState } from 'react';
+import { GateOSCheckoutModal } from './GateOSCheckoutModal';
 import { SEO } from './SEO';
 
 interface PricingPageProps {
@@ -8,171 +9,120 @@ interface PricingPageProps {
 
 export function PricingPage({ onNavigate }: PricingPageProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
 
-  const agencyServices = [
+  const handleOpenCheckout = (tier: any) => {
+    setSelectedInvoice({
+      id: `NX-${Math.floor(1000 + Math.random() * 9000)}`,
+      title: tier.name,
+      amount: tier.price === 'Custom' ? 5000 : parseFloat(tier.price.replace(/[$,]/g, '')),
+      description: tier.description
+    });
+    setIsModalOpen(true);
+  };
+
+  const pricingTiers = [
     {
-      name: 'One-Time Service',
-      price: '$499',
-      description: 'Perfect for single projects',
+      name: 'Basic Boost',
+      price: '$1,500',
+      planValue: 'basic',
+      description: 'Startups/Small Projects',
       features: [
-        'Logo Design',
-        'Business Card Design',
-        'Social Media Graphics (3)',
-        'Basic Brand Guidelines',
+        'Initial Concept',
+        '1 Revision Round',
+        'Basic Mockups',
+        'Mobile Responsive',
+        'Basic Design Assets',
+        '1-2 Week Delivery',
+      ],
+      cta: 'Select Plan',
+      popular: false,
+    },
+    {
+      name: 'Standard Pro',
+      price: '$3,000',
+      planValue: 'standard',
+      description: 'Growing Businesses',
+      features: [
+        'Everything in Basic Boost',
+        'Full Wireframe',
         '2 Revision Rounds',
-        '1 Week Delivery',
+        'Full Design System Overview',
+        'Component Library',
+        'Interactive Prototype',
+        '2-3 Week Delivery',
       ],
-      popular: false,
-    },
-  ];
-
-  const retainers = [
-    {
-      name: 'Starter Retainer',
-      price: '$999/month',
-      description: 'Essential ongoing support',
-      features: [
-        'Branding Full Kit Package',
-        'Basic Web/App Design',
-        'SEO Optimization',
-        'Email Marketing Setup',
-        'Standard Business Documents',
-        'Contracts & Agreements',
-        'Terms of Service',
-        'Email Outreach Writing',
-        'Custom AI Assistant (1)',
-        'Business Hours Support',
-      ],
+      cta: 'Select Plan',
       popular: false,
     },
     {
-      name: 'Growth Retainer',
-      price: '$2,499/month',
-      description: 'Comprehensive growth package',
+      name: 'Premium Elite',
+      price: '$5,000',
+      planValue: 'premium',
+      description: 'Established Brands',
       features: [
-        'Everything in Starter',
-        'Advanced Web/App Development',
-        'Video Editing (5 videos/month)',
-        'Marketing Campaign Management',
-        'Custom AI Assistants (3)',
+        'Everything in Standard Pro',
+        'Full UX Research',
+        'Unlimited Revisions',
+        'Full Design System Documentation',
+        'Advanced Animations',
         'Priority Support',
-        '24/7 Monitoring Service',
-        'Help Desk Access',
-        'Weekly Strategy Calls',
+        'Developer Handoff',
+        'Style Guide',
+        '3-4 Week Delivery',
       ],
+      cta: 'Select Plan',
       popular: true,
     },
     {
-      name: 'Enterprise Retainer',
-      price: '$4,999/month',
-      description: 'Full-service partnership',
+      name: 'Custom Scale',
+      price: 'Custom',
+      planValue: 'custom',
+      description: 'High-End/Large Scope',
       features: [
-        'Everything in Growth',
-        'Unlimited Design Requests',
-        'Full Development Team',
-        'Video Production Suite',
-        'Advanced Marketing Automation',
-        'Custom AI Assistants (Unlimited)',
-        'Dedicated Account Manager',
-        '24/7 Priority Support',
-        'Real-time Monitoring',
-        'Monthly Business Strategy',
+        'Large-scale Applications',
+        'Full Brand Overhaul',
+        'Retainer Work Available',
+        'Dedicated Team',
+        'Custom Timeline (Max 4 weeks)',
+        'White Label Solutions',
+        'Ongoing Support',
+        '24/7 Availability',
       ],
-      popular: false,
-    },
-  ];
-
-  const osSeriesTiers = [
-    {
-      name: 'Free Tier',
-      price: '$0',
-      description: 'Start your OS journey',
-      profitSplit: '70/30',
-      features: [
-        'Basic OS Access',
-        'Standard Templates',
-        'Community Support',
-        '70% Your Revenue / 30% Platform Fee',
-        'Monthly Reporting',
-      ],
-      popular: false,
-    },
-    {
-      name: 'Starter OS',
-      price: '$499',
-      description: 'Enhanced OS features',
-      profitSplit: '80/20',
-      features: [
-        'Everything in Free',
-        'Custom Branding',
-        'Advanced Analytics',
-        'Priority Support',
-        '80% Your Revenue / 20% Platform Fee',
-        'Includes 9LMNTS Studio Services',
-      ],
-      popular: false,
-    },
-    {
-      name: 'Pro OS',
-      price: '$1,499',
-      description: 'Professional OS solution',
-      profitSplit: '85/15',
-      features: [
-        'Everything in Starter',
-        'White Label Option',
-        'Custom Integrations',
-        'Dedicated Support',
-        '85% Your Revenue / 15% Platform Fee',
-        'Full 9LMNTS Studio Services',
-      ],
-      popular: true,
-    },
-    {
-      name: 'Enterprise OS',
-      price: '$4,999',
-      description: 'Complete OS ecosystem',
-      profitSplit: '95/5',
-      features: [
-        'Everything in Pro',
-        'Custom Development',
-        'API Access',
-        '24/7 Priority Support',
-        '95% Your Revenue / 5% Platform Fee',
-        'Premium 9LMNTS Studio Services',
-        'Revenue Sharing Optimization',
-      ],
+      cta: 'Contact for Quote',
       popular: false,
     },
   ];
 
   const faqs = [
     {
-      question: 'What is the difference between Agency Services and OS Series?',
-      answer: 'Agency Services are one-time or monthly retainers for creative agency work (design, development, marketing). OS Series is our proprietary operating system platform with revenue sharing models for event management and business operations.',
+      question: 'What is included in each tier?',
+      answer: 'Each tier builds on the previous one. Basic Boost covers initial concepts and mockups, Standard Pro adds wireframes and design systems, Premium Elite includes full UX research and unlimited revisions, and Custom Scale is tailored to your specific needs.',
     },
     {
-      question: 'How does the profit split work for OS Series?',
-      answer: 'Free Tier: You keep 70%, platform takes 30%. Starter OS: You keep 80%, platform takes 20%. Pro OS: You keep 85%, platform takes 15%. Enterprise OS: You keep 95%, platform takes 5%.',
+      question: 'Can I upgrade my plan later?',
+      answer: 'Absolutely! You can upgrade at any time during the project. We\'ll credit your previous payment toward the higher tier.',
     },
     {
-      question: 'Can I switch between retainer plans?',
-      answer: 'Yes, you can upgrade or downgrade your retainer plan at any time. Changes take effect at the start of the next billing cycle.',
+      question: 'What does "Full Design System" include?',
+      answer: 'A full design system includes color palettes, typography scales, component libraries, spacing guidelines, and comprehensive documentation for consistent implementation across all platforms.',
     },
     {
-      question: 'What is included in the "Branding Full Kit Package"?',
-      answer: 'The branding kit includes logo design, color palette, typography system, brand guidelines document, social media templates, business card design, and brand asset library.',
+      question: 'Do you offer payment plans?',
+      answer: 'Yes, we offer flexible payment plans for projects over $3,000 CAD. Contact us to discuss milestone-based payment options.',
     },
     {
-      question: 'Do the OS Series tiers include 9LMNTS Studio services?',
-      answer: 'Yes, all paid OS tiers (Starter, Pro, Enterprise) include corresponding 9LMNTS Studio services. The higher the tier, the more comprehensive the included services.',
+      question: 'What is the delivery timeline?',
+      answer: 'Basic Boost takes 1-2 weeks, Standard Pro takes 2-3 weeks, Premium Elite takes 3-4 weeks, and Custom Scale timelines are negotiated based on project scope with a maximum of 4 weeks for most projects.',
     },
     {
-      question: 'What is the "Custom AI Assistant" feature?',
-      answer: 'Our custom AI assistants are tailored to your business needs - from customer service chatbots to content generation tools, marketing automation, and data analysis helpers.',
+      question: 'What services do you offer?',
+      answer: 'We specialize in: 7-Day Agentic Sprint (AI Automation), Brand Identity & Logo Design, Website Design & Development, E-commerce Platforms, Mobile App Design, Marketing Campaigns, and Full Digital Transformations.',
     },
     {
-      question: 'How does 24/7 monitoring service work?',
-      answer: 'Our team monitors your systems, website, and applications around the clock. We detect and resolve issues proactively, ensuring maximum uptime and performance.',
+      question: 'What files do I receive?',
+      answer: 'You receive all design files (Figma/Adobe), exported assets, documentation, and for Premium Elite and above, developer-ready specs and style guides.',
     },
   ];
 
@@ -191,64 +141,20 @@ export function PricingPage({ onNavigate }: PricingPageProps) {
             </span>
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl text-foreground mb-6 font-bold">
-            <span className="font-['Orbitron'] uppercase tracking-tighter">Choose Your</span> <span className="font-['Mrs_Saint_Delafield'] text-primary text-6xl sm:text-7xl lg:text-8xl capitalize ml-[-10px] -rotate-3 inline-block">Plan</span>
+            <span className="font-['Orbitron'] uppercase tracking-tighter">The</span> <span className="font-['Caveat'] text-[#FF5500] text-primary text-6xl sm:text-7xl lg:text-8xl capitalize ml-[-10px] -rotate-3 inline-block">Element Levels</span>
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto font-sans">
-            Agency services and OS Series tiers to fit your needs
+            Choose the perfect tier for your project. All plans include our signature 
+            9 Elements approach to digital excellence
           </p>
         </div>
       </section>
 
-      {/* Agency Services Section */}
+      {/* Pricing Table */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card border-y border-border">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl text-foreground mb-4 font-bold uppercase tracking-widest">
-              <span className="font-['Orbitron']">Agency</span> <span className="font-['Mrs_Saint_Delafield'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">Services</span>
-            </h2>
-            <p className="text-muted-foreground font-sans">One-time services and monthly retainers</p>
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            {agencyServices.map((tier, index) => (
-              <div
-                key={index}
-                className="p-8 rounded-none transition-all flex flex-col bg-background border border-primary/20"
-              >
-                <h3 className="text-foreground text-xl mb-2 font-bold uppercase tracking-widest">{tier.name}</h3>
-                <div className="mb-6">
-                  <span className="text-3xl text-primary font-black">{tier.price}</span>
-                </div>
-                <p className="text-muted-foreground text-sm mb-6 font-sans">{tier.description}</p>
-                <ul className="space-y-3 mb-8 flex-1 font-sans">
-                  {tier.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="text-muted-foreground flex items-start text-sm">
-                      <Check className="text-primary mr-2 flex-shrink-0" size={16} />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <button className="w-full py-4 rounded-none font-bold uppercase tracking-widest transition-all border bg-primary text-primary-foreground border-primary hover:bg-primary/90">
-                  Get Started
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Retainers Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl text-foreground mb-4 font-bold uppercase tracking-widest">
-              <span className="font-['Orbitron']">Monthly</span> <span className="font-['Mrs_Saint_Delafield'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">Retainers</span>
-            </h2>
-            <p className="text-muted-foreground font-sans">Ongoing comprehensive support packages</p>
-          </div>
-
           <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {retainers.map((tier, index) => (
+            {pricingTiers.slice(0, 3).map((tier, index) => (
               <div
                 key={index}
                 className={`p-8 rounded-none transition-all flex flex-col ${
@@ -264,154 +170,135 @@ export function PricingPage({ onNavigate }: PricingPageProps) {
                     </span>
                   </div>
                 )}
-                <h3 className="text-foreground text-xl mb-2 font-bold uppercase tracking-widest">{tier.name}</h3>
+                <h3 className="text-foreground text-2xl mb-2 font-bold uppercase tracking-widest">{tier.name}</h3>
                 <div className="mb-6">
-                  <span className="text-3xl text-primary font-black">{tier.price}</span>
+                  <span className="text-4xl text-primary font-black">{tier.price}</span>
+                  <span className="text-muted-foreground ml-2 text-sm">CAD</span>
                 </div>
-                <p className="text-muted-foreground text-sm mb-6 font-sans">{tier.description}</p>
                 <ul className="space-y-3 mb-8 flex-1 font-sans">
                   {tier.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="text-muted-foreground flex items-start text-sm">
-                      <Check className="text-primary mr-2 flex-shrink-0" size={16} />
+                      <span className="text-primary mr-2">✓</span>
                       {feature}
                     </li>
                   ))}
                 </ul>
-                <button className={`w-full py-4 rounded-none font-bold uppercase tracking-widest transition-all border ${
-                  tier.popular
-                    ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90'
-                    : 'bg-transparent border-primary text-primary hover:bg-primary/10'
-                }`}>
-                  Select Plan
+                <button
+                  onClick={() => handleOpenCheckout(tier)}
+                  className={`w-full py-4 rounded-none font-bold uppercase tracking-widest transition-all border ${
+                    tier.popular
+                      ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90'
+                      : 'bg-transparent border-primary text-primary hover:bg-primary/10'
+                  }`}
+                >
+                  Buy Pass
                 </button>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* OS Series Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card border-y border-border">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl text-foreground mb-4 font-bold uppercase tracking-widest">
-              <span className="font-['Orbitron']">9LMNTS OS</span> <span className="font-['Mrs_Saint_Delafield'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">Series</span>
-            </h2>
-            <p className="text-muted-foreground font-sans">Proprietary operating system with revenue sharing</p>
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-6 mb-12">
-            {osSeriesTiers.map((tier, index) => (
-              <div
-                key={index}
-                className={`p-6 rounded-none transition-all flex flex-col ${
-                  tier.popular
-                    ? 'bg-background border-2 border-primary shadow-[0_0_40px_rgba(255,69,0,0.2)] scale-105 z-10'
-                    : 'bg-background border border-primary/20'
-                }`}
-              >
-                {tier.popular && (
-                  <div className="mb-4">
-                    <span className="px-3 py-1 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-widest">
-                      Recommended
-                    </span>
-                  </div>
-                )}
-                <h3 className="text-foreground text-lg mb-2 font-bold uppercase tracking-widest">{tier.name}</h3>
-                <div className="mb-4">
-                  <span className="text-2xl text-primary font-black">{tier.price}</span>
-                </div>
-                <div className="mb-4">
-                  <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded">
-                    {tier.profitSplit} Split
-                  </span>
-                </div>
-                <p className="text-muted-foreground text-xs mb-6 font-sans">{tier.description}</p>
-                <ul className="space-y-2 mb-6 flex-1 font-sans">
-                  {tier.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="text-muted-foreground flex items-start text-xs">
-                      <Check className="text-primary mr-2 flex-shrink-0" size={14} />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <button className={`w-full py-3 rounded-none font-bold uppercase tracking-widest transition-all border text-xs ${
-                  tier.popular
-                    ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90'
-                    : 'bg-transparent border-primary text-primary hover:bg-primary/10'
-                }`}>
-                  Choose Tier
-                </button>
-              </div>
-            ))}
+          <div className="text-center font-sans">
+            <p className="text-muted-foreground text-sm">
+              All prices in Canadian Dollars (CAD). Need a custom solution?{' '}
+              <a href="#" className="text-primary hover:underline font-bold">
+                Contact us
+              </a>
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Price Comparison Table */}
+      {/* Compare All Features */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl text-foreground mb-4 font-bold uppercase tracking-widest">
-              <span className="font-['Orbitron']">Compare All</span> <span className="font-['Mrs_Saint_Delafield'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">Features</span>
+              <span className="font-['Orbitron']">Compare All</span> <span className="font-['Caveat'] text-[#FF5500] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">Features</span>
             </h2>
             <p className="text-muted-foreground font-sans">Detailed feature comparison across all tiers</p>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full bg-card rounded-none border border-primary/20 font-sans text-xs">
+            <table className="w-full bg-card rounded-none border border-primary/20 font-sans">
               <thead>
                 <tr className="border-b border-primary/20">
                   <th className="text-left p-4 text-foreground uppercase tracking-widest text-xs">Features</th>
-                  <th className="text-center p-4 text-foreground uppercase tracking-widest text-xs">One-Time</th>
-                  <th className="text-center p-4 text-foreground uppercase tracking-widest text-xs">Starter</th>
+                  <th className="text-center p-4 text-foreground uppercase tracking-widest text-xs">Basic Boost</th>
+                  <th className="text-center p-4 text-foreground uppercase tracking-widest text-xs">Standard Pro</th>
                   <th className="text-center p-4 text-foreground uppercase tracking-widest text-xs bg-primary/10">
-                    Growth
-                    <div className="text-[9px] text-primary mt-1">Popular</div>
+                    Premium Elite
+                    <div className="text-[10px] text-primary mt-1">Popular</div>
                   </th>
-                  <th className="text-center p-4 text-foreground uppercase tracking-widest text-xs">Enterprise</th>
+                  <th className="text-center p-4 text-foreground uppercase tracking-widest text-xs">Custom Scale</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { feature: 'Logo Design', onetime: true, starter: true, growth: true, enterprise: true },
-                  { feature: 'Web/App Design', onetime: false, starter: true, growth: true, enterprise: true },
-                  { feature: 'SEO Optimization', onetime: false, starter: true, growth: true, enterprise: true },
-                  { feature: 'Video Editing', onetime: false, starter: false, growth: true, enterprise: true },
-                  { feature: 'Marketing Campaigns', onetime: false, starter: false, growth: true, enterprise: true },
-                  { feature: 'Custom AI Assistants', onetime: false, starter: '1', growth: '3', enterprise: 'Unlimited' },
-                  { feature: '24/7 Monitoring', onetime: false, starter: false, growth: true, enterprise: true },
-                  { feature: 'Dedicated Account Manager', onetime: false, starter: false, growth: false, enterprise: true },
-                  { feature: 'Business Strategy', onetime: false, starter: false, growth: false, enterprise: true },
+                  { feature: 'Initial Concept', basic: true, standard: true, premium: true, custom: true },
+                  { feature: 'Mobile Responsive', basic: true, standard: true, premium: true, custom: true },
+                  { feature: 'Basic Design Assets', basic: true, standard: true, premium: true, custom: true },
+                  { feature: 'Revision Rounds', basic: '1', standard: '2', premium: 'Unlimited', custom: 'Unlimited' },
+                  { feature: 'Basic Mockups', basic: true, standard: true, premium: true, custom: true },
+                  { feature: 'Full Wireframe', basic: false, standard: true, premium: true, custom: true },
+                  { feature: 'Component Library', basic: false, standard: true, premium: true, custom: true },
+                  { feature: 'Interactive Prototype', basic: false, standard: true, premium: true, custom: true },
+                  { feature: 'Design System Overview', basic: false, standard: true, premium: true, custom: true },
+                  { feature: 'Full UX Research', basic: false, standard: false, premium: true, custom: true },
+                  { feature: 'Full Design System Documentation', basic: false, standard: false, premium: true, custom: true },
+                  { feature: 'Advanced Animations', basic: false, standard: false, premium: true, custom: true },
+                  { feature: 'Developer Handoff', basic: false, standard: false, premium: true, custom: true },
+                  { feature: 'Style Guide', basic: false, standard: false, premium: true, custom: true },
+                  { feature: 'Priority Support', basic: false, standard: false, premium: true, custom: true },
+                  { feature: 'Dedicated Team', basic: false, standard: false, premium: false, custom: true },
+                  { feature: 'White Label Solutions', basic: false, standard: false, premium: false, custom: true },
+                  { feature: 'Retainer Work Available', basic: false, standard: false, premium: false, custom: true },
+                  { feature: '24/7 Availability', basic: false, standard: false, premium: false, custom: true },
+                  { feature: 'Delivery Time', basic: '1-2 weeks', standard: '2-3 weeks', premium: '3-4 weeks', custom: 'Max 4 weeks' },
                 ].map((row, index) => (
                   <tr key={index} className="border-b border-primary/10 hover:bg-primary/5 transition-colors">
                     <td className="p-4 text-muted-foreground text-sm font-medium">{row.feature}</td>
                     <td className="p-4 text-center">
-                      {typeof row.onetime === 'boolean' ? (
-                        row.onetime ? <Check className="text-primary mx-auto" size={16} /> : <span className="text-muted-foreground/30">—</span>
+                      {typeof row.basic === 'boolean' ? (
+                        row.basic ? (
+                          <Check className="text-primary mx-auto" size={18} />
+                        ) : (
+                          <span className="text-muted-foreground/30">—</span>
+                        )
                       ) : (
-                        <span className="text-muted-foreground text-xs font-bold uppercase">{row.onetime}</span>
+                        <span className="text-muted-foreground text-xs font-bold uppercase">{row.basic}</span>
                       )}
                     </td>
                     <td className="p-4 text-center">
-                      {typeof row.starter === 'boolean' ? (
-                        row.starter ? <Check className="text-primary mx-auto" size={16} /> : <span className="text-muted-foreground/30">—</span>
+                      {typeof row.standard === 'boolean' ? (
+                        row.standard ? (
+                          <Check className="text-primary mx-auto" size={18} />
+                        ) : (
+                          <span className="text-muted-foreground/30">—</span>
+                        )
                       ) : (
-                        <span className="text-muted-foreground text-xs font-bold uppercase">{row.starter}</span>
+                        <span className="text-muted-foreground text-xs font-bold uppercase">{row.standard}</span>
                       )}
                     </td>
                     <td className="p-4 text-center bg-primary/5">
-                      {typeof row.growth === 'boolean' ? (
-                        row.growth ? <Check className="text-primary mx-auto" size={16} /> : <span className="text-muted-foreground/30">—</span>
+                      {typeof row.premium === 'boolean' ? (
+                        row.premium ? (
+                          <Check className="text-primary mx-auto" size={18} />
+                        ) : (
+                          <span className="text-muted-foreground/30">—</span>
+                        )
                       ) : (
-                        <span className="text-primary text-xs font-bold uppercase">{row.growth}</span>
+                        <span className="text-primary text-xs font-bold uppercase">{row.premium}</span>
                       )}
                     </td>
                     <td className="p-4 text-center">
-                      {typeof row.enterprise === 'boolean' ? (
-                        row.enterprise ? <Check className="text-primary mx-auto" size={16} /> : <span className="text-muted-foreground/30">—</span>
+                      {typeof row.custom === 'boolean' ? (
+                        row.custom ? (
+                          <Check className="text-primary mx-auto" size={18} />
+                        ) : (
+                          <span className="text-muted-foreground/30">—</span>
+                        )
                       ) : (
-                        <span className="text-muted-foreground text-xs font-bold uppercase">{row.enterprise}</span>
+                        <span className="text-muted-foreground text-xs font-bold uppercase">{row.custom}</span>
                       )}
                     </td>
                   </tr>
@@ -427,7 +314,7 @@ export function PricingPage({ onNavigate }: PricingPageProps) {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl text-foreground mb-4 font-bold uppercase tracking-widest">
-              <span className="font-['Orbitron']">Frequently Asked</span> <span className="font-['Mrs_Saint_Delafield'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">Questions</span>
+              <span className="font-['Orbitron']">Frequently Asked</span> <span className="font-['Caveat'] text-[#FF5500] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">Questions</span>
             </h2>
             <p className="text-muted-foreground font-sans">Everything you need to know about our pricing</p>
           </div>
@@ -465,7 +352,7 @@ export function PricingPage({ onNavigate }: PricingPageProps) {
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl sm:text-5xl text-foreground mb-6 font-bold leading-tight">
-          <span className="font-['Orbitron'] uppercase tracking-tighter">Still Have</span> <span className="font-['Mrs_Saint_Delafield'] text-primary text-5xl sm:text-6xl lg:text-8xl capitalize ml-[-15px] -rotate-6 inline-block">Questions?</span>
+          <span className="font-['Orbitron'] uppercase tracking-tighter">Still Have</span> <span className="font-['Caveat'] text-[#FF5500] text-primary text-5xl sm:text-6xl lg:text-8xl capitalize ml-[-15px] -rotate-6 inline-block">Questions?</span>
         </h2>
         <p className="text-muted-foreground text-lg mb-8 font-sans">
           Our team is ready to help you choose the perfect plan
@@ -475,6 +362,15 @@ export function PricingPage({ onNavigate }: PricingPageProps) {
         </button>
       </div>
     </section>
+
+    {/* Checkout Modal */}
+    {selectedInvoice && (
+      <GateOSCheckoutModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        invoiceDetails={selectedInvoice}
+      />
+    )}
   </div>
   );
 }

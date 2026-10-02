@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Romeo & Juliet | Wedding OS V2</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CORE VARIABLES --- */
+        :root {
+            --primary: #D4AF37; /* Luxury Gold */
+            --primary-glow: rgba(212, 175, 55, 0.4);
+            --accent: #FF5500; /* 9LMNTS Orange (Party Mode) */
+            --bg-light: #f4f4f0;
+            --bg-dark: #0a0a0a;
+            --card-light: rgba(255, 255, 255, 0.85);
+            --card-dark: rgba(20, 20, 20, 0.6);
+            --glass-blur: blur(12px);
+            --text-light: #1a1a1a;
+            --text-dark: #ededed;
+            --radius: 16px;
+            --font-head: 'Playfair Display', serif;
+            --font-ui: 'Space Grotesk', sans-serif;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* --- GLOBAL RESET --- */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; padding: 0; font-family: var(--font-ui); background: var(--bg-light); color: var(--text-light); transition: var(--transition); overflow-x: hidden; }
+        
+        /* --- THEME ENGINES --- */
+        body[data-theme="dark"] {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+            --primary: #FFD700;
+        }
+        
+        .ambient-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background: radial-gradient(circle at 50% 10%, rgba(212, 175, 55, 0.1), transparent 60%);
+            transition: var(--transition);
+        }
+        body[data-theme="dark"] .ambient-bg {
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 85, 0, 0.08), transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.05), transparent 40%);
+        }
+
+        /* --- APP SHELL --- */
+        .app-container {
+            max-width: 440px; margin: 0 auto; padding-bottom: 120px; min-height: 100vh; position: relative;
+        }
+
+        /* --- HEADER & HERO --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center; padding: 20px 24px;
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(255,255,255,0.01); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        body[data-theme="dark"] header { border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+        .brand { font-family: var(--font-head); font-weight: 700; font-size: 1.2rem; letter-spacing: 0.5px; }
+        .theme-switch { 
+            background: rgba(0,0,0,0.05); border: none; width: 40px; height: 40px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; cursor: pointer; color: inherit; transition: var(--transition);
+        }
+        .admin-lock {
+            margin-right: 15px; cursor: pointer; opacity: 0.3; transition: 0.3s;
+        }
+        .admin-lock:hover { opacity: 1; color: var(--primary); }
+
+        .hero { padding: 30px 24px 20px; text-align: center; }
+        .couple-names { font-family: var(--font-head); font-size: 3rem; line-height: 0.9; margin: 0; background: linear-gradient(45deg, var(--text-light), #666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body[data-theme="dark"] .couple-names { background: linear-gradient(45deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-date { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; opacity: 0.6; margin-top: 10px; font-weight: 700; }
+        
+        .hero-cta { margin-top: 25px; width: 100%; padding: 18px; font-size: 1rem; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* --- NAVIGATION TABS --- */
+        .nav-scroller {
+            display: flex; gap: 12px; overflow-x: auto; padding: 10px 24px 20px; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+        }
+        .nav-pill {
+            padding: 10px 20px; border-radius: 100px; background: rgba(0,0,0,0.05); 
+            font-size: 0.85rem; font-weight: 600; white-space: nowrap; cursor: pointer; transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        body[data-theme="dark"] .nav-pill { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+        .nav-pill.active { background: var(--text-light); color: white; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        body[data-theme="dark"] .nav-pill.active { background: var(--primary); color: #000; box-shadow: 0 5px 20px var(--primary-glow); }
+
+        /* --- SECTIONS --- */
+        .section { display: none; padding: 0 24px; animation: slideUp 0.5s ease; }
+        .section.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glass-card {
+            background: var(--card-light); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius); padding: 20px;
+            margin-bottom: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+        body[data-theme="dark"] .glass-card { background: var(--card-dark); border: 1px solid rgba(255,255,255,0.08); }
+
+        h2 { font-size: 1.2rem; margin: 0 0 15px 0; font-weight: 700; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+
+        /* --- COMPONENTS --- */
+        .action-btn {
+            width: 100%; padding: 16px; border-radius: 12px; border: none; font-family: var(--font-ui); font-weight: 700; font-size: 0.95rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #000; color: #fff; margin-bottom: 10px; transition: 0.2s;
+        }
+        .action-btn:active { transform: scale(0.98); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), #b08d26); color: #000; box-shadow: 0 4px 15px var(--primary-glow); justify-content: center; }
+        .btn-outline { background: transparent; border: 2px solid rgba(0,0,0,0.1); color: inherit; }
+        body[data-theme="dark"] .btn-outline { border-color: rgba(255,255,255,0.2); }
+        
+        .speech-avatar { width: 80px; height: 80px; border-radius: 50%; background-size: cover; margin: 0 auto 15px; border: 3px solid var(--primary); }
+        
+        /* --- NEW: NETWORKING STYLES --- */
+        .filter-bar { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; }
+        .filter-tag { padding: 6px 12px; border-radius: 8px; background: rgba(0,0,0,0.05); font-size: 0.75rem; cursor: pointer; white-space: nowrap; font-weight: bold; }
+        body[data-theme="dark"] .filter-tag { background: rgba(255,255,255,0.1); }
+        .filter-tag.active { background: var(--text-light); color: white; }
+        body[data-theme="dark"] .filter-tag.active { background: var(--primary); color: black; }
+        
+        .guest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .guest-card { background: rgba(255,255,255,0.5); border: 1px solid rgba(0,0,0,0.05); border-radius: 12px; padding: 15px; text-align: center; }
+        body[data-theme="dark"] .guest-card { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+        .guest-avatar { width: 60px; height: 60px; border-radius: 50%; background-color: #eee; margin: 0 auto 10px; background-size: cover; border: 2px solid var(--primary); }
+        .team-badge { font-size: 0.6rem; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-weight: bold; display: inline-block; margin-bottom: 5px; }
+        .team-groom { background: rgba(2, 132, 199, 0.2); color: #0284c7; }
+        .team-bride { background: rgba(190, 24, 93, 0.2); color: #be185d; }
+        body[data-theme="dark"] .team-groom { color: #38bdf8; }
+        body[data-theme="dark"] .team-bride { color: #f472b6; }
+        
+        /* --- NEW: MOSAIC STYLES --- */
+        .mosaic-feed { columns: 2; column-gap: 10px; }
+        .feed-item { break-inside: avoid; background: white; border-radius: 8px; margin-bottom: 10px; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); }
+        .feed-img { width: 100%; display: block; }
+        .feed-caption { padding: 8px; font-size: 0.75rem; font-style: italic; color: #666; }
+
+        /* --- ADMIN PANEL --- */
+        #adminPanel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #111; color: white; z-index: 200; display: none; padding: 30px; flex-direction: column; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .admin-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 20px; border-radius: 12px; text-align: left; cursor: pointer; }
+        .admin-btn i { font-size: 1.5rem; margin-bottom: 10px; color: var(--primary); }
+
+        /* --- PROJECTOR MODE --- */
+        #projectorView { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 999; display: none; padding: 40px; }
+        .proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .proj-card { background: white; padding: 10px; border-radius: 8px; animation: popIn 0.6s ease; }
+        .proj-img { width: 100%; height: 250px; object-fit: cover; border-radius: 4px; }
+
+        /* --- BOTTOM DOCK --- */
+        .bottom-dock {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px;
+            background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-radius: 100px; padding: 10px; display: flex; justify-content: space-around;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 200; border: 1px solid rgba(255,255,255,0.1);
+        }
+        body[data-theme="dark"] .bottom-dock { border: 1px solid var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
+
+        .dock-item {
+            background: none; border: none; color: rgba(255,255,255,0.5); font-size: 1.2rem;
+            width: 45px; height: 45px; border-radius: 50%; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .dock-item.active { color: #000; background: var(--primary); transform: translateY(-5px); }
+        body[data-theme="dark"] .dock-item.active { background: var(--primary); color: #000; }
+
+        /* --- ANIMATIONS & MODALS --- */
+        .winner-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .confetti-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 300; display: none; align-items: flex-end; }
+        .modal-sheet { background: var(--bg-light); width: 100%; max-width: 440px; margin: 0 auto; border-radius: 24px 24px 0 0; padding: 30px 24px 50px; }
+        body[data-theme="dark"] .modal-sheet { background: #1a1a1a; color: #fff; border-top: 1px solid var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg"></div>
+
+    <div class="app-container">
+        
+        <header>
+            <div style="display:flex; align-items:center;">
+                <i class="fas fa-lock admin-lock" onclick="openPinModal()"></i>
+                <div class="brand">R & J</div>
+            </div>
+            <button class="theme-switch" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+
+        <div class="hero">
+            <div class="hero-date" id="weddingDate">JULY 24, 2025</div>
+            <h1 class="couple-names" id="coupleNames">Romeo &<br>Juliet</h1>
+            <button class="action-btn btn-primary hero-cta" onclick="openFundModal()">
+                Contribute to Future
+            </button>
+        </div>
+
+        <div class="nav-scroller">
+            <div class="nav-pill active" onclick="nav('timeline', this)">Timeline</div>
+            <div class="nav-pill" onclick="nav('family', this)">Who's Family?</div>
+            <div class="nav-pill" onclick="nav('speeches', this)">Speeches</div>
+            <div class="nav-pill" onclick="nav('mosaic', this)">Mosaic</div>
+            <div class="nav-pill" onclick="nav('games', this)">Games</div>
+            <div class="nav-pill" onclick="nav('raffle', this)">Raffle</div>
+        </div>
+
+        <div id="timeline" class="section active">
+            <div class="glass-card">
+                <h2><i class="fas fa-clock" style="color:var(--primary)"></i> Happening Now</h2>
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span style="font-weight:700;">Dinner Service</span>
+                    <span style="opacity:0.6;">7:00 PM</span>
+                </div>
+                <div style="width:100%; height:4px; background:rgba(0,0,0,0.1); border-radius:2px;">
+                    <div style="width:70%; height:100%; background:var(--primary); border-radius:2px;"></div>
+                </div>
+                <p style="font-size:0.85rem; opacity:0.7; margin-top:10px;">Speeches starting in 15 mins.</p>
+            </div>
+        </div>
+
+        <div id="family" class="section">
+            <div class="filter-bar">
+                <div class="filter-tag active" onclick="renderGuests('all')">All Guests</div>
+                <div class="filter-tag" onclick="renderGuests('Team Groom')">Team Groom</div>
+                <div class="filter-tag" onclick="renderGuests('Team Bride')">Team Bride</div>
+            </div>
+            <div class="guest-grid" id="guestGrid">
+                </div>
+        </div>
+
+        <div id="speeches" class="section">
+            <div class="glass-card" style="text-align:center;">
+                <h2 style="justify-content:center;">Speech Showcase</h2>
+                <div style="margin-bottom:30px; border-bottom:1px solid rgba(128,128,128,0.2); padding-bottom:20px;">
+                    <div class="speech-avatar" style="background-image:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200');"></div>
+                    <div style="font-size:0.8rem; text-transform:uppercase; color:var(--primary); font-weight:bold;">Best Man</div>
+                    <h3 style="margin:5px 0 15px;">Mercutio</h3>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <button class="action-btn btn-vote" onclick="vote('Mercutio')">🗳️ VOTE</button>
+                        <button class="action-btn btn-primary" style="background:var(--accent); color:white;" onclick="tip('Mercutio', 5)">🍺 BUY DRINK</button>
+                    </div>
+                </div>
+                <div>
+                    <div class="speech-avatar" style="background-image:url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200');"></div>
+                    <div style="font-size:0.8rem; text-transform:uppercase; color:var(--primary); font-weight:bold;">Maid of Honor</div>
+                    <h3 style="margin:5px 0 15px;">The Nurse</h3>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <button class="action-btn btn-vote" onclick="vote('The Nurse')">🗳️ VOTE</button>
+                        <button class="action-btn btn-primary" style="background:var(--accent); color:white;" onclick="tip('The Nurse', 5)">🍷 BUY DRINK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="mosaic" class="section">
+            <div class="glass-card" style="text-align:center; border: 2px dashed rgba(128,128,128,0.3); cursor:pointer;" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-camera" style="font-size:2rem; color:var(--primary); margin-bottom:10px;"></i>
+                <div style="font-weight:bold;">Upload to Big Screen</div>
+                <input type="file" id="fileInput" style="display:none" accept="image/*" onchange="handleUpload(this)">
+            </div>
+            <div class="mosaic-feed" id="mosaicFeed"></div>
+        </div>
+
+        <div id="games" class="section">
+            <div class="glass-card">
+                <h2 style="margin:0;">Shoe Game: "First Move?"</h2>
+                <div class="vote-bar"><div class="vote-fill" style="width:50%"></div></div>
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button class="action-btn btn-outline" style="justify-content:center;" onclick="vote('Romeo')">Romeo</button>
+                    <button class="action-btn btn-outline" style="justify-content:center;" onclick="vote('Juliet')">Juliet</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="raffle" class="section">
+            <div class="glass-card">
+                <h2><i class="fas fa-ticket-alt"></i> Raffle</h2>
+                <p>Win a weekend getaway.</p>
+                <button class="action-btn btn-primary" onclick="payRaffle(25)">3 Entries ($25)</button>
+            </div>
+             <div class="glass-card">
+                <h2><i class="fas fa-music"></i> Request</h2>
+                <input type="text" placeholder="Song Name">
+                <button class="action-btn btn-outline" style="justify-content:center;" onclick="alert('Sent!')">Send</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom-dock">
+        <button class="dock-item active" onclick="nav('timeline', null)"><i class="fas fa-home"></i></button>
+        <button class="dock-item" onclick="nav('family', null)"><i class="fas fa-users"></i></button>
+        <button class="dock-item" onclick="nav('speeches', null)"><i class="fas fa-microphone-alt"></i></button>
+        <button class="dock-item" onclick="nav('mosaic', null)"><i class="fas fa-images"></i></button>
+        <button class="dock-item" onclick="nav('raffle', null)"><i class="fas fa-ticket-alt"></i></button>
+    </div>
+
+    <div id="adminPanel">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>Command Center</h2>
+            <button onclick="document.getElementById('adminPanel').style.display='none'" style="border:1px solid white; background:transparent; color:white; padding:5px 10px;">EXIT</button>
+        </div>
+        <div class="admin-grid">
+            <div class="admin-btn" onclick="toggleProjector()"><i class="fas fa-desktop"></i><div>Projector Mode</div></div>
+            <div class="admin-btn" onclick="alert('Voting Unlocked')"><i class="fas fa-lock-open"></i><div>Unlock Voting</div></div>
+            <div class="admin-btn" onclick="triggerWinner('Romeo')"><i class="fas fa-glass-cheers"></i><div>Confetti</div></div>
+            <div class="admin-btn" onclick="alert('Exporting PDF...')"><i class="fas fa-file-pdf"></i><div>Export Book</div></div>
+        </div>
+        <div style="margin-top:30px; font-size:2rem; font-weight:bold; color:var(--primary);">$3,250 RAISED</div>
+    </div>
+
+    <div id="projectorView">
+        <div style="color:white; position:absolute; top:40px; left:40px;">
+            <h1 style="font-family:var(--font-head); font-size:3rem; margin:0; color:var(--primary);">Romeo & Juliet</h1>
+            <div>#RJFOREVER</div>
+        </div>
+        <div class="proj-grid" id="projGrid" style="margin-top:120px;"></div>
+    </div>
+
+    <div class="winner-overlay" id="winnerOverlay" onclick="closeWinner()">
+        <canvas id="confetti" class="confetti-canvas"></canvas>
+        <div style="text-align:center; color:white;">
+            <div style="font-size:1.5rem;">WINNER</div>
+            <div id="winnerName" style="font-size:4rem; font-weight:bold; color:var(--primary);">NAME</div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="genericModal" onclick="closeModal()">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div style="text-align:center; margin-bottom:20px;">
+                <div style="width:40px; height:4px; background:gray; border-radius:2px; margin:0 auto 10px;"></div>
+                <h2 id="modalTitle" style="justify-content:center;">Payment</h2>
+            </div>
+            <div id="modalContent"></div>
+            <button class="action-btn btn-primary" style="margin-top:20px;" onclick="processPayment()">CONFIRM PAY</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="pinModal">
+        <div class="modal-sheet" style="padding-bottom:30px;">
+            <h3>Admin PIN</h3>
+            <input type="password" id="adminPin" placeholder="Enter 1234" style="text-align:center; font-size:1.5rem;">
+            <button class="action-btn btn-primary" onclick="checkPin()">ACCESS</button>
+            <div style="text-align:center; margin-top:10px; cursor:pointer;" onclick="document.getElementById('pinModal').style.display='none'">Cancel</div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. CONFIG & DATA ---
+        const guests = [
+            { name: "Benvolio", team: "Team Groom", role: "Cousin", img: "https://randomuser.me/api/portraits/men/11.jpg" },
+            { name: "Rosaline", team: "Team Bride", role: "Friend", img: "https://randomuser.me/api/portraits/women/22.jpg" },
+            { name: "Tybalt", team: "Team Bride", role: "Cousin", img: "https://randomuser.me/api/portraits/men/33.jpg" },
+            { name: "Paris", team: "Team Groom", role: "Best Man", img: "https://randomuser.me/api/portraits/men/44.jpg" }
+        ];
+        const photos = [
+            { img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=400", cap: "Ceremony" },
+            { img: "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?w=400", cap: "Cheers!" }
+        ];
+
+        // --- 2. INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGuests('all');
+            renderMosaic();
+        });
+
+        // --- 3. NAV ---
+        function nav(id, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(el) {
+                document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+                el.classList.add('active');
+            }
+            // Sync Dock
+            const order = ['timeline', 'family', 'speeches', 'mosaic', 'raffle']; 
+            const idx = order.indexOf(id);
+            document.querySelectorAll('.dock-item').forEach((d, i) => {
+                if(i===idx || (id==='games' && i===2) || (id==='music' && i===2)) d.classList.add('active');
+                else d.classList.remove('active');
+            });
+        }
+
+        // --- 4. THEME ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.querySelector('.theme-switch i');
+            if(body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme'); icon.className = 'fas fa-moon';
+            } else {
+                body.setAttribute('data-theme', 'dark'); icon.className = 'fas fa-sun';
+            }
+        }
+
+        // --- 5. FEATURES ---
+        function renderGuests(filter) {
+            const grid = document.getElementById('guestGrid');
+            grid.innerHTML = '';
+            guests.forEach(g => {
+                if(filter === 'all' || g.team === filter) {
+                    const badge = g.team === 'Team Groom' ? 'team-groom' : 'team-bride';
+                    grid.innerHTML += `
+                        <div class="guest-card">
+                            <div class="guest-avatar" style="background-image:url('${g.img}')"></div>
+                            <span class="team-badge ${badge}">${g.team}</span>
+                            <div style="font-weight:bold;">${g.name}</div>
+                            <button class="connect-btn" onclick="alert('Connect request sent!')">CONNECT</button>
+                        </div>
+                    `;
+                }
+            });
+            document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function renderMosaic() {
+            const feed = document.getElementById('mosaicFeed');
+            const proj = document.getElementById('projGrid');
+            let html = ''; let projHtml = '';
+            photos.forEach(p => {
+                html += `<div class="feed-item"><img src="${p.img}" class="feed-img"><div class="feed-caption">${p.cap}</div></div>`;
+                projHtml += `<div class="proj-card"><img src="${p.img}" class="proj-img"><div style="text-align:center; font-family:var(--font-head); font-size:1.2rem;">"${p.cap}"</div></div>`;
+            });
+            feed.innerHTML = html;
+            proj.innerHTML = projHtml;
+        }
+
+        function handleUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photos.unshift({ img: e.target.result, cap: "Just added!" });
+                    renderMosaic();
+                    alert("Photo added to Big Screen!");
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function vote(who) { setTimeout(() => { triggerWinner(who); }, 500); }
+
+        // --- 6. ADMIN & MODALS ---
+        function openPinModal() { document.getElementById('pinModal').style.display='flex'; }
+        function checkPin() {
+            if(document.getElementById('adminPin').value === '1234') {
+                document.getElementById('pinModal').style.display='none';
+                document.getElementById('adminPanel').style.display='flex';
+            } else alert('Wrong PIN');
+        }
+        function toggleProjector() {
+            const v = document.getElementById('projectorView');
+            if(v.style.display==='none') { v.style.display='block'; document.documentElement.requestFullscreen(); }
+            else { v.style.display='none'; document.exitFullscreen(); }
+        }
+
+        // --- 7. PAYMENTS & WINNER ---
+        function tip(t, a) { openPayment(`Tip ${t}`, a); }
+        function payRaffle(a) { openPayment("Raffle Tickets", a); }
+        function openFundModal() { openPayment("Future Fund", 100); }
+        
+        function openPayment(title, amount) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalContent').innerHTML = `<div style="font-size:2rem; text-align:center; font-weight:bold; margin:20px;">$${amount}</div>`;
+            document.getElementById('genericModal').style.display = 'flex';
+        }
+        function closeModal() { document.getElementById('genericModal').style.display = 'none'; }
+        function processPayment() {
+            const btn = document.querySelector('#genericModal .btn-primary');
+            btn.innerHTML = 'Processing...';
+            setTimeout(() => { btn.innerHTML = 'Success!'; setTimeout(closeModal, 1000); }, 1000);
+        }
+
+        function triggerWinner(name) {
+            document.getElementById('winnerName').innerText = name;
+            document.getElementById('winnerOverlay').style.display = 'flex';
+            initConfetti(); loopConfetti();
+        }
+        function closeWinner() { document.getElementById('winnerOverlay').style.display = 'none'; }
+
+        // --- 8. CONFETTI ENGINE ---
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let confetti = [];
+        function initConfetti() {
+            confetti = [];
+            for (let i = 0; i < 100; i++) confetti.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height-canvas.height, color: ['#D4AF37','#FFF','#FF5500'][Math.floor(Math.random()*3)], size: Math.random()*10+5, speed: Math.random()*5+2 });
+        }
+        function loopConfetti() {
+            if(document.getElementById('winnerOverlay').style.display === 'none') return;
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            confetti.forEach(p => { p.y+=p.speed; ctx.fillStyle=p.color; ctx.fillRect(p.x,p.y,p.size,p.size); if(p.y>canvas.height) p.y=-10; });
+            requestAnimationFrame(loopConfetti);
+        }
+    </script>
+</body>
+</html>

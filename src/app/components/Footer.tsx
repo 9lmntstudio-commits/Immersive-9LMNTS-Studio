@@ -5,7 +5,7 @@ import {
   Mail,
   Shield,
 } from "lucide-react";
-import logoImg from "../../imports/Main_website_logo_9lmnts_studio.png";
+import logoImg from "../imports/Main_website_logo_9lmnts_studio.png";
 const logoImage = logoImg;
 
 interface FooterProps {

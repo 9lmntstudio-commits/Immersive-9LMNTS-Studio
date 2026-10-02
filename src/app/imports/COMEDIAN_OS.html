@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎤 COMEDIAN OS | The Roast Battle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(10, 10, 10, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --orange: #FF4500;
+            --warn: #ef4444;
+            --green: #22c55e;
+            --gold: #f59e0b;
+            --text: #ffffff;
+            --sub: #cccccc;
+            --font-head: 'Bebas Neue', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            --radius: 6px;
+            --radius-lg: 10px;
+            --radius-xl: 14px;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-body);
+            padding-bottom: 90px;
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+            min-height: 100vh;
+            background: url('https://images.unsplash.com/photo-1508253730651-e5ace80a7025?w=1200&q=80') center/cover no-repeat fixed;
+            color: var(--text);
+        }
+        .app-container {
+            max-width: 480px; margin: 0 auto; min-height: 100vh; background: transparent; position: relative;
+            overflow-x: hidden; display: flex; flex-direction: column; z-index: 1; box-shadow: 0 0 80px rgba(0,0,0,0.4);
+        }
+        .live-header { background: var(--glass-bg); backdrop-filter: blur(14px); padding: 14px 18px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); }
+        .logo { font-family: var(--font-head); font-size: 1.7rem; letter-spacing: 2px; text-transform: uppercase; color: #fff; font-weight: 400; }
+        .logo span { color: var(--orange); }
+        .admin-gear { color: var(--sub); cursor: pointer; font-size: 1.2rem; margin-left: 12px; transition: 0.2s; }
+        .admin-gear:hover { color: var(--orange); }
+        .live-status { display: flex; align-items: center; gap: 8px; }
+        .live-badge { background: var(--orange); color: #fff; font-size: 0.68rem; font-weight: 900; padding: 6px 11px; border-radius: 4px; display: flex; align-items: center; gap: 5px; text-transform: uppercase; box-shadow: 0 0 18px rgba(255,69,0,0.5); animation: pulse-glow 1.5s infinite; letter-spacing: 1px; }
+        @keyframes pulse-glow { 0%,100%{box-shadow:0 0 18px rgba(255,69,0,0.5)} 50%{box-shadow:0 0 30px rgba(255,69,0,0.85)} }
+        .live-timer { font-size: 0.75rem; font-weight: 700; color: var(--orange); background: rgba(255,69,0,0.08); padding: 5px 10px; border-radius: 4px; border: 1px solid rgba(255,69,0,0.25); font-family: var(--font-mono); }
+        .ticker-wrap { background: rgba(10,10,10,0.5); backdrop-filter: blur(8px); border-bottom: 1px solid var(--glass-border); padding: 9px 0; overflow: hidden; white-space: nowrap; }
+        .ticker-content { display: inline-block; animation: ticker 28s linear infinite; color: var(--orange); font-weight: 600; font-size: 0.78rem; padding-left: 100%; letter-spacing: 0.4px; }
+        .ticker-content i { margin: 0 8px; color: var(--gold); }
+        @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
+        .hero { background: rgba(10,10,10,0.5); backdrop-filter: blur(10px); padding: 24px 18px 20px; text-align: center; border-bottom: 1px solid var(--glass-border); position: relative; }
+        .hero::before { content:''; display:block; height:3px; background:linear-gradient(90deg,var(--orange),var(--warn),var(--orange)); margin:-24px -18px 0; }
+        .hero-title { font-family: var(--font-head); font-size: 3.3rem; line-height: 0.85; color: #fff; text-transform: uppercase; letter-spacing: 3px; text-shadow: 2px 2px 8px rgba(0,0,0,0.7); }
+        .hero-sub { color: var(--orange); font-weight: 900; letter-spacing: 2px; font-size: 0.7rem; margin: 8px 0 18px; text-transform: uppercase; }
+        .live-stats { display: flex; justify-content: space-around; margin: 18px 0 14px; background: rgba(0,0,0,0.3); padding: 14px 8px; border-radius: var(--radius-lg); border: 1px solid var(--glass-border); }
+        .stat-item { text-align: center; flex: 1; }
+        .stat-value { font-size: 1.6rem; font-weight: 900; color: #fff; display: block; line-height: 1; font-family: var(--font-mono); }
+        .stat-label { font-size: 0.6rem; text-transform: uppercase; color: var(--sub); font-weight: 700; margin-top: 4px; letter-spacing: 1px; }
+        .stat-icon { color: var(--orange); font-size: 0.9rem; margin-bottom: 3px; }
+        .btn-primary { width:100%; padding:15px; background:var(--orange); color:#fff; border:none; border-radius:var(--radius); font-weight:900; font-size:0.9rem; margin:10px 0 6px; cursor:pointer; text-transform:uppercase; letter-spacing:1px; box-shadow:0 4px 20px rgba(255,69,0,0.3); transition:0.2s; font-family:var(--font-body); }
+        .revenue-rack { padding:18px 0 22px 16px; margin:18px 16px; background:var(--glass-bg); backdrop-filter:blur(12px); border-radius:var(--radius-xl); border:1px solid var(--glass-border); position:relative; }
+        .revenue-rack::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--orange); }
+        .section-label { display:flex; align-items:center; gap:10px; margin-bottom:16px; color:#fff; font-weight:800; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px; }
+        .ticket-scroll { display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; padding-right:16px; scrollbar-width:none; }
+        .ticket-scroll::-webkit-scrollbar { display:none; }
+        .ticket { min-width:92px; padding:12px 6px; border-radius:var(--radius-lg); border:1px solid var(--glass-border); background:rgba(0,0,0,0.4); backdrop-filter:blur(4px); cursor:pointer; text-align:center; flex-shrink:0; transition:0.2s; position:relative; }
+        .ticket.vip { border:2px solid var(--orange); background:rgba(255,69,0,0.15); }
+        .vip-tag { position:absolute; top:-8px; left:50%; transform:translateX(-50%); background:var(--orange); color:#fff; font-size:0.55rem; font-weight:900; padding:2px 8px; border-radius:4px; letter-spacing:1px; text-transform:uppercase; white-space:nowrap; }
+        .t-price { font-size:1.15rem; font-weight:900; color:var(--orange); margin-bottom:3px; font-family:var(--font-mono); }
+        .t-label { font-size:0.6rem; color:var(--sub); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.3px; line-height:1.2; min-height:2.2em; }
+        .t-btn { font-size:0.68rem; font-weight:900; padding:7px 0; border-radius:20px; border:none; background:var(--orange); color:#fff; width:100%; cursor:pointer; text-transform:uppercase; letter-spacing:0.5px; }
+        .nav-tabs { display:flex; background:rgba(10,10,10,0.5); backdrop-filter:blur(8px); border-bottom:1px solid var(--glass-border); overflow-x:auto; position:sticky; top:73px; z-index:90; }
+        .tab { padding:15px 14px; color:var(--sub); font-weight:800; font-size:0.8rem; cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent; flex:1; text-align:center; text-transform:uppercase; letter-spacing:0.5px; position:relative; transition:0.2s; }
+        .tab.active { color:var(--orange); border-bottom-color:var(--orange); background:rgba(255,69,0,0.08); }
+        .tab-dot { position:absolute; top:9px; right:10px; width:7px; height:7px; background:var(--warn); border-radius:50%; animation:pulse 1s infinite; display:none; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        .view { display:none; padding:18px; animation:fadeIn 0.35s ease; }
+        .view.active { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        .battle-header { text-align:center; margin-bottom:18px; color:var(--orange); font-size:0.8rem; text-transform:uppercase; letter-spacing:1.5px; font-weight:900; display:flex; align-items:center; justify-content:center; gap:8px; }
+        .dot-live { background:var(--warn); color:#fff; font-size:0.58rem; padding:3px 8px; border-radius:3px; font-weight:900; animation:pulse 1.5s infinite; letter-spacing:1px; }
+        .battle-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+        .b-card { background:var(--glass-bg); backdrop-filter:blur(12px); padding:20px 12px; text-align:center; border-radius:var(--radius-xl); border:1px solid var(--glass-border); position:relative; transition:0.3s; }
+        .b-card.red { border-top:4px solid var(--warn); } .b-card.blue { border-top:4px solid var(--orange); }
+        .b-pct { position:absolute; top:12px; right:12px; font-size:1.5rem; font-weight:900; font-family:var(--font-mono); }
+        .b-card.red .b-pct { color:var(--warn); } .b-card.blue .b-pct { color:var(--orange); }
+        .b-avatar { width:65px; height:65px; background-size:cover; border-radius:50%; margin:0 auto 10px; border:3px solid var(--glass-border); }
+        .b-name { font-family:var(--font-head); font-size:1.4rem; letter-spacing:1px; color:#fff; text-transform:uppercase; }
+        .b-role { font-size:0.65rem; color:var(--sub); margin-bottom:12px; font-weight:600; }
+        .b-bar { width:100%; height:7px; background:rgba(255,255,255,0.1); border-radius:4px; margin:10px 0; overflow:hidden; }
+        .b-fill { height:100%; border-radius:4px; transition:width 0.8s; }
+        .b-vote-btn { width:100%; padding:11px; font-weight:900; border:none; cursor:pointer; text-transform:uppercase; border-radius:var(--radius); font-size:0.8rem; color:#fff; letter-spacing:0.5px; }
+        .b-vote-btn.red { background:var(--warn); } .b-vote-btn.blue { background:var(--orange); }
+        .punchline-box { background:var(--glass-bg); backdrop-filter:blur(12px); border:2px solid var(--orange); border-radius:var(--radius-xl); padding:16px 14px; margin-bottom:18px; text-align:center; }
+        .pl-btn { flex:1; padding:12px; border:2px solid var(--glass-border); border-radius:var(--radius-lg); background:rgba(0,0,0,0.3); color:#fff; font-weight:900; font-size:0.8rem; cursor:pointer; transition:0.2s; text-transform:uppercase; }
+        .pl-btn.picked-a { border-color:var(--warn); background:rgba(239,68,68,0.2); } .pl-btn.picked-b { border-color:var(--orange); background:rgba(255,69,0,0.2); }
+        .grid-header { font-size:0.9rem; font-weight:900; color:#fff; margin:24px 0 14px; border-bottom:1px solid var(--glass-border); padding-bottom:10px; display:flex; justify-content:space-between; align-items:center; text-transform:uppercase; }
+        .card-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .c-card { background:var(--glass-bg); backdrop-filter:blur(12px); padding:13px; border-radius:var(--radius-lg); border:1px solid var(--glass-border); display:flex; align-items:center; gap:10px; cursor:pointer; transition:0.2s; }
+        .c-card.active { border-color:var(--orange); background:rgba(255,69,0,0.15); }
+        .c-img { width:44px; height:44px; border-radius:50%; background-size:cover; background-color:#1a1a1a; border:2px solid var(--glass-border); flex-shrink:0; }
+        .c-info { flex:1; min-width:0; } .c-name { font-weight:900; font-size:0.82rem; color:#fff; } .c-sub { font-size:0.65rem; color:var(--sub); }
+        .c-tag { color:var(--orange); font-size:0.7rem; font-weight:900; border:1px solid var(--orange); padding:5px 10px; border-radius:20px; cursor:pointer; }
+        .shop-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .shop-card { background:var(--glass-bg); backdrop-filter:blur(12px); padding:18px 12px; border-radius:var(--radius-xl); text-align:center; border:1px solid var(--glass-border); cursor:pointer; }
+        .shop-emoji { font-size:2.2rem; margin-bottom:6px; }
+        .shop-name { font-weight:900; font-size:0.9rem; color:#fff; } .shop-desc { font-size:0.7rem; color:var(--sub); margin-bottom:10px; }
+        .shop-price { font-weight:900; font-size:1.1rem; color:var(--orange); margin-bottom:8px; font-family:var(--font-mono); }
+        .shop-btn { background:transparent; border:1px solid var(--orange); color:var(--orange); padding:9px 16px; border-radius:20px; font-size:0.72rem; font-weight:900; text-transform:uppercase; cursor:pointer; }
+        .shop-btn.ordered { background:var(--green); border-color:var(--green); color:#000; }
+        .qa-card { background:var(--glass-bg); backdrop-filter:blur(12px); padding:14px; border-radius:var(--radius-lg); margin-bottom:8px; border:1px solid var(--glass-border); display:flex; gap:12px; }
+        .upvote-col { display:flex; flex-direction:column; align-items:center; min-width:40px; justify-content:center; }
+        .arrow-up { font-size:1.2rem; color:var(--sub); cursor:pointer; } .arrow-up.lit { color:var(--orange); } .vote-count { font-weight:900; font-size:0.9rem; color:#fff; }
+        .bottom-nav { position:fixed; bottom:0; width:100%; max-width:480px; background:var(--glass-bg); backdrop-filter:blur(14px); border-top:1px solid var(--glass-border); display:flex; justify-content:space-around; padding:13px 0; z-index:100; box-shadow:0 -5px 30px rgba(0,0,0,0.4); }
+        .nav-item { text-align:center; color:var(--sub); font-size:0.65rem; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:5px; font-weight:800; text-transform:uppercase; }
+        .nav-item.active { color:var(--orange); } .nav-item i { font-size:1.3rem; }
+        .nav-dot { position:absolute; top:-4px; right:-4px; background:var(--warn); color:#fff; font-size:0.55rem; font-weight:900; width:16px; height:16px; border-radius:50%; display:none; align-items:center; justify-content:center; }
+        .fab { position:fixed; bottom:78px; right:18px; width:52px; height:52px; background:var(--orange); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.2rem; cursor:pointer; box-shadow:0 5px 22px rgba(255,69,0,0.5); z-index:99; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(6px); z-index:200; justify-content:center; align-items:center; }
+        .modal-box { width:90%; max-width:390px; max-height:85vh; overflow-y:auto; background:var(--glass-bg); backdrop-filter:blur(20px); border-radius:var(--radius-xl); border:1px solid var(--glass-border); animation:slideUp 0.3s; box-shadow:0 25px 55px rgba(0,0,0,0.6); display:flex; flex-direction:column; }
+        .m-head { padding:20px 18px; border-bottom:1px solid var(--glass-border); text-align:center; position:sticky; top:0; background:rgba(10,10,10,0.85); backdrop-filter:blur(12px); z-index:5; }
+        .m-title { font-size:1.2rem; color:#fff; text-transform:uppercase; font-family:var(--font-head); letter-spacing:1px; } .m-close { position:absolute; top:15px; right:18px; font-size:1.6rem; color:var(--sub); cursor:pointer; background:none; border:none; }
+        .m-body { padding:20px 16px 24px; flex:1; }
+        .v-tabs { display:flex; background:rgba(0,0,0,0.4); border-radius:var(--radius); overflow:hidden; margin-bottom:18px; border:1px solid var(--glass-border); }
+        .v-tab { flex:1; padding:12px; text-align:center; font-size:0.75rem; font-weight:900; color:var(--sub); cursor:pointer; text-transform:uppercase; }
+        .v-tab.active { color:var(--orange); background:rgba(255,69,0,0.1); border-bottom:3px solid var(--orange); }
+        .pkg-opt { display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(0,0,0,0.4); border:2px solid var(--glass-border); border-radius:var(--radius-lg); margin-bottom:10px; cursor:pointer; }
+        .pkg-opt.sel { border-color:var(--orange); background:rgba(255,69,0,0.1); }
+        .btn-submit { background:var(--orange); color:#fff; border:none; padding:14px; width:100%; font-weight:900; border-radius:var(--radius); cursor:pointer; text-transform:uppercase; margin-top:12px; font-size:0.9rem; letter-spacing:1px; }
+        .btn-submit.gray { background:var(--glass-border); }
+        .input-field { width:100%; padding:12px; background:rgba(0,0,0,0.4); border:2px solid var(--glass-border); border-radius:var(--radius); color:#fff; font-size:0.9rem; margin-bottom:10px; font-family:var(--font-body); }
+        .network-card { background:var(--glass-bg); backdrop-filter:blur(12px); padding:14px; border-radius:var(--radius-lg); border:1px solid var(--glass-border); display:flex; align-items:center; gap:12px; margin-bottom:10px; cursor:pointer; }
+        .online-dot { width:10px; height:10px; background:var(--green); border-radius:50%; margin-right:6px; display:inline-block; }
+        .profile-avatar { width:80px; height:80px; border-radius:50%; background-size:cover; margin:0 auto 12px; border:3px solid var(--glass-border); }
+        .goal-wrap { background:rgba(0,0,0,0.4); padding:14px; border-radius:var(--radius-lg); border:1px solid var(--glass-border); margin:16px 0; }
+        .goal-bar-bg { width:100%; height:8px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden; margin:8px 0; }
+        .goal-bar-fill { height:100%; background:var(--orange); border-radius:4px; transition:width 0.8s; }
+        .agenda-list { list-style:none; padding:0; }
+        .agenda-item { padding:14px 0; border-bottom:1px solid var(--glass-border); color:#fff; display:flex; gap:12px; align-items:flex-start; }
+        .agenda-item.now { background:rgba(255,69,0,0.05); border-left:3px solid var(--orange); margin-left:-16px; padding-left:13px; }
+        .agenda-time { font-weight:900; color:var(--orange); font-family:var(--font-mono); min-width:65px; }
+        .now-tag { background:var(--warn); color:#fff; font-size:0.6rem; padding:2px 6px; border-radius:3px; margin-left:6px; }
+        @keyframes slideUp { from{transform:translateY(28px);opacity:0} to{transform:translateY(0);opacity:1} }
+        .toast { position:fixed; top:90px; left:50%; transform:translateX(-50%); background:var(--orange); color:#fff; padding:12px 22px; border-radius:var(--radius); font-weight:900; z-index:1000; font-size:0.85rem; }
+</style>
+</head>
+<body>
+<div class="app-container">
+    <div class="live-header">
+        <div style="display:flex; align-items:center;">
+            <div class="logo" id="brandName">🎤 THE <span>ROAST</span></div>
+            <i class="fas fa-cog admin-gear" onclick="switchTab('admin')" title="Admin Panel"></i>
+        </div>
+        <div class="live-status"><div class="live-timer" id="liveTimer">NEXT: 9:00 PM</div><div class="live-badge"><i class="fas fa-circle"></i> LIVE</div></div>
+    </div>
+    <div class="ticker-wrap"><div class="ticker-content" id="ticker"></div></div>
+    <div class="hero">
+        <div class="hero-sub" id="eventSub">ROAST BATTLE • JUNE 18 2026 • NUVO LOUNGE</div>
+        <h1 class="hero-title" id="eventTitle">ROAST<br>BATTLE</h1>
+        <div class="live-stats">
+            <div class="stat-item"><div class="stat-icon"><i class="fas fa-laugh-squint"></i></div><div class="stat-value" id="liveAudience">300</div><div class="stat-label">Crowd</div></div>
+            <div class="stat-item"><div class="stat-icon"><i class="fas fa-fire-alt"></i></div><div class="stat-value" id="totalVotes">4,821</div><div class="stat-label">Votes</div></div>
+            <div class="stat-item"><div class="stat-icon"><i class="fas fa-coins"></i></div><div class="stat-value" id="thePot">$4,250</div><div class="stat-label">The Pot</div></div>
+        </div>
+        <button class="btn-primary" onclick="openModal('preEventModal')"><i class="fas fa-ticket-alt"></i> BUY TICKETS & PRE‑EVENT PACKS</button>
+    </div>
+    <div class="revenue-rack">
+        <div class="section-label"><i class="fas fa-bullhorn"></i> HECKLE & HYPE SUITE</div>
+        <div class="ticket-scroll" id="ticketScroll"></div>
+    </div>
+    <div class="nav-tabs">
+        <div class="tab active" onclick="switchTab('battle',this)">🎤 BATTLE<div class="tab-dot" id="battleDot"></div></div>
+        <div class="tab" onclick="switchTab('network',this)">🤝 NETWORK<div class="tab-dot" id="networkDot"></div></div>
+        <div class="tab" onclick="switchTab('merch',this)">🍺 MERCH<div class="tab-dot" id="merchDot"></div></div>
+        <div class="tab" onclick="switchTab('requests',this)">🔥 ROASTS<div class="tab-dot" id="requestsDot"></div></div>
+    </div>
+    <div id="battle" class="view active">
+        <div class="battle-header"><div class="dot-live">ROASTING NOW</div><span id="currentMatch">THE VETERAN vs THE CHALLENGER</span></div>
+        <div class="battle-grid" id="battleGrid"></div>
+        <div class="punchline-box">
+            <div class="punchline-q"><i class="fas fa-gavel" style="color:var(--orange)"></i> WHO WON THAT ROUND?</div>
+            <div class="punchline-btns" id="punchlineBtns"></div>
+            <div class="pl-hint">Winner gets <span>2x Tip Multiplier</span> for 5 min</div>
+        </div>
+        <div class="grid-header">ALL COMEDIANS<span style="font-size:0.7rem;color:var(--sub)" id="comicCount"></span></div>
+        <div class="card-grid" id="comicGrid"></div>
+    </div>
+    <div id="network" class="view">
+        <div class="grid-header">WHO'S HERE <span style="font-size:0.7rem;color:var(--sub)" id="networkCount">24 ATTENDEES</span></div>
+        <div id="networkList"></div>
+    </div>
+    <div id="merch" class="view">
+        <div class="grid-header">MERCH & BAR<span style="font-size:0.7rem;color:var(--sub)" id="merchCount"></span></div>
+        <div class="shop-grid" id="shopGrid"></div>
+    </div>
+    <div id="requests" class="view">
+        <button class="btn-primary" style="margin-bottom:18px" onclick="openRoastRequest()"><i class="fas fa-bullhorn"></i> REQUEST A ROAST ($15)</button>
+        <div id="roastList"></div>
+    </div>
+    <div id="admin" class="view">
+        <div class="grid-header">🛠️ ADMIN PANEL</div>
+        <div class="admin-card"><div style="font-weight:900; margin-bottom:12px; color:var(--orange);">📊 LIVE PERFORMANCE</div><div id="adminStats" style="font-size:0.8rem;"></div></div>
+        <div class="admin-card"><div style="font-weight:900; margin-bottom:12px; color:var(--green);">💰 REVENUE SUMMARY</div><div id="revenueStats" style="font-size:0.8rem;"></div></div>
+        <div class="admin-card"><div style="font-weight:900; margin-bottom:12px;">🧾 RECENT TRANSACTIONS</div><div class="tx-log" id="txLog"></div></div>
+        <div class="admin-card"><div style="font-weight:900; margin-bottom:12px;">👥 ATTENDEE DATA</div><div id="attendeeData" style="font-size:0.8rem;"></div></div>
+        <button class="btn-primary" onclick="exportCSV()" style="margin-top:12px;"><i class="fas fa-download"></i> EXPORT ATTENDEE CSV</button>
+    </div>
+    <button class="fab" onclick="openQuickActions()"><i class="fas fa-bolt"></i></button>
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('battle',this)"><i class="fas fa-microphone-alt"></i>BATTLE<div class="nav-dot" id="navBattleDot">3</div></div>
+        <div class="nav-item" onclick="switchTab('network',this)"><i class="fas fa-users"></i>NETWORK<div class="nav-dot" id="navNetworkDot">5</div></div>
+        <div class="nav-item" onclick="switchTab('merch',this)"><i class="fas fa-shopping-bag"></i>MERCH<div class="nav-dot" id="navMerchDot">2</div></div>
+        <div class="nav-item" onclick="switchTab('admin',this)"><i class="fas fa-chart-bar"></i>ADMIN</div>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div id="voteModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">CAST ROAST VOTE</div><button class="m-close" onclick="closeModal('voteModal')">&times;</button></div><div class="v-tabs"><div class="v-tab active" onclick="switchVoteTab('free',this)">FREE VOTE</div><div class="v-tab" onclick="switchVoteTab('power',this)">POWER VOTE</div></div><div class="m-body"><div id="freeVoteSection"><p style="color:var(--sub);font-size:0.9rem;text-align:center;margin-bottom:18px">One free vote per round.</p><button class="btn-submit gray" onclick="castFreeVote()">SUBMIT FREE VOTE</button></div><div id="powerVoteSection" style="display:none"><p style="color:var(--sub);font-size:0.85rem;margin-bottom:14px">Boost your comic!</p><div class="pkg-opt" onclick="selectPower(5,2,'5 Power Votes')"><span><strong>5 Votes</strong><br><small>Quick boost</small></span><span style="color:var(--orange);font-weight:900">$2</span></div><div class="pkg-opt" onclick="selectPower(10,5,'10 Power Votes')"><span><strong>10 Votes</strong><br><small>Extra roar</small></span><span style="color:var(--orange);font-weight:900">$5</span></div><div class="pkg-opt" onclick="selectPower(30,10,'30 Power Votes')"><span><strong>30 Votes</strong><br><small>Stage presence</small></span><span style="color:var(--orange);font-weight:900">$10</span></div><div style="margin-top:18px; border-top:1px solid var(--glass-border); padding-top:16px;"><p style="color:var(--sub); font-size:0.8rem; margin-bottom:10px;"><i class="fas fa-star" style="color:var(--orange)"></i> STANDING OVATION (Donation)</p><input class="input-field" type="number" id="donationAmount" placeholder="Enter any amount ($)" min="1"><button class="btn-submit" style="background:var(--warn)" onclick="processDonation()">DONATE</button></div></div></div></div></div>
+
+<div id="roastModal" class="modal"><div class="modal-box roast-top"><div class="m-head"><div class="m-title">REQUEST A ROAST</div><button class="m-close" onclick="closeModal('roastModal')">&times;</button></div><div class="m-body"><p style="color:var(--sub);font-size:0.85rem;text-align:center;margin-bottom:16px">Comic reads this on stage. <strong style="color:var(--warn)">$15</strong></p><input class="input-field" id="roastName" placeholder="Your name or table..."><textarea class="input-field" id="roastNote" placeholder="Optional ammo" style="height:70px;resize:none;"></textarea><button class="btn-submit" style="background:var(--warn)" onclick="submitRoast()">PAY $15 & ROAST ME</button></div></div></div>
+
+<div id="heckleModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">HECKLE SHIELD</div><button class="m-close" onclick="closeModal('heckleModal')">&times;</button></div><div class="m-body" style="text-align:center"><p style="color:var(--sub);font-size:0.9rem;margin-bottom:16px">Mute an annoying heckler. <strong style="color:var(--orange)">$5</strong></p><div style="font-size:3rem;margin:16px 0">🛡️</div><button class="btn-submit" onclick="activateShield()">ACTIVATE ($5)</button></div></div></div>
+
+<div id="agendaModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">TONIGHT'S LINEUP</div><button class="m-close" onclick="closeModal('agendaModal')">&times;</button></div><div class="m-body"><ul class="agenda-list" id="agendaList"></ul><button class="btn-submit" style="margin-top:16px" onclick="closeModal('agendaModal')">CLOSE</button></div></div></div>
+
+<div id="profileModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">COMEDIAN PROFILE</div><button class="m-close" onclick="closeModal('profileModal')">&times;</button></div><div class="m-body"><div style="text-align:center"><div id="pAvatar" class="profile-avatar"></div><h2 id="pName" style="color:#fff">Comic</h2><p id="pRole" style="color:var(--sub);font-size:0.85rem">Headliner</p></div><div class="goal-wrap"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-weight:900;color:#fff">Tip Jar</span><button style="background:var(--orange);color:#fff;border:none;padding:7px 12px;border-radius:20px;font-size:0.7rem;font-weight:900;cursor:pointer" onclick="openTipModal()">TIP</button></div><div class="goal-bar-bg"><div class="goal-bar-fill" id="pGoalFill"></div></div><div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--sub);margin-top:5px"><span>Raised: <strong style="color:var(--orange)" id="raisedAmount">$680</strong></span><span>Goal: <strong>$1,000</strong></span></div></div><button class="btn-submit" id="followBtn" onclick="toggleFollow()" style="margin-bottom:10px">FOLLOW COMIC</button><div style="text-align:center;font-size:0.8rem;color:var(--orange);font-weight:900;cursor:pointer;padding:12px;border:2px solid var(--glass-border);border-radius:var(--radius)" onclick="buySpecial()">BUY MY SPECIAL ($9.99)</div></div></div></div>
+
+<div id="tipModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">TIP THE COMIC</div><button class="m-close" onclick="closeModal('tipModal')">&times;</button></div><div class="m-body" style="text-align:center"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px"><div class="pkg-opt" style="text-align:center" onclick="selTip(5)"><div style="font-size:1.3rem;color:var(--orange)">$5</div><div style="font-size:0.65rem;color:var(--sub)">Beer</div></div><div class="pkg-opt" style="text-align:center" onclick="selTip(10)"><div style="font-size:1.3rem;color:var(--orange)">$10</div><div style="font-size:0.65rem;color:var(--sub)">Cocktail</div></div><div class="pkg-opt" style="text-align:center" onclick="selTip(25)"><div style="font-size:1.3rem;color:var(--orange)">$25</div><div style="font-size:0.65rem;color:var(--sub)">Bottle</div></div><div class="pkg-opt" style="text-align:center" onclick="selTip(50)"><div style="font-size:1.3rem;color:var(--orange)">$50</div><div style="font-size:0.65rem;color:var(--sub)">VIP</div></div></div><button class="btn-submit" onclick="sendTip()">SEND TIP</button></div></div></div>
+
+<div id="contributeModal" class="modal"><div class="modal-box" style="border-top:3px solid var(--orange)"><div class="m-head"><div class="m-title">CHOOSE PACK</div><button class="m-close" onclick="closeModal('contributeModal')">&times;</button></div><div class="m-body"><div class="pkg-opt" onclick="selTier(20,'Entry Ticket')"><span><strong>Entry Ticket</strong></span><span style="color:var(--orange)">$20</span></div><div class="pkg-opt" onclick="selTier(2,'Giggle Pack')"><span><strong>Giggle Pack</strong></span><span style="color:var(--orange)">$2</span></div><div class="pkg-opt" onclick="selTier(10,'Belly Laugh')"><span><strong>Belly Laugh</strong></span><span style="color:var(--orange)">$10</span></div><div class="pkg-opt" onclick="selTier(50,'Standing Ovation')"><span><strong>Standing Ovation</strong></span><span style="color:var(--orange)">$50</span></div><button class="btn-submit" onclick="processContribution()">PROCEED TO PAYMENT</button></div></div></div>
+
+<div id="payModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">SECURE PAYMENT</div><button class="m-close" onclick="closeModal('payModal')">&times;</button></div><div class="m-body" style="text-align:center"><h3 id="paymentTitle">Payment</h3><div style="font-size:2.5rem;font-weight:900;color:var(--orange);font-family:var(--font-mono);margin:12px 0">$<span id="payAmount">0</span></div><div style="background:rgba(0,0,0,0.4);padding:12px;border:1px solid var(--glass-border);border-radius:var(--radius);margin-bottom:14px;font-size:0.8rem"><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span>Item:</span><span id="paymentItem">-</span></div><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span>Amount:</span><span id="paymentAmount">-</span></div><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span>Fee:</span><span id="paymentFee">-</span></div><hr style="border-color:var(--glass-border);margin:6px 0"><div style="display:flex;justify-content:space-between;font-weight:bold"><span>Total:</span><span id="paymentTotal" style="color:var(--orange)">-</span></div></div><button class="btn-submit" onclick="processPayment()">CONFIRM & PAY</button></div></div></div>
+
+<div id="preEventModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">🎟️ PRE‑EVENT ACCESS</div><button class="m-close" onclick="closeModal('preEventModal')">&times;</button></div><div class="m-body"><p style="color:var(--sub);font-size:0.85rem;text-align:center;margin-bottom:16px;">Secure your spot and unlock networking perks.</p><div class="pkg-opt" onclick="openTicketForm('entry')"><span><strong>General Entry</strong><br><small>Show access + networking</small></span><span style="color:var(--orange);font-weight:900">$20</span></div><div class="pkg-opt" onclick="openTicketForm('vip')"><span><strong>VIP Access</strong><br><small>Priority seating, backstage meet</small></span><span style="color:var(--orange);font-weight:900">$50</span></div><div id="ticketForm" style="display:none; margin-top:16px;"><input class="input-field" id="ticketName" placeholder="Your name"><input class="input-field" id="ticketEmail" placeholder="Email (for digital pass)"><input class="input-field" id="ticketCompany" placeholder="Company / Role (optional)"><button class="btn-submit" onclick="purchaseTicket()">PURCHASE & JOIN NETWORK</button></div></div></div></div>
+
+<div id="chatModal" class="modal"><div class="modal-box"><div class="m-head"><div class="m-title">💬 MESSAGE</div><button class="m-close" onclick="closeModal('chatModal')">&times;</button></div><div class="m-body" id="chatBody"></div></div></div>
+
+<script>
+    const CONFIG = {
+        brand: { name: 'THE ROAST', subtitle: 'ROAST BATTLE • JUNE 18 2026 • NUVO LOUNGE', heroTitle: 'ROAST BATTLE' },
+        location: 'NUVO LOUNGE', date: 'JUNE 18 2026', time: '9:00 PM', crowd: 300,
+        comics: [
+            { name: 'Big Mike', role: 'The Veteran', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300', active: true },
+            { name: 'Slick J', role: 'The Challenger', img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300', active: true },
+            { name: 'Auntie Roast', role: 'Round 2', img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300', active: false },
+            { name: 'DJ Chuckles', role: 'Round 2', img: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=300', active: false },
+            { name: 'Lil Punch', role: 'Round 3', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300', active: false },
+            { name: 'Savage Sal', role: 'Round 3', img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300', active: false }
+        ],
+        merch: [
+            { id: 1, name: 'Combo Platter', price: 18, emoji: '🍱', desc: 'Sliders+Fries+Drink' },
+            { id: 2, name: 'Spicy Wings', price: 14, emoji: '🍗', desc: '6pc ranch dip' },
+            { id: 3, name: 'Loaded Nachos', price: 16, emoji: '🧀', desc: 'Jalapeño+guac' },
+            { id: 4, name: 'Craft Beer', price: 9, emoji: '🍺', desc: 'Local IPA 16oz' },
+            { id: 5, name: 'T-Shirt', price: 25, emoji: '👕', desc: 'Official Roast Tee' },
+            { id: 6, name: 'Signed Poster', price: 15, emoji: '🖼️', desc: 'Big Mike autograph' },
+            { id: 7, name: 'Cap', price: 20, emoji: '🧢', desc: 'Snapback' },
+            { id: 8, name: 'Drink Token', price: 7, emoji: '🥃', desc: 'Well drink' }
+        ],
+        agenda: [
+            { time: '7:00 PM', desc: 'Doors Open & Bar', live: false },
+            { time: '8:00 PM', desc: 'Opening: Lil Punch', live: false },
+            { time: '9:00 PM', desc: 'Roast Battle: Big Mike vs Slick J', live: true },
+            { time: '10:15 PM', desc: 'Auntie Roast vs DJ Chuckles', live: false },
+            { time: '11:00 PM', desc: 'Heckle Shield Round', live: false },
+            { time: '11:45 PM', desc: '🏆 Championship', live: false }
+        ],
+        prize: '$10K', tipGoal: 1000, entryPrice: 20, roastPrice: 15, hecklePrice: 5, specialPrice: 9.99,
+        bgImage: 'https://images.unsplash.com/photo-1508253730651-e5ace80a7025?w=1200&q=80',
+        attendees: [
+            { id:1, name:'Alex Rivera', role:'Comedy Fan', bio:'Loves roast battles', online:true, img:null },
+            { id:2, name:'Jamie Park', role:'Industry Pro', bio:'Talent scout', online:true, img:null },
+            { id:3, name:'Taylor Chen', role:'Venue Manager', bio:'Running the show', online:false, img:null },
+            { id:4, name:'Morgan Reed', role:'Comedy Fan', bio:'First time!', online:true, img:null }
+        ]
+    };
+
+    const S = {
+        votes: Object.fromEntries(CONFIG.comics.map(c => [c.name, { count: 0, percentage: 0 }])),
+        totalVotes: 4821, audience: CONFIG.crowd, pot: 4250, laugh: 72, punchVoted: null,
+        pVotes: 0, pAmt: 0, pLabel: '', voteTarget: '', tierAmt: null, tierName: '', tipAmt: 0,
+        following: new Set(), connections: new Set([1,2]), messages: {},
+        merch: CONFIG.merch.map(i => ({ ...i, ordered: false })),
+        roasts: [
+            { id:1, text:'Roast my date', author:'Table 7', time:'3m ago', votes:28, voted:false, fulfilled:true },
+            { id:2, text:'I wear crocs', author:'Anon', time:'8m ago', votes:45, voted:true, fulfilled:false }
+        ],
+        transactions: [],
+        nB:3, nBn:2, nR:1, nNet:5,
+        pendingTicket: null
+    };
+    S.votes['Big Mike'].count = 2218; S.votes['Big Mike'].percentage = 46;
+    S.votes['Slick J'].count = 2603; S.votes['Slick J'].percentage = 54;
+
+    const fm = n => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const ri = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+    function toast(msg) {
+        const e = document.querySelector('.toast'); if(e) e.remove();
+        const t = document.createElement('div'); t.className='toast'; t.textContent=msg;
+        document.body.appendChild(t);
+        setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity 0.3s'; setTimeout(()=>t.remove(),300); },2600);
+    }
+    function openModal(id) { document.getElementById(id).style.display='flex'; }
+    function closeModal(id) { document.getElementById(id).style.display='none'; if(id==='roastModal'){ document.getElementById('roastName').value=''; document.getElementById('roastNote').value=''; } }
+    function switchTab(id, el) {
+        document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(el) el.classList.add('active');
+        if(id==='admin') updateAdminPanel();
+        if(id==='network') renderNetwork();
+        if(id==='battle') S.nB=0; if(id==='network') S.nNet=0; if(id==='merch') S.nBn=0;
+        updateBadges();
+    }
+
+    function initUI() {
+        document.getElementById('brandName').innerHTML = `🎤 ${CONFIG.brand.name}`;
+        document.getElementById('eventSub').textContent = CONFIG.brand.subtitle;
+        document.getElementById('eventTitle').innerHTML = CONFIG.brand.heroTitle.replace(' ','<br>');
+        document.body.style.backgroundImage = `url('${CONFIG.bgImage}')`;
+        document.getElementById('ticketScroll').innerHTML = `
+            <div class="ticket" onclick="openTierSelection(${CONFIG.entryPrice},'Entry Ticket')"><div class="t-price">$${CONFIG.entryPrice}</div><div class="t-label">Entry Ticket</div><button class="t-btn">GET IN</button></div>
+            <div class="ticket" onclick="openRoastRequest()"><div class="t-price">$${CONFIG.roastPrice}</div><div class="t-label">Request a Roast</div><button class="t-btn">ROAST ME</button></div>
+            <div class="ticket" onclick="openHeckleShield()"><div class="t-price">$${CONFIG.hecklePrice}</div><div class="t-label">Heckle Shield</div><button class="t-btn">MUTE 'EM</button></div>
+            <div class="ticket vip" onclick="openModal('contributeModal')"><div class="vip-tag">BEST</div><div class="t-price">$50</div><div class="t-label">Standing Ovation</div><button class="t-btn">OVATION</button></div>
+            <div class="ticket" onclick="openTierSelection(2,'Giggle Pack')"><div class="t-price">$2</div><div class="t-label">Giggle Pack</div><button class="t-btn">100 VOTES</button></div>
+        `;
+        renderAll();
+        updateBadges(); updateTicker();
+    }
+
+    function renderAll() {
+        renderBattle(); renderNetwork(); renderMerch(); renderRoasts(); renderAgenda();
+    }
+
+    function renderBattle() {
+        const active = CONFIG.comics.filter(c => c.active);
+        document.getElementById('currentMatch').textContent = active.map(c => c.name).join(' vs ');
+        document.getElementById('battleGrid').innerHTML = active.map((c,i) => {
+            const side = i===0 ? 'red' : 'blue';
+            return `<div class="b-card ${side}"><div class="b-pct" id="vote${side==='red'?'Red':'Blue'}">${S.votes[c.name].percentage}%</div><div class="b-avatar" style="background-image:url('${c.img}')"></div><h3 class="b-name">${c.name}</h3><div class="b-role">${c.role}</div><div class="b-bar"><div class="b-fill" id="progress${side==='red'?'Red':'Blue'}" style="width:${S.votes[c.name].percentage}%"></div></div><button class="b-vote-btn ${side}" onclick="openVote('${c.name}')">🔥 VOTE ${c.name.split(' ')[0].toUpperCase()}</button></div>`;
+        }).join('');
+        document.getElementById('punchlineBtns').innerHTML = active.map((c,i) => `<button class="pl-btn" id="pl${String.fromCharCode(65+i)}" onclick="castPunchline('${String.fromCharCode(65+i)}')">${c.name.toUpperCase()} 🔥</button>`).join('');
+        document.getElementById('comicCount').textContent = `${CONFIG.comics.length} COMICS • ${CONFIG.prize} PRIZE`;
+        document.getElementById('comicGrid').innerHTML = CONFIG.comics.map(c => `
+            <div class="c-card ${c.active?'active':''}" onclick="openComicProfile('${c.name}','${c.role}','${c.img}')">
+                <div class="c-img" style="background-image:url('${c.img}')"></div>
+                <div class="c-info"><div class="c-name">${c.name}</div><div class="c-sub">${c.role}</div></div>
+                <div class="c-tag">VIEW</div>
+            </div>`).join('');
+    }
+
+    function renderNetwork() {
+        document.getElementById('networkList').innerHTML = CONFIG.attendees.map(a => `
+            <div class="network-card" onclick="openAttendeeProfile(${a.id})">
+                <div class="c-img" style="background-image:url('${a.img || 'https://via.placeholder.com/44'}')"></div>
+                <div style="flex:1"><div style="font-weight:900; color:#fff;">${a.name} <span class="online-dot" style="${a.online?'':'display:none'}"></span></div><div style="font-size:0.7rem; color:var(--sub);">${a.role}</div></div>
+                <div>
+                    <button class="shop-btn" style="padding:6px 12px;" onclick="event.stopPropagation(); connectWith(${a.id})">${S.connections.has(a.id)?'CONNECTED':'CONNECT'}</button>
+                    ${S.connections.has(a.id) ? `<button class="shop-btn" style="padding:6px 12px; margin-left:4px;" onclick="event.stopPropagation(); openChat(${a.id})"><i class="fas fa-comment"></i></button>` : ''}
+                </div>
+            </div>`).join('');
+        document.getElementById('networkCount').textContent = `${CONFIG.attendees.length} ATTENDEES`;
+    }
+
+    function connectWith(id) {
+        if(S.connections.has(id)) { S.connections.delete(id); toast('Disconnected'); }
+        else { S.connections.add(id); toast('Connected! You can now message.'); }
+        S.nNet = S.connections.size; updateBadges(); renderNetwork();
+    }
+
+    function openChat(id) {
+        const person = CONFIG.attendees.find(a=>a.id===id);
+        document.getElementById('chatBody').innerHTML = `<div style="margin-bottom:10px;"><strong>${person.name}</strong></div><div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:12px;"><p style="color:var(--sub); font-size:0.8rem;">Hey! Great set, right?</p></div><input class="input-field" id="chatInput" placeholder="Type a message..."><button class="btn-submit" onclick="sendChat(${id})">SEND</button>`;
+        openModal('chatModal');
+    }
+    function sendChat(id) {
+        const input = document.getElementById('chatInput'); toast(`Message sent to ${CONFIG.attendees.find(a=>a.id===id).name}`); closeModal('chatModal');
+    }
+    function openAttendeeProfile(id) {
+        const p = CONFIG.attendees.find(a=>a.id===id); toast(`${p.name} - ${p.bio}`);
+    }
+
+    function openTicketForm(type) { S.pendingTicket = type; document.getElementById('ticketForm').style.display = 'block'; }
+    function purchaseTicket() {
+        const name = document.getElementById('ticketName').value.trim();
+        const email = document.getElementById('ticketEmail').value.trim();
+        if(!name || !email) { toast('Enter name and email'); return; }
+        const company = document.getElementById('ticketCompany').value.trim();
+        const amount = S.pendingTicket === 'vip' ? 50 : 20;
+        if(!CONFIG.attendees.find(a=>a.name===name)) {
+            CONFIG.attendees.push({ id: CONFIG.attendees.length+1, name, role: company||'Comedy Fan', bio:'', online:true, img:null });
+        }
+        S.transactions.push({ amount, desc: `${S.pendingTicket.toUpperCase()} Ticket - ${name}`, time: new Date().toLocaleTimeString() });
+        closeModal('preEventModal'); document.getElementById('ticketForm').style.display = 'none';
+        toast(`Ticket purchased! Welcome, ${name}.`); S.nNet++; updateBadges(); renderNetwork();
+    }
+
+    function exportCSV() {
+        let csv = "Name,Role,Bio\n"; CONFIG.attendees.forEach(a => csv += `"${a.name}","${a.role}","${a.bio}"\n`);
+        const blob = new Blob([csv], {type:'text/csv'}); const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download='attendees.csv'; a.click(); toast('CSV exported!');
+    }
+
+    function updateAdminPanel() {
+        document.getElementById('adminStats').innerHTML = `Audience: <strong>${S.audience}</strong> | Votes: <strong>${fm(S.totalVotes)}</strong> | Pot: <strong>$${fm(S.pot)}</strong>`;
+        const totalRev = S.transactions.reduce((s,t)=>s+t.amount,0);
+        document.getElementById('revenueStats').innerHTML = `Transactions: <strong>${S.transactions.length}</strong> | Revenue: <strong>$${totalRev.toFixed(2)}</strong>`;
+        document.getElementById('txLog').innerHTML = S.transactions.slice(-10).reverse().map(t => `<div class="tx-item"><span>${t.desc}</span><span style="color:var(--orange)">$${t.amount.toFixed(2)}</span></div>`).join('') || 'No transactions yet.';
+        document.getElementById('attendeeData').innerHTML = CONFIG.attendees.map(a => `${a.name} (${a.role})`).join('<br>') || 'No attendees.';
+    }
+
+    function openVote(name) { S.voteTarget=name; document.querySelectorAll('.v-tab')[0].click(); openModal('voteModal'); }
+    function switchVoteTab(type, el) {
+        document.querySelectorAll('.v-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
+        document.getElementById('freeVoteSection').style.display = type==='free'?'block':'none';
+        document.getElementById('powerVoteSection').style.display = type==='power'?'block':'none';
+    }
+    function selectPower(v,a,l){ S.pVotes=v; S.pAmt=a; S.pLabel=l; document.querySelectorAll('#voteModal .pkg-opt').forEach(o=>o.classList.remove('sel')); event.target.closest('.pkg-opt').classList.add('sel'); }
+    function castFreeVote(){ if(!S.voteTarget) return; S.votes[S.voteTarget].count++; S.totalVotes++; updatePcts(); renderBattle(); toast('Vote cast! 🔥'); closeModal('voteModal'); S.nB++; updateBadges(); }
+    function purchasePower(){ if(!S.pVotes){ toast('Select a pack'); return; } S.votes[S.voteTarget].count+=S.pVotes; S.totalVotes+=S.pVotes; updatePcts(); renderBattle(); openPay(S.pAmt, S.pLabel); S.pVotes=0; S.pAmt=0; S.nB++; updateBadges(); }
+    function processDonation(){ const amt=parseFloat(document.getElementById('donationAmount').value); if(!amt||amt<=0){ toast('Enter a valid amount'); return; } openPay(amt, `Donation`); document.getElementById('donationAmount').value=''; toast('Thank you! 🎉'); }
+    function updatePcts(){ const t=Object.values(S.votes).reduce((s,v)=>s+v.count,0); Object.keys(S.votes).forEach(k=>{ S.votes[k].percentage = t>0?Math.round((S.votes[k].count/t)*100):0; }); document.getElementById('totalVotes').textContent=fm(t); }
+    function castPunchline(ch){ if(S.punchVoted){ toast('Already voted!'); return; } S.punchVoted=ch;
+        const a=document.getElementById('plA'), b=document.getElementById('plB'); a.className='pl-btn'; b.className='pl-btn';
+        if(ch==='A'){ a.classList.add('picked-a'); a.innerHTML=CONFIG.comics[0].name.toUpperCase()+' 🔥 ✓'; b.innerHTML=CONFIG.comics[1].name.toUpperCase()+' ⚡'; }
+        else{ b.classList.add('picked-b'); b.innerHTML=CONFIG.comics[1].name.toUpperCase()+' ⚡ ✓'; a.innerHTML=CONFIG.comics[0].name.toUpperCase()+' 🔥'; }
+        toast((ch==='A'?CONFIG.comics[0].name:CONFIG.comics[1].name)+' wins the round!'); }
+
+    function openRoastRequest(){ openModal('roastModal'); }
+    function openHeckleShield(){ openModal('heckleModal'); }
+    function submitRoast(){ const n=document.getElementById('roastName').value.trim(); if(!n){ toast('Enter name'); return; } const nt=document.getElementById('roastNote').value.trim(); S.roasts.unshift({id:Date.now(),text:nt||'Roast me!',author:n,time:'Just now',votes:0,voted:false,fulfilled:false}); renderRoasts(); openPay(CONFIG.roastPrice,'Roast Request - '+n); closeModal('roastModal'); toast('Roast request sent!'); S.nR++; updateBadges(); }
+    function activateShield(){ openPay(CONFIG.hecklePrice,'Heckle Shield'); closeModal('heckleModal'); toast('Heckle Shield activated! 🛡️'); }
+    function openTierSelection(amt,name){ S.tierAmt=amt; S.tierName=name; openModal('contributeModal'); }
+    function selTier(amt,name){ S.tierAmt=amt; S.tierName=name; document.querySelectorAll('#contributeModal .pkg-opt').forEach(o=>o.classList.remove('sel')); event.target.closest('.pkg-opt').classList.add('sel'); }
+    function processContribution(){ if(!S.tierAmt){ toast('Select a pack'); return; } openPay(S.tierAmt, S.tierName); closeModal('contributeModal'); }
+
+    function openTipModal(){ openModal('tipModal'); }
+    function selTip(amt){ S.tipAmt=amt; document.querySelectorAll('#tipModal .pkg-opt').forEach(o=>o.classList.remove('sel')); event.target.closest('.pkg-opt').classList.add('sel'); }
+    function sendTip(){ if(!S.tipAmt){ toast('Select tip'); return; } const n=document.getElementById('pName').textContent; openPay(S.tipAmt,'Tip for '+n); closeModal('tipModal'); const cur=parseInt(document.getElementById('raisedAmount').textContent.replace('$','')); document.getElementById('raisedAmount').textContent='$'+(cur+S.tipAmt); document.getElementById('pGoalFill').style.width=Math.min(100,Math.round(((cur+S.tipAmt)/CONFIG.tipGoal)*100))+'%'; S.tipAmt=0; }
+    function openPay(amt,desc){
+        const fee=amt*0.029+0.3; const tot=(amt+fee).toFixed(2);
+        document.getElementById('payAmount').textContent=amt; document.getElementById('paymentTitle').textContent='Payment: '+desc;
+        document.getElementById('paymentItem').textContent=desc; document.getElementById('paymentAmount').textContent='$'+amt.toFixed(2);
+        document.getElementById('paymentFee').textContent='$'+fee.toFixed(2); document.getElementById('paymentTotal').textContent='$'+tot;
+        openModal('payModal');
+    }
+    function processPayment(){
+        const btn=document.querySelector('#payModal .btn-submit'); const orig=btn.innerHTML;
+        btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> PROCESSING...'; btn.disabled=true;
+        setTimeout(()=>{
+            const amt=parseFloat(document.getElementById('payAmount').textContent);
+            const desc=document.getElementById('paymentItem').textContent;
+            S.transactions.push({amount:amt, desc:desc, time:new Date().toLocaleTimeString()});
+            toast('Payment successful! 🎉'); closeModal('payModal'); btn.innerHTML=orig; btn.disabled=false;
+            updateAdminPanel();
+        },1400);
+    }
+
+    function openComicProfile(name,role,img){
+        document.getElementById('pName').textContent=name; document.getElementById('pRole').textContent=role;
+        document.getElementById('pAvatar').style.backgroundImage='url('+img+')';
+        document.getElementById('raisedAmount').textContent='$'+ri(300,900); document.getElementById('pGoalFill').style.width='0%';
+        document.getElementById('followBtn').innerHTML = S.following.has(name) ? '<i class="fas fa-check"></i> FOLLOWING' : '<i class="fas fa-user-plus"></i> FOLLOW COMIC';
+        openModal('profileModal'); setTimeout(()=>{ document.getElementById('pGoalFill').style.width=ri(40,85)+'%'; },200);
+    }
+    function toggleFollow(){ const n=document.getElementById('pName').textContent; S.following.has(n) ? S.following.delete(n) : S.following.add(n); toast(S.following.has(n)?'Following '+n:'Unfollowed'); }
+    function buySpecial(){ openPay(CONFIG.specialPrice,document.getElementById('pName').textContent+"'s Special"); closeModal('profileModal'); }
+    function renderMerch(){ document.getElementById('shopGrid').innerHTML = S.merch.map(i => `<div class="shop-card"><div class="shop-emoji">${i.emoji}</div><div class="shop-name">${i.name}</div><div class="shop-desc">${i.desc}</div><div class="shop-price">$${i.price}</div><button class="shop-btn ${i.ordered?'ordered':''}" onclick="orderMerch(${i.id})">${i.ordered?'ORDERED ✓':'ORDER NOW'}</button></div>`).join(''); }
+    function orderMerch(id){ const i=S.merch.find(x=>x.id===id); if(!i||i.ordered) return; i.ordered=true; openPay(i.price,i.name); renderMerch(); toast(i.name+' ordered!'); S.nBn++; updateBadges(); }
+    function renderRoasts(){ document.getElementById('roastList').innerHTML = S.roasts.map(r => `<div class="qa-card"><div class="upvote-col" onclick="voteRoast(${r.id})"><i class="fas fa-chevron-up arrow-up ${r.voted?'lit':''}"></i><span class="vote-count">${r.votes}</span></div><div style="flex:1"><div style="font-weight:900;font-size:0.9rem;color:#fff">${r.text}</div><div style="font-size:0.7rem;color:var(--sub)">By <strong style="color:var(--orange)">${r.author}</strong> • ${r.time}</div></div></div>`).join(''); }
+    function voteRoast(id){ const r=S.roasts.find(x=>x.id===id); if(!r) return; r.voted=!r.voted; r.votes+=r.voted?1:-1; renderRoasts(); }
+    function renderAgenda(){ document.getElementById('agendaList').innerHTML = CONFIG.agenda.map(i => `<li class="agenda-item ${i.live?'now':''}"><span class="agenda-time">${i.time}</span><span class="agenda-desc">${i.desc}${i.live?'<span class="now-tag">LIVE</span>':''}</span></li>`).join(''); }
+    function updateBadges(){ document.getElementById('battleDot').style.display = S.nB>0?'block':'none'; document.getElementById('navBattleDot').style.display = S.nB>0?'flex':'none'; if(S.nB>0) document.getElementById('navBattleDot').textContent = S.nB>9?'9+':S.nB; document.getElementById('networkDot').style.display = S.nNet>0?'block':'none'; document.getElementById('navNetworkDot').style.display = S.nNet>0?'flex':'none'; if(S.nNet>0) document.getElementById('navNetworkDot').textContent = S.nNet>9?'9+':S.nNet; document.getElementById('merchDot').style.display = S.nBn>0?'block':'none'; document.getElementById('navMerchDot').style.display = S.nBn>0?'flex':'none'; if(S.nBn>0) document.getElementById('navMerchDot').textContent = S.nBn>9?'9+':S.nBn; document.getElementById('requestsDot').style.display = S.nR>0?'block':'none'; }
+    function updateTicker(){ document.getElementById('ticker').innerHTML = `<i class="fas fa-fire"></i> Big Mike just landed a killer roast! • <i class="fas fa-laugh"></i> Crowd is roaring at ${CONFIG.location} • <i class="fas fa-coins"></i> The Pot: $${fm(S.pot)}`; }
+    function simLive(){ S.audience=Math.max(200,S.audience+ri(-2,5)); document.getElementById('liveAudience').textContent=fm(S.audience); S.totalVotes+=ri(1,15); S.pot+=ri(2,20); S.laugh=Math.max(40,Math.min(95,S.laugh+ri(-5,8))); updatePcts(); renderBattle(); document.getElementById('thePot').textContent='$'+fm(S.pot); }
+    function openQuickActions(){ const acts=[ {t:'Request a Roast',i:'fire',f:()=>openRoastRequest()},{t:'Heckle Shield',i:'shield-alt',f:()=>openHeckleShield()},{t:'View Lineup',i:'calendar-alt',f:()=>openModal('agendaModal')},{t:'Admin Panel',i:'cog',f:()=>switchTab('admin')} ]; const m=document.createElement('div'); m.style.cssText='position:fixed;bottom:140px;right:16px;background:var(--glass-bg);backdrop-filter:blur(20px);border-radius:var(--radius-lg);padding:12px;box-shadow:0 10px 35px rgba(0,0,0,0.6);z-index:199;min-width:200px;border:1px solid var(--glass-border);'; acts.forEach(a=>{ const b=document.createElement('div'); b.style.cssText='display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;border-radius:5px;color:#fff;border-bottom:1px solid var(--glass-border);font-weight:700;font-size:0.85rem;'; b.onmouseenter=()=>b.style.background='rgba(255,69,0,0.1)'; b.onmouseleave=()=>b.style.background='transparent'; b.onclick=()=>{a.f();m.remove();}; b.innerHTML=`<i class="fas fa-${a.i}" style="color:var(--orange)"></i> ${a.t}`; m.appendChild(b); }); const cls=document.createElement('div'); cls.style.cssText='text-align:center;padding:10px;color:var(--sub);font-size:0.75rem;cursor:pointer;font-weight:700;'; cls.textContent='Close'; cls.onclick=()=>m.remove(); m.appendChild(cls); document.body.appendChild(m); setTimeout(()=>{ const h=(e)=>{ if(!m.contains(e.target)&&!e.target.closest('.fab')){ m.remove(); document.removeEventListener('click',h); } }; document.addEventListener('click',h); },100); }
+
+    window.onclick = function(e){ if(e.target.classList.contains('modal')) closeModal(e.target.id); };
+    document.addEventListener('DOMContentLoaded', ()=>{ initUI(); setInterval(simLive,3000); setInterval(updateTicker,10000); });
+</script>
+</body>
+</html>

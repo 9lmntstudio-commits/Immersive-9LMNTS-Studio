@@ -100,7 +100,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
           <h1 className="text-4xl sm:text-5xl lg:text-7xl text-foreground mb-6 tracking-tight font-bold">
             <span className="font-['Orbitron']">9LMNTS</span>{" "}
-            <span className="font-['Mrs_Saint_Delafield'] text-primary text-5xl sm:text-6xl lg:text-8xl capitalize ml-[-10px] -rotate-6 inline-block">
+            <span className="font-['Righteous'] text-primary text-5xl sm:text-6xl lg:text-8xl capitalize ml-[-10px] -rotate-6 inline-block">
               Studio
             </span>
             <br />
@@ -145,7 +145,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <h2 className="text-3xl sm:text-5xl text-foreground mb-4">
               The{" "}
               <span className="font-['Orbitron']">9LMNTS</span>{" "}
-              <span className="font-['Mrs_Saint_Delafield'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">
+              <span className="font-['Righteous'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">
                 Concept
               </span>
             </h2>
@@ -181,7 +181,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               </div>
             ))}
             <button
-              onClick={() => onNavigate("services")}
+              onClick={() => onNavigate("nine-pillars")}
               className="bg-primary border border-primary rounded-none flex flex-col items-center justify-center group hover:bg-primary/90 transition-all hover:scale-105 cursor-pointer p-4"
             >
               <ArrowRight
@@ -241,7 +241,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-5xl text-foreground mb-4">
               <span className="font-['Orbitron']">Featured</span>{" "}
-              <span className="font-['Mrs_Saint_Delafield'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">
+              <span className="font-['Righteous'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">
                 Work
               </span>
             </h2>
@@ -318,7 +318,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <span className="font-['Orbitron']">
                 Choose Your
               </span>{" "}
-              <span className="font-['Mrs_Saint_Delafield'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">
+              <span className="font-['Righteous'] text-primary text-4xl sm:text-6xl capitalize ml-[-5px] -rotate-3 inline-block">
                 Element
               </span>
             </h2>

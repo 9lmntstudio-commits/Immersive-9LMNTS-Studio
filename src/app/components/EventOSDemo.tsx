@@ -4,18 +4,19 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   ResponsiveContainer,
 } from "recharts";
-import { useState, useEffect, useRef, useMemo, FormEvent, type ComponentType } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ChevronLeft, ShoppingBag, Zap, ArrowRight, X, Shield,
   Check, Music, Crown, Star, Users, BarChart2, Lock,
   MapPin, Brain, Heart, ThumbsUp, CheckSquare,
 } from "lucide-react";
 import {
-  SOUND_CLASH_DATA, CORPORATE_CLASH_DATA, RECEPTION_OS_DATA,
+  SOUND_CLASH_DATA, ARTIST_OS_DATA, CORPORATE_CLASH_DATA, RECEPTION_OS_DATA,
   COMEDIAN_OS_DATA, VENUE_OS_DATA, UNCLE_JAY_OS_DATA, GAMING_OS_DATA,
   EventOSData,
 } from "./EventOSData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { GateOSCheckoutModal } from "./GateOSCheckoutModal";
 import { SEO } from "./SEO";
 
 interface EventOSDemoProps {
@@ -24,6 +25,7 @@ interface EventOSDemoProps {
 
 const THEMES: Record<string, EventOSData> = {
   nightlife: SOUND_CLASH_DATA,
+  artist:    ARTIST_OS_DATA,
   corporate: CORPORATE_CLASH_DATA,
   wedding:   RECEPTION_OS_DATA,
   comedy:    COMEDIAN_OS_DATA,
@@ -104,181 +106,6 @@ const getVotePacks = (themeId: string) => {
   };
   return packs[themeId] || packs.nightlife;
 };
-
-const resolveBackgroundColor = (bgClass: string) => {
-  const match = bgClass.match(/bg-\[\s*(#[0-9A-Fa-f]{3,6})\s*\]/);
-  return match?.[1] ?? bgClass;
-};
-
-interface BattleParticipant {
-  avatarGradient: string;
-  progressGradient: string;
-  name: string;
-  round: string;
-  pct: string;
-  pctColor: string;
-}
-
-interface UndercardBattleData {
-  id: string;
-  top: BattleParticipant;
-  bottom: BattleParticipant;
-}
-
-const UNDERCARD_BATTLES: UndercardBattleData[] = [
-  {
-    id: "undercard-1",
-    top: {
-      avatarGradient: "linear-gradient(135deg, #06b6d4, #3b82f6)",
-      progressGradient: "linear-gradient(90deg, #06b6d4, #3b82f6)",
-      name: "Pixel Master",
-      round: "Round 2",
-      pct: "64%",
-      pctColor: "#22d3ee",
-    },
-    bottom: {
-      avatarGradient: "linear-gradient(135deg, #8b5cf6, #ec4899)",
-      progressGradient: "linear-gradient(90deg, #8b5cf6, #ec4899)",
-      name: "Neon Knight",
-      round: "Round 2",
-      pct: "36%",
-      pctColor: "#c084fc",
-    },
-  },
-  {
-    id: "undercard-2",
-    top: {
-      avatarGradient: "linear-gradient(135deg, #10b981, #14b8a6)",
-      progressGradient: "linear-gradient(90deg, #10b981, #14b8a6)",
-      name: "Vibe Chief",
-      round: "Round 2",
-      pct: "58%",
-      pctColor: "#34d399",
-    },
-    bottom: {
-      avatarGradient: "linear-gradient(135deg, #f97316, #ef4444)",
-      progressGradient: "linear-gradient(90deg, #f97316, #ef4444)",
-      name: "Bass Drop",
-      round: "Round 2",
-      pct: "42%",
-      pctColor: "#fb923c",
-    },
-  },
-  {
-    id: "undercard-3",
-    top: {
-      avatarGradient: "linear-gradient(135deg, #f59e0b, #fbbf24)",
-      progressGradient: "linear-gradient(90deg, #f59e0b, #fbbf24)",
-      name: "Gold Rush",
-      round: "Round 3",
-      pct: "71%",
-      pctColor: "#fcd34d",
-    },
-    bottom: {
-      avatarGradient: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-      progressGradient: "linear-gradient(90deg, #6366f1, #8b5cf6)",
-      name: "Cosmic Flow",
-      round: "Round 3",
-      pct: "29%",
-      pctColor: "#818cf8",
-    },
-  },
-  {
-    id: "undercard-4",
-    top: {
-      avatarGradient: "linear-gradient(135deg, #fb7185, #ec4899)",
-      progressGradient: "linear-gradient(90deg, #fb7185, #ec4899)",
-      name: "Electric Rose",
-      round: "Round 3",
-      pct: "45%",
-      pctColor: "#f472b6",
-    },
-    bottom: {
-      avatarGradient: "linear-gradient(135deg, #84cc16, #22c55e)",
-      progressGradient: "linear-gradient(90deg, #84cc16, #22c55e)",
-      name: "Neon Jungle",
-      round: "Round 3",
-      pct: "55%",
-      pctColor: "#86efac",
-    },
-  },
-];
-
-interface StoreItemType {
-  id: string;
-  icon: ComponentType<{ size?: number }>;
-  color: string;
-  name: string;
-  desc: string;
-  price: number;
-  popular?: boolean;
-}
-
-function StoreItemCard({ item, primaryColor, onSelect }: { item: StoreItemType; primaryColor: string; onSelect: () => void }) {
-  return (
-    <button onClick={onSelect}
-      className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all group text-left relative overflow-hidden hover:border-white/20">
-      {item.popular && <div className="absolute top-0 right-0 px-2 py-0.5 text-black text-[8px] font-bold rounded-bl-lg" style={{ backgroundColor: primaryColor }}>HOT</div>}
-      <div className="w-10 h-10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform" style={{ backgroundColor: `${item.color}1A`, color: item.color }}>
-        <item.icon size={18} />
-      </div>
-      <div className="flex-1">
-        <div className="text-sm font-bold">{item.name}</div>
-        <div className="text-[10px] text-white/40">{item.desc}</div>
-      </div>
-      <div className="text-sm font-bold text-white/90">${item.price}</div>
-    </button>
-  );
-}
-
-function StoreModalCard({ item, primaryColor, onSelect }: { item: StoreItemType; primaryColor: string; onSelect: () => void }) {
-  return (
-    <div className={`relative p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-2 ${item.popular ? "bg-white/5 shadow-[0_0_30px_rgba(255,255,255,0.05)] z-10 scale-105" : "bg-white/5 border-white/5 hover:border-white/20"}`}
-      style={{ borderColor: item.popular ? primaryColor : undefined }}>
-      {item.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-black text-[10px] font-black uppercase tracking-wider rounded-full" style={{ backgroundColor: primaryColor }}>Most Popular</div>}
-      <div className="flex justify-center mb-4">
-        <div className={`w-12 h-12 rounded-full flex items-center justify-center`} style={{ backgroundColor: item.popular ? primaryColor : "rgba(255,255,255,0.1)", color: item.popular ? "black" : "white" }}>
-          <item.icon size={24} />
-        </div>
-      </div>
-      <div className="text-center mb-6">
-        <h3 className="font-bold text-lg mb-1">{item.name}</h3>
-        <div className="flex items-baseline justify-center gap-1"><span className="text-sm opacity-60">$</span><span className="text-3xl font-black">{item.price}</span></div>
-      </div>
-      <div className="space-y-3 mb-8"><div className="flex items-center gap-2 text-xs text-white/80 justify-center">{item.desc}</div></div>
-      <button onClick={onSelect}
-        className="w-full py-3 rounded-xl text-xs font-bold transition-all"
-        style={{ backgroundColor: item.popular ? primaryColor : "rgba(255,255,255,0.1)", color: item.popular ? "black" : "white" }}>
-        Select
-      </button>
-    </div>
-  );
-}
-
-function UndercardBattle({ battle, onClick }: { battle: UndercardBattleData; onClick: () => void }) {
-  const renderEntry = (entry: BattleParticipant) => (
-    <>
-      <div className="flex items-center gap-2 mb-2">
-        <div className="w-8 h-8 rounded-full flex-shrink-0" style={{ background: entry.avatarGradient }} />
-        <div className="flex-1 min-w-0">
-          <div className="text-xs font-bold truncate">{entry.name}</div>
-          <div className="text-[10px] text-white/40">{entry.round}</div>
-        </div>
-        <div className="text-xs font-mono font-bold" style={{ color: entry.pctColor }}>{entry.pct}</div>
-      </div>
-      <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-        <div className="h-full transition-all" style={{ width: entry.pct, background: entry.progressGradient }} />
-      </div>
-    </>
-  );
-
-  return (
-    <div className="bg-white/5 rounded-xl p-3 border border-white/5 hover:border-white/10 transition-colors cursor-pointer" onClick={onClick}>
-      {renderEntry(battle.top)}
-      <div className="mt-2">{renderEntry(battle.bottom)}</div>
-    </div>
-  );
-}
 
 const INITIAL_TIP_FEED = [
   { id: 1, emoji: "🔥", label: "Table 7",   time: "just now", amount: 50  },
@@ -392,25 +219,11 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
   const activeData = THEMES[activeThemeId];
   const { theme, labels, contestants, liveStats, storeItems, requests, vipUsers } = activeData;
 
-  const initialVotesByContestant = useMemo(
-    () => contestants.reduce(
-      (acc, contestant) => ({
-        ...acc,
-        [contestant.id]: contestant.initialVotes,
-      }),
-      {} as Record<string, number>,
-    ),
-    [contestants],
-  );
-
   /* existing state */
-  const [votes, setVotes] = useState<Record<string, number>>(
-    () => initialVotesByContestant,
-  );
+  const [votes, setVotes]               = useState({ [contestants[0].id]: activeData.contestants[0].initialVotes, [contestants[1].id]: activeData.contestants[1].initialVotes });
   const [hypeData, setHypeData]         = useState(generateChartData());
   const [showStoreModal, setShowStoreModal] = useState(false);
   const [notification, setNotification] = useState<string | null>(null);
-  const notificationTimeoutRef = useRef<number | null>(null);
   const [chartWidth, setChartWidth]     = useState(0);
   const chartContainerRef               = useRef<HTMLDivElement>(null);
 
@@ -429,16 +242,8 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
 
   /* reset on theme change */
   useEffect(() => {
-    setVotes(initialVotesByContestant);
-  }, [initialVotesByContestant]);
-
-  useEffect(() => {
-    return () => {
-      if (notificationTimeoutRef.current) {
-        window.clearTimeout(notificationTimeoutRef.current);
-      }
-    };
-  }, []);
+    setVotes({ [contestants[0].id]: contestants[0].initialVotes, [contestants[1].id]: contestants[1].initialVotes });
+  }, [activeThemeId, contestants]);
 
   /* chart container sizing */
   useEffect(() => {
@@ -454,14 +259,9 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
   useEffect(() => {
     const iv = setInterval(() => {
       setVotes(prev => {
-        if (contestants.length < 2) return prev;
         const c = Math.random() > 0.5 ? 0.1 : -0.1;
         const [id1, id2] = [contestants[0].id, contestants[1].id];
-        return {
-          ...prev,
-          [id1]: Math.min(90, Math.max(10, (prev[id1] || 50) + c)),
-          [id2]: Math.min(90, Math.max(10, (prev[id2] || 50) - c)),
-        };
+        return { ...prev, [id1]: Math.min(90, Math.max(10, (prev[id1] || 50) + c)), [id2]: Math.min(90, Math.max(10, (prev[id2] || 50) - c)) };
       });
       setHypeData(prev => [...prev.slice(1), { time: prev[prev.length - 1].time + 1, value: 50 + Math.random() * 40 }]);
     }, 2000);
@@ -493,16 +293,7 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
   const votePacks = getVotePacks(activeThemeId);
   const features = getFeatures(activeThemeId);
 
-  const handleAction = (msg: string) => {
-    setNotification(msg);
-    if (notificationTimeoutRef.current) {
-      window.clearTimeout(notificationTimeoutRef.current);
-    }
-    notificationTimeoutRef.current = window.setTimeout(() => {
-      setNotification(null);
-      notificationTimeoutRef.current = null;
-    }, 3000);
-  };
+  const handleAction = (msg: string) => { setNotification(msg); setTimeout(() => setNotification(null), 3000); };
 
   const handleTip = (amount: number) => {
     setTotalTips(t => t + amount);
@@ -511,7 +302,7 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
     handleAction(`Tip of $${amount} sent to the DJ!`);
   };
 
-  const handleQASubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleQASubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!qaInput.trim()) return;
     const newQ = { id: Date.now(), votes: 0, q: qaInput.trim(), from: qaName.trim() || "Anonymous", answered: false, answer: "" };
@@ -536,7 +327,7 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
       />
       {/* Ambient background */}
       <div className="fixed inset-0 bg-[url('https://images.unsplash.com/photo-1561474381-7a7ebb152e2c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwY3liZXIlMjB0ZXh0dXJlfGVufDF8fHx8MTc3Nzk2NjczOHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral')] bg-cover bg-center opacity-10 pointer-events-none mix-blend-screen" />
-      <div className="fixed inset-0 pointer-events-none opacity-80" style={{ background: `linear-gradient(to bottom, transparent, ${resolveBackgroundColor(theme.background)})` }} />
+      <div className="fixed inset-0 pointer-events-none opacity-80" style={{ background: `linear-gradient(to bottom, transparent, ${theme.background.replace("bg-[", "").replace("]", "")})` }} />
 
       {/* ── NAV ──────────────────────────────────────────────── */}
       <nav className="sticky top-0 z-40 border-b border-white/5 backdrop-blur-xl bg-black/80">
@@ -714,13 +505,97 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
               <div>
                 <h3 className="text-xs font-bold tracking-widest uppercase mb-3 text-white/40">UNDERCARD BATTLES</h3>
                 <div className="grid grid-cols-2 gap-3">
-                  {UNDERCARD_BATTLES.map(battle => (
-                    <UndercardBattle
-                      key={battle.id}
-                      battle={battle}
-                      onClick={() => handleAction("Undercard battle clicked")}
-                    />
-                  ))}
+                  {/* Undercard 1 */}
+                  <div className="bg-white/5 rounded-xl p-3 border border-white/5 hover:border-white/10 transition-colors cursor-pointer" onClick={() => handleAction("Undercard battle clicked")}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-bold truncate">Pixel Master</div>
+                        <div className="text-[10px] text-white/40">Round 2</div>
+                      </div>
+                      <div className="text-xs font-mono font-bold text-cyan-400">64%</div>
+                    </div>
+                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-cyan-500 to-blue-600 transition-all" style={{ width: '64%' }} />
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-bold truncate">Neon Knight</div>
+                        <div className="text-[10px] text-white/40">Round 2</div>
+                      </div>
+                      <div className="text-xs font-mono font-bold text-purple-400">36%</div>
+                    </div>
+                  </div>
+
+                  {/* Undercard 2 */}
+                  <div className="bg-white/5 rounded-xl p-3 border border-white/5 hover:border-white/10 transition-colors cursor-pointer" onClick={() => handleAction("Undercard battle clicked")}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-bold truncate">Vibe Chief</div>
+                        <div className="text-[10px] text-white/40">Round 2</div>
+                      </div>
+                      <div className="text-xs font-mono font-bold text-emerald-400">58%</div>
+                    </div>
+                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-600 transition-all" style={{ width: '58%' }} />
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-bold truncate">Bass Drop</div>
+                        <div className="text-[10px] text-white/40">Round 2</div>
+                      </div>
+                      <div className="text-xs font-mono font-bold text-orange-400">42%</div>
+                    </div>
+                  </div>
+
+                  {/* Undercard 3 */}
+                  <div className="bg-white/5 rounded-xl p-3 border border-white/5 hover:border-white/10 transition-colors cursor-pointer" onClick={() => handleAction("Undercard battle clicked")}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-bold truncate">Gold Rush</div>
+                        <div className="text-[10px] text-white/40">Round 3</div>
+                      </div>
+                      <div className="text-xs font-mono font-bold text-yellow-400">71%</div>
+                    </div>
+                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-yellow-500 to-amber-600 transition-all" style={{ width: '71%' }} />
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-bold truncate">Cosmic Flow</div>
+                        <div className="text-[10px] text-white/40">Round 3</div>
+                      </div>
+                      <div className="text-xs font-mono font-bold text-indigo-400">29%</div>
+                    </div>
+                  </div>
+
+                  {/* Undercard 4 */}
+                  <div className="bg-white/5 rounded-xl p-3 border border-white/5 hover:border-white/10 transition-colors cursor-pointer" onClick={() => handleAction("Undercard battle clicked")}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-rose-500 to-pink-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-bold truncate">Electric Rose</div>
+                        <div className="text-[10px] text-white/40">Round 3</div>
+                      </div>
+                      <div className="text-xs font-mono font-bold text-rose-400">45%</div>
+                    </div>
+                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-rose-500 to-pink-600 transition-all" style={{ width: '45%' }} />
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-lime-500 to-green-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-bold truncate">Neon Jungle</div>
+                        <div className="text-[10px] text-white/40">Round 3</div>
+                      </div>
+                      <div className="text-xs font-mono font-bold text-lime-400">55%</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -764,12 +639,18 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
             </div>
             <div className="space-y-3">
               {storeItems.slice(0, 3).map(item => (
-                <StoreItemCard
-                  key={item.id}
-                  item={item}
-                  primaryColor={p}
-                  onSelect={() => item.popular ? setShowStoreModal(true) : handleAction(`Selected: ${item.name}`)}
-                />
+                <button key={item.id} onClick={() => item.popular ? setShowStoreModal(true) : handleAction(`Selected: ${item.name}`)}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all group text-left relative overflow-hidden hover:border-white/20">
+                  {item.popular && <div className="absolute top-0 right-0 px-2 py-0.5 text-black text-[8px] font-bold rounded-bl-lg" style={{ backgroundColor: p }}>HOT</div>}
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform" style={{ backgroundColor: `${item.color}1A`, color: item.color }}>
+                    <item.icon size={18} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-bold">{item.name}</div>
+                    <div className="text-[10px] text-white/40">{item.desc}</div>
+                  </div>
+                  <div className="text-sm font-bold text-white/90">${item.price}</div>
+                </button>
               ))}
             </div>
           </div>
@@ -991,12 +872,15 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
               <div className="grid grid-cols-4 gap-2 mb-4">
                 {[5, 10, 20, 50].map(amt => (
                   <button key={amt} onClick={() => handleTip(amt)}
-                    className="py-3 rounded-xl border border-white/20 bg-transparent text-sm font-black text-white transition-all hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/10 hover:text-black">
+                    className="py-3 rounded-xl border border-white/20 text-sm font-black hover:text-black transition-all hover:-translate-y-0.5"
+                    style={{ backgroundColor: "transparent" }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = p; (e.currentTarget as HTMLButtonElement).style.color = "black"; (e.currentTarget as HTMLButtonElement).style.borderColor = p; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "white"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.2)"; }}>
                     ${amt}
                   </button>
                 ))}
               </div>
-              <form onSubmit={e => { e.preventDefault(); const a = parseInt(customTip, 10); if (a > 0) { handleTip(a); setCustomTip(""); }}} className="flex gap-2">
+              <form onSubmit={e => { e.preventDefault(); const a = parseInt(customTip); if (a > 0) { handleTip(a); setCustomTip(""); }}} className="flex gap-2">
                 <input value={customTip} onChange={e => setCustomTip(e.target.value)} type="number" min="1" placeholder="Custom amount..." className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/30 focus:border-white/30 outline-none" />
                 <button type="submit" className="px-5 py-2.5 rounded-xl font-bold text-black text-sm" style={{ backgroundColor: p }}>Send</button>
               </form>
@@ -1377,12 +1261,25 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
                 <div className={`md:col-span-8 p-8 ${theme.cardBg}`}>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-full items-center">
                     {storeItems.slice(0, 3).map(item => (
-                      <StoreModalCard
-                        key={item.id}
-                        item={item}
-                        primaryColor={p}
-                        onSelect={() => { setShowStoreModal(false); handleAction(`Purchased ${item.name}`); }}
-                      />
+                      <div key={item.id} className={`relative p-6 rounded-2xl border transition-all duration-300 hover:-translate-y-2 ${item.popular ? "bg-white/5 shadow-[0_0_30px_rgba(255,255,255,0.05)] z-10 scale-105" : "bg-white/5 border-white/5 hover:border-white/20"}`}
+                        style={{ borderColor: item.popular ? p : undefined }}>
+                        {item.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-black text-[10px] font-black uppercase tracking-wider rounded-full" style={{ backgroundColor: p }}>Most Popular</div>}
+                        <div className="flex justify-center mb-4">
+                          <div className={`w-12 h-12 rounded-full flex items-center justify-center`} style={{ backgroundColor: item.popular ? p : "rgba(255,255,255,0.1)", color: item.popular ? "black" : "white" }}>
+                            <item.icon size={24} />
+                          </div>
+                        </div>
+                        <div className="text-center mb-6">
+                          <h3 className="font-bold text-lg mb-1">{item.name}</h3>
+                          <div className="flex items-baseline justify-center gap-1"><span className="text-sm opacity-60">$</span><span className="text-3xl font-black">{item.price}</span></div>
+                        </div>
+                        <div className="space-y-3 mb-8"><div className="flex items-center gap-2 text-xs text-white/80 justify-center">{item.desc}</div></div>
+                        <button onClick={() => { setShowStoreModal(false); handleAction(`Purchased ${item.name}`); }}
+                          className="w-full py-3 rounded-xl text-xs font-bold transition-all"
+                          style={{ backgroundColor: item.popular ? p : "rgba(255,255,255,0.1)", color: item.popular ? "black" : "white" }}>
+                          Select
+                        </button>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -1405,6 +1302,17 @@ export function EventOSDemo({ onNavigate }: EventOSDemoProps) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <GateOSCheckoutModal 
+        isOpen={isCheckoutModalOpen}
+        onClose={() => setIsCheckoutModalOpen(false)}
+        invoiceDetails={{
+          id: `NX-${Math.floor(Math.random() * 10000)}`,
+          title: "Gate OS Access Ticket",
+          amount: 150.00,
+          description: "Standard Access Pass + VIP Entry"
+        }}
+      />
 
       <style>{`
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
