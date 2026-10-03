@@ -32,7 +32,7 @@ export function Navbar({
   const navLinks = [
     { name: "Home", id: "home" },
     { name: "Services", id: "services" },
-    { name: "Portfolio", id: "portfolio" },
+    { name: "9LMNTS OS", id: "event-os-demo" },
     { name: "LOA Game", id: "loa", isGame: true },
     { name: "Pricing", id: "pricing" },
     { name: "About", id: "about" },

@@ -21,18 +21,21 @@ export function HomePage({ onNavigate }: HomePageProps) {
   const featuredWorks = [
     {
       title: "Sound Clash OS",
-      category: "Nightlife & Entertainment",
+      category: "Live DJ Battles & Tournament Arena",
       image: soundClashImg,
+      action: () => window.open("https://clash.9lmntsstudio.com", "_blank"),
     },
     {
-      title: "The Union: Wedding OS",
-      category: "Lifestyle & Events",
+      title: "9LMNTS Event OS",
+      category: "Live Competition & Staging Engine",
       image: weddingImg,
+      action: () => onNavigate("event-os-demo"),
     },
     {
-      title: "Corporate Clash",
-      category: "Business & Tech",
+      title: "Project LOA Universe",
+      category: "Unreal Engine 5.7 Action RPG",
       image: corporateImg,
+      action: () => onNavigate("loa"),
     },
   ];
 
@@ -254,7 +257,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             {featuredWorks.map((work, index) => (
               <div
                 key={index}
-                onClick={() => onNavigate("portfolio")}
+                onClick={work.action}
                 className="group cursor-pointer flex flex-col items-center"
               >
                 {/* iPhone Mockup Container */}
@@ -290,7 +293,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
                     {work.title}
                   </h3>
                   <div className="flex items-center justify-center gap-2 text-muted-foreground group-hover:text-foreground transition-colors">
-                    <span className="text-[10px] font-black uppercase tracking-widest">Explore System</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest">Launch System</span>
                     <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
@@ -300,12 +303,46 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
           <div className="text-center">
             <button
-              onClick={() => onNavigate("portfolio")}
-              className="px-8 py-4 bg-transparent border border-primary text-primary rounded-none font-bold hover:bg-primary/10 transition-all inline-flex items-center gap-2"
+              onClick={() => onNavigate("services")}
+              className="px-8 py-4 bg-transparent border border-primary text-primary rounded-none font-bold hover:bg-primary/10 transition-all inline-flex items-center gap-2 uppercase tracking-widest"
             >
-              View All Projects
+              Explore 9 Elements Services
               <ArrowRight size={20} />
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* AR Wings & Phygital Streetwear — Coming Soon Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card border-y border-border">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-background border border-primary/30 p-8 sm:p-12 relative overflow-hidden">
+            <div className="relative z-10 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/30 rounded-none text-primary text-xs font-mono tracking-widest uppercase mb-4">
+                <span className="w-2 h-2 rounded-full bg-primary animate-ping" />
+                Coming Soon // Q4 2026 & 2027 Arena Rollout
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-bold uppercase tracking-tight text-white mb-4">
+                WebAR Holographic Wings
+              </h2>
+              <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-8 font-sans">
+                Next-generation browser WebAR holographic wings and NFC-embedded 450 GSM streetwear. Scan the back cipher code on any authenticated 9LMNTS garment to project glowing neon energy wings over your shoulders in real-time camera view with zero app downloads required.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <button
+                  onClick={() => onNavigate("start-project", "ar-waitlist")}
+                  className="px-8 py-4 bg-primary text-primary-foreground font-bold uppercase tracking-widest hover:bg-primary/90 transition-all text-xs"
+                >
+                  Join Early Waitlist
+                </button>
+                <button
+                  onClick={() => onNavigate("pricing")}
+                  className="px-8 py-4 bg-transparent border border-primary text-primary font-bold uppercase tracking-widest hover:bg-primary/10 transition-all text-xs"
+                >
+                  View Product Matrix
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>

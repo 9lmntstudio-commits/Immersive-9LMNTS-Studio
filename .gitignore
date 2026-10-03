@@ -1,4 +1,6 @@
 node_modules
+**/node_modules
+public/sound-clash-redesign/node_modules
 .env
 .env.*
 .env.local
