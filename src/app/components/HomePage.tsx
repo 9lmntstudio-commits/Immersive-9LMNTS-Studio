@@ -9,6 +9,7 @@ import img1 from "../../imports/image-1.png";
 import img2 from "../../imports/image-2.png";
 import img3 from "../../imports/image-3.png";
 import { SEO } from "./SEO";
+import { StudioWorkstation } from "./StudioWorkstation";
 const soundClashImg = img3;
 const weddingImg    = img2;
 const corporateImg  = img1;
@@ -83,63 +84,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div className="min-h-screen bg-background text-foreground font-['Orbitron']">
       <SEO 
-        title="9LMNTS Studio | Futuristic Web Experiences" 
-        description="Pioneering the digital frontier with high-performance Web3 applications, cyber aesthetic designs, and real-time CRM capabilities powered by Gate OS." 
+        title="9LMNTS Studio — Futuristic Web Experiences & Creative Operating Systems" 
+        description="Pioneering the digital frontier with high-performance creative applications, cyber aesthetic designs, Event OS, and Sound Clash arena ecosystems." 
       />
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Background effect */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="relative z-10 max-w-6xl mx-auto text-center">
-          <div className="mb-6 inline-block">
-            <span className="px-4 py-2 bg-card border border-primary/30 rounded-full text-primary text-sm">
-              Welcome to the Future
-            </span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl text-foreground mb-6 tracking-tight font-bold">
-            <span className="font-['Orbitron']">9LMNTS</span>{" "}
-            <span className="font-['Righteous'] text-primary text-5xl sm:text-6xl lg:text-8xl capitalize ml-[-10px] -rotate-6 inline-block">
-              Studio
-            </span>
-            <br />
-            Digital Design Enters the
-            <br />
-            <span className="text-primary font-['Orbitron'] uppercase tracking-widest">
-              CYBER CYPHER
-            </span>
-          </h1>
-
-          <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Blending Hip-Hop culture with cutting-edge AI
-            technology to create unforgettable digital
-            experiences
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => onNavigate("start-project")}
-              className="px-8 py-4 bg-primary text-primary-foreground rounded-none font-bold hover:bg-primary/90 transition-all transform hover:scale-105 flex items-center justify-center gap-2 group border border-primary"
-            >
-              Start Your Project
-              <ArrowRight
-                className="group-hover:translate-x-1 transition-transform"
-                size={20}
-              />
-            </button>
-            <button
-              onClick={() => onNavigate("event-os-demo")}
-              className="px-8 py-4 bg-transparent border border-primary text-primary rounded-none font-bold hover:bg-primary/10 transition-all flex items-center justify-center gap-2"
-            >
-              Event OS Demo <Zap size={18} />
-            </button>
-          </div>
-        </div>
-      </section>
+      {/* Master 4K Cyber Cypher Workstation (Flagship Hero) */}
+      <StudioWorkstation onNavigate={onNavigate} />
 
       {/* 9 Elements Concept */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card border-y border-border">

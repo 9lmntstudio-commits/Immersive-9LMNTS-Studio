@@ -54,6 +54,22 @@ export function Footer({ onNavigate }: FooterProps) {
               </li>
               <li>
                 <button
+                  onClick={() => onNavigate("9lmnts-os")}
+                  className="hover:text-primary transition-colors"
+                >
+                  9LMNTS OS
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onNavigate("loa")}
+                  className="hover:text-primary transition-colors"
+                >
+                  LOA Game
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => onNavigate("pricing")}
                   className="hover:text-primary transition-colors"
                 >
@@ -140,7 +156,7 @@ export function Footer({ onNavigate }: FooterProps) {
               </a>
             </div>
             <p className="text-muted-foreground text-xs tracking-widest uppercase">
-              contact@9lmnts.studio
+              contact@9lmntsstudio.com
             </p>
           </div>
         </div>

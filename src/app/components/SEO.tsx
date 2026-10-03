@@ -10,10 +10,10 @@ interface SEOProps {
 }
 
 export const SEO: React.FC<SEOProps> = ({ 
-  title = '9LMNTS Studio | Futuristic Web Experiences', 
-  description = '9LMNTS Studio delivers high-performance, futuristic web applications powered by our proprietary Gate OS and true black cyber aesthetics.', 
-  keywords = '9LMNTS, Studio, Cyber Aesthetic, Futuristic Web Design, Gate OS, Web Development, Supabase, True Black, Neon Orange',
-  canonicalUrl = 'https://9lmnts.studio',
+  title = '9LMNTS Studio — Futuristic Web Experiences & Creative Operating Systems', 
+  description = '9LMNTS Studio delivers high-performance, futuristic web applications powered by our proprietary Event OS, Sound Clash OS, and true black cyber aesthetics.', 
+  keywords = '9LMNTS, Studio, Cyber Aesthetic, Futuristic Web Design, Event OS, Sound Clash OS, Web Development, Supabase, True Black, Neon Orange',
+  canonicalUrl = 'https://9lmntsstudio.com',
   ogImage = '/imports/logo.png' // Default placeholder based on available logo
 }) => {
   const fullTitle = title.includes('9LMNTS Studio') ? title : `${title} | 9LMNTS Studio`;
